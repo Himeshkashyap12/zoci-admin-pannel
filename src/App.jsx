@@ -1,0 +1,157 @@
+import { Route, Routes } from "react-router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { lazy, Suspense } from "react";
+import AdminProtectedRoute from "./utils/AdminProtectedRoute";
+const AdminOrdersPage = lazy(() => import("./pages/adminOrder/AdminOrderPage"));
+const AdminLayout = lazy(() => import("./component/layout/AdminLayout"));
+const AdminProductPage = lazy(() =>
+  import("./pages/adminProductPage/AdminProductPage")
+);
+const AdminCreateFormPage = lazy(() =>
+  import("./pages/adminCreateForm/AdminCreateFormPage")
+);
+import AdminInvoicePage from "./pages/adminInvoice/AdminInvoicePage";
+import GenerateInvoiceForm from "./component/admin/GenerateInvoiceForm";
+import LoginPage from "./pages/auth/LoginPage";
+import InventaryPage from "./pages/inventaryPage/InventaryPage";
+import OrderManagementPage from "./pages/orderManagementPage/OrderManagementPage";
+import SalesPage from "./pages/salesPage/SalesPage";
+import CrmPage from "./pages/crmPage/CrmPage";
+import MarketingToolsPage from "./pages/marketinToolsPage/MarketingToolPage";
+import AnanymousPage from "./pages/ananymousPage/AnanymousPage";
+import UiManagementpage from "./pages/uiManagementPage/UiManagementpage";
+import BlogManagementPage from "./pages/blogPage/blogPage";
+import StockAlertPage from "./pages/inventaryPage/StockAlertPage";
+import VendorPerformancePage from "./pages/inventaryPage/VendorPerformancePage";
+import BestSellerPage from "./pages/inventaryPage/BestSellerPage";
+import MakeOnlineOrderPage from "./pages/orderManagementPage/MakeOnlineOrderPage";
+import ProductExchangePage from "./pages/orderManagementPage/ProductExhangePage";
+import ProductReturnedPage from "./pages/orderManagementPage/ProductReturnedPage";
+import GenerateInvoicePage from "./pages/orderManagementPage/GenerateInstantInvoicePage";
+import TotalSalesPage from "./pages/salesPage/TotalSalesPage";
+import TotalExpenditurePage from "./pages/salesPage/TotalExpenditurePage";
+import NetProfitPage from "./pages/salesPage/NetProfitPage";
+import TotalOrderPage from "./pages/salesPage/TotalOrderPage";
+import ReturningCustomerPage from "./pages/salesPage/ReturningCustomerPage";
+import OnlineSalesListPage from "./pages/salesPage/OnlineSalesListPage";
+import MakeToOrderPage from "./pages/salesPage/MakeToOrderPage";
+import MakeToOrderList from "./component/salesManagement/makeToOrderList/MakeToOrderList";
+import OfflineSalesListPage from "./pages/salesPage/OfflineSalesListPage";
+function App() {
+
+
+  return (
+    <>
+      <ToastContainer />
+      {/* <ApiLoader /> */}
+      <Suspense >
+      {/* <Suspense fallback={<Loading />}> */}
+        <Routes>
+        <Route path="/login"element={<LoginPage /> }/>
+       <Route path="*" element={<LoginPage />} />
+
+          <Route path="/admin" element={<AdminProtectedRoute> <AdminLayout /> </AdminProtectedRoute>} >
+             <Route  path="inventary" element={ <AdminProtectedRoute>  <InventaryPage />  </AdminProtectedRoute> }/>
+             <Route  path="stock-alert" element={ <AdminProtectedRoute>  <StockAlertPage />  </AdminProtectedRoute> }/>
+             <Route  path="vendor-performance" element={ <AdminProtectedRoute>  <VendorPerformancePage />  </AdminProtectedRoute> }/>
+             <Route  path="best-seller" element={ <AdminProtectedRoute>  <BestSellerPage />  </AdminProtectedRoute> }/>
+             {/* Order route */}
+             <Route  path="order" element={ <AdminProtectedRoute>  <OrderManagementPage />  </AdminProtectedRoute> }/>
+             <Route  path="order-online" element={ <AdminProtectedRoute>  <MakeOnlineOrderPage />  </AdminProtectedRoute> }/>
+             <Route  path="make-order" element={ <AdminProtectedRoute>  <MakeToOrderPage />  </AdminProtectedRoute> }/>
+             <Route  path="product-exchange" element={ <AdminProtectedRoute>  <ProductExchangePage />  </AdminProtectedRoute> }/>
+             <Route  path="product-returned" element={ <AdminProtectedRoute>  <ProductReturnedPage />  </AdminProtectedRoute> }/>
+             <Route  path="generate-invoice" element={ <AdminProtectedRoute>  <GenerateInvoicePage />  </AdminProtectedRoute> }/>
+
+             {/* Order route */}
+
+             <Route  path="sales" element={ <AdminProtectedRoute>  <SalesPage />  </AdminProtectedRoute> }/>
+             <Route  path="total-sales" element={ <AdminProtectedRoute>  <TotalSalesPage />  </AdminProtectedRoute> }/>
+             <Route  path="total-expenditure" element={ <AdminProtectedRoute>  <TotalExpenditurePage />  </AdminProtectedRoute> }/>
+             <Route  path="net-profit" element={ <AdminProtectedRoute>  <NetProfitPage />  </AdminProtectedRoute> }/>
+             <Route  path="total-order" element={ <AdminProtectedRoute>  <TotalOrderPage />  </AdminProtectedRoute> }/>
+             <Route  path="returning-customer" element={ <AdminProtectedRoute>  <ReturningCustomerPage />  </AdminProtectedRoute> }/>
+             <Route  path="online-sales" element={ <AdminProtectedRoute>  <OnlineSalesListPage />  </AdminProtectedRoute> }/>
+             <Route  path="make-order-list" element={ <AdminProtectedRoute>  <MakeToOrderList />  </AdminProtectedRoute> }/>
+             <Route  path="offline-sales-list" element={ <AdminProtectedRoute>  <OfflineSalesListPage />  </AdminProtectedRoute> }/>
+
+
+             <Route  path="crm" element={ <AdminProtectedRoute>  <CrmPage />  </AdminProtectedRoute> }/>
+             <Route  path="marketing" element={ <AdminProtectedRoute>  <MarketingToolsPage />  </AdminProtectedRoute> }/>
+             <Route  path="Anonymous-visitor" element={ <AdminProtectedRoute>  <AnanymousPage />  </AdminProtectedRoute> }/>
+             <Route  path="ui-management" element={ <AdminProtectedRoute>  <UiManagementpage />  </AdminProtectedRoute> }/>
+             <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/>
+           
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  <Route
+//               path="products"
+//               element={
+//                 <AdminProtectedRoute>
+//                   <AdminProductPage />
+//                 </AdminProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="create-product"
+//               element={
+//                 <AdminProtectedRoute>
+//                   <AdminCreateFormPage />
+//                 </AdminProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="order"
+//               element={
+//                 <AdminProtectedRoute>
+//                   <AdminOrdersPage />
+//                 </AdminProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="invoice"
+//               element={
+//                 <AdminProtectedRoute>
+//                   <AdminInvoicePage />
+//                 </AdminProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="generate-invoice"
+//               element={
+//                 <AdminProtectedRoute>
+//                   <GenerateInvoiceForm />
+//                 </AdminProtectedRoute>
+//               }
+//             />
+            
