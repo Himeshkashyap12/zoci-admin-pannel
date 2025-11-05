@@ -36,7 +36,7 @@ const Login = ({ setSingnin }) => {
         localStorage.setItem("userId", res.data?._id);
         dispatch(loginSuccess({ token: res.data.token, users: res.data }));
         if (res.data.role === "admin") {
-          navigate("/admin");
+          navigate("/admin/inventary");
         } else {
           navigate("/");
         }
