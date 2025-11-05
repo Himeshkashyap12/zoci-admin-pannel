@@ -21,7 +21,7 @@ import CrmPage from "./pages/crmPage/CrmPage";
 import MarketingToolsPage from "./pages/marketinToolsPage/MarketingToolPage";
 import AnanymousPage from "./pages/ananymousPage/AnanymousPage";
 import UiManagementpage from "./pages/uiManagementPage/UiManagementpage";
-import BlogManagementPage from "./pages/blogPage/blogPage";
+// import BlogManagementPage from "./pages/blogPage/blogPage";
 import StockAlertPage from "./pages/inventaryPage/StockAlertPage";
 import VendorPerformancePage from "./pages/inventaryPage/VendorPerformancePage";
 import BestSellerPage from "./pages/inventaryPage/BestSellerPage";
@@ -81,7 +81,7 @@ function App() {
              <Route  path="marketing" element={ <AdminProtectedRoute>  <MarketingToolsPage />  </AdminProtectedRoute> }/>
              <Route  path="Anonymous-visitor" element={ <AdminProtectedRoute>  <AnanymousPage />  </AdminProtectedRoute> }/>
              <Route  path="ui-management" element={ <AdminProtectedRoute>  <UiManagementpage />  </AdminProtectedRoute> }/>
-             <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/>
+             {/* <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/> */}
            
           </Route>
         </Routes>
