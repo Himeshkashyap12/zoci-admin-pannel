@@ -3,7 +3,7 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 
-const MakeToOrderTable=()=>{
+const BirthdayReminderTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
      const columns = [
@@ -24,7 +24,7 @@ const MakeToOrderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 200,
-      render: (text) =>  <div onClick={()=>{navigate("")}}><CustomText value={"Product Name"}/></div>
+      render: (text) =>  <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-birthday-reminder/${1}`)}}><CustomText value={"Product Name"}/></div>
     },
       {
       title: (
@@ -119,4 +119,4 @@ const data = [
         </>
     )
 }
-export default MakeToOrderTable;
+export default BirthdayReminderTable;

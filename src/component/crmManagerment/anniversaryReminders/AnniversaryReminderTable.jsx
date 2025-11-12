@@ -3,7 +3,7 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 
-const MakeToOrderTable=()=>{
+const AnniversaryRemindertable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
      const columns = [
@@ -119,4 +119,4 @@ const data = [
         </>
     )
 }
-export default MakeToOrderTable;
+export default AnniversaryRemindertable;
