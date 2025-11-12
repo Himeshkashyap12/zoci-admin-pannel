@@ -119,27 +119,6 @@ const CustomSidebar = () => {
       ),
     },
     {
-      key: 5,
-      path: "/admin/Anonymous-visitor",
-      style: {
-        backgroundColor: selectKey == 5 && "#F0D5A0",
-        marginBottom: "10px",
-        height: "40px",
-        border: selectKey != 5 && "2px solid #F0D5A0",
-      },
-      label: (
-        <Link to={"/admin/Anonymous-visitor"}>
-          <Typography.Text
-            className={`${
-              selectKey == 5 ? "!text-[#214344]" : "!text-[#fff]"
-            } font-[300] !text-[20px]`}
-          >
-            Anonymous Visitor Analytics
-          </Typography.Text>
-        </Link>
-      ),
-    },
-    {
       key: 6,
       path: "/admin/ui-management",
       style: {

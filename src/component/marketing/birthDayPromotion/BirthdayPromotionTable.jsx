@@ -3,7 +3,7 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 
-const MakeToOrderTable=()=>{
+const BirthdayPromotionTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
      const columns = [
@@ -114,9 +114,8 @@ const data = [
   };
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
-
+        <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
         </>
     )
 }
-export default MakeToOrderTable;
+export default BirthdayPromotionTable;

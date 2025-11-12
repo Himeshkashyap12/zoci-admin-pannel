@@ -1,11 +1,9 @@
-import { useState } from "react";
-import CustomTable from "../../common/CustomTable";
-import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
 
-const MakeToOrderTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
+import { useState } from "react";
+import CustomTable from "../common/CustomTable";
+import CustomText from "../common/CustomText";
+
+const MarketingToolsTable=()=>{
      const columns = [
          {
       title: (
@@ -14,7 +12,7 @@ const MakeToOrderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 200,
-      render: (text) =>  <CustomText  value={1}/>
+      render: (text) =>  <CustomText className={"Text-[]"} value={1}/>
     },
     
     {
@@ -24,7 +22,7 @@ const MakeToOrderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 200,
-      render: (text) =>  <div onClick={()=>{navigate("")}}><CustomText value={"Product Name"}/></div>
+      render: (text) =>  <CustomText value={"Product Name"}/>
     },
       {
       title: (
@@ -104,19 +102,13 @@ const data = [
     address: 'New York No. 1 Lake Park',
   }
 ];
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+
+
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
+        <CustomTable  dataSource={data} columns={columns}/>
 
         </>
     )
 }
-export default MakeToOrderTable;
+export default MarketingToolsTable;

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import CustomTable from "../../common/CustomTable";
-import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
 
-const MakeToOrderTable=()=>{
+import { useState } from "react";
+import CustomTable from "../../../common/CustomTable";
+import CustomText from "../../../common/CustomText";
+import { useNavigate } from "react-router-dom";
+import CustomInput from "../../../common/CustomInput";
+
+const AllVisitorsDetailsTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
      const columns = [
@@ -14,7 +16,7 @@ const MakeToOrderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 200,
-      render: (text) =>  <CustomText  value={1}/>
+      render: (text) => <CustomText  value={1}/>
     },
     
     {
@@ -24,7 +26,7 @@ const MakeToOrderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 200,
-      render: (text) =>  <div onClick={()=>{navigate("")}}><CustomText value={"Product Name"}/></div>
+      render: (text) =>  <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-all-visitors-list/${1}`)}}><CustomText value={"Product Name"}/></div>
     },
       {
       title: (
@@ -113,10 +115,11 @@ const data = [
     onChange: onSelectChange,
   };
     return(
-        <>
+        <div className="flex flex-col gap-5">
+                   <CustomInput className={"!w-[300px]"} placeholder={"Search your orders"} />
               <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
 
-        </>
+        </div>
     )
 }
-export default MakeToOrderTable;
+export default AllVisitorsDetailsTable;
