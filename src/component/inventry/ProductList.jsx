@@ -22,6 +22,7 @@ const ProductList=({selectedRowKeys})=>{
   const debouncedText = useDebounce(search, 500);
   const dispatch=useDispatch();
   const navigate=useNavigate();
+  const token=Cookies.get("token");
   
   const sortOption=[
     {label:"Price-High to Low",value:"priceDesc"},
