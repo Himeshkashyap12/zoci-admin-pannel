@@ -7,8 +7,8 @@ import { getAllAnniversaryAsync } from "../../../feature/marketing/marketingSlic
 import Cookies from "js-cookie"
 import Loader from "../../loader/Loader";
 import { CopyOutlined } from "@ant-design/icons";
-import { isoToIST } from "../../../../../../AAJEEVAN_SANG_ADMIN/src/constant/constant";
 import { toast } from "react-toastify";
+import { isoToIST } from "../../../constants/constants";
 const AnniversaryPromotionalTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();

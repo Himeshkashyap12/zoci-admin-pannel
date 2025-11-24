@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCustomerList } from "../../../feature/crm/crmSlice";
 import Cookies from "js-cookie";
-import { isoToIST } from "../../../../../../AAJEEVAN_SANG_ADMIN/src/constant/constant";
 import Loader from "../../loader/Loader";
 import {CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import {toast} from "react-toastify";
