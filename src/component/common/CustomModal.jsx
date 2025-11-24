@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import CustomHeading from './CustomHeading';
 import CustomText from './CustomText';
 import "./common.css"
-const CustomModal = ({footer,open,setOpen,value,modalBody,width}) => {  
+const CustomModal = ({footer,open,setOpen,value,modalBody,width,closeIcon}) => {  
   const handleOk = () => {
     setTimeout(() => {
       setOpen(false);
@@ -22,6 +22,7 @@ const CustomModal = ({footer,open,setOpen,value,modalBody,width}) => {
         onCancel={()=>{setOpen(false)}}
         footer={footer??true}
         padding={0}
+        closeIcon={closeIcon && null}
         
       >
        {modalBody}

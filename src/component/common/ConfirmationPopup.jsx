@@ -1,25 +1,16 @@
-import { Modal } from "antd"
+import CustomButton from "./CustomButton"
 import CustomText from "./CustomText"
-import CustomButton from "./CustomButton";
-const ConfirmationPopup=({setModel,model,confirmationPopUpHandler})=>{
+
+const ConfirmationPopup=({confirmationPopUpHandler,setDeleteConfirm})=>{
     
     
     return(
         <>
-        <Modal
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={model?.status}
-        onCancel={()=>{setModel(false)}}
-        footer={false}
-
-      >
-       <CustomText className={"!text-[16px] font-[500]" } value={`Are you sure you want to ${model?.key} this account ?`}/>
-       <div className="flex justify-end gap-2 pt-2">
-         <CustomButton onclick={()=>setModel(false)} className={"!bg-[#ff2d55] !text-[#fff]"} value={"Cancel"}/>
-               <CustomButton onclick={confirmationPopUpHandler} className={"!bg-[#ff2d55] !text-[#fff]"} value={model?.key}/>
-
-       </div>
-      </Modal>
+          <CustomText className={"!text-[16px]"} value={`Are you sure you want to delete ?`}/>
+          <div className="flex justify-end gap-3">
+            <CustomButton className={"!text-[#fff]"} value={"Cancel"} onclick={()=>{setDeleteConfirm(false)}}/>
+            <CustomButton className={"!text-[#fff]"} value={"Ok"} onclick={()=>{confirmationPopUpHandler()}}/>
+          </div>
         </>
     )
 }

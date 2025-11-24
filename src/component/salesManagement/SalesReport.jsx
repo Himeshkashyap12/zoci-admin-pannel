@@ -10,66 +10,89 @@ import CustomButton from "../common/CustomButton";
 import SalesReportTable from "./SalesReportTable";
 import { Link, useNavigate } from "react-router-dom";
 import CustomModal from "../common/CustomModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExpense from "./addNewExpense/AddExpence";
+import Cookies from "js-cookie"
+import { useDispatch, useSelector } from "react-redux";
+import { getSalesDashboardAsync } from "../../feature/sales/salesSlice";
+import Loader from "../loader/Loader";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const navigate=useNavigate();
+    const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
+            console.log(slaesDashboard);
+            
+        const getSalesDashboard=async()=>{
+          try {
+          const res=await dispatch(getSalesDashboardAsync({token})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        useEffect(()=>{
+        getSalesDashboard();
+        },[])
+        if(isLoading) return <Loader/>
+
     const dashboardData = [
   {
     title: "Total Sales",
-    value: "Rs. 125,450",
+    value: slaesDashboard?.summary?.totalSales,
     percent: "+12%"
   },
   {
     title: "Total Expenditure",
-    value: "Rs. 25,450",
+    value: slaesDashboard?.summary?.totalExpenditure,
     percent: "+8%"
   },
   {
     title: "Net Profit",
-    value: "$143.37",
+    value: slaesDashboard?.summary?.netProfit,
     percent: "-3%"
   },
   {
     title: "Total Orders",
-    value: "350",
+    value: slaesDashboard?.summary?.totalOrders,
     percent: "+1.5%"
   },
   {
     title: "Total Orders Value",
-    value: "$125,450",
+    value: slaesDashboard?.summary?.totalOrderValue??0,
     percent: "+12%"
   },
   {
     title: "Average Order Value",
-    value: "875",
+    value: slaesDashboard?.summary?.avgOrderValue,
     percent: "+8%"
   },
   {
     title: "Top-Selling Category",
-    value: "Ring",
+    value: slaesDashboard?.summary?.topCategory
+,
     percent: "+12%"
   },
   {
     title: "Returning Customers",
-    value: "350",
+    value: slaesDashboard?.summary?.returningCustomers,
     percent: "+1.5%"
   }
 ];
 
+if(isLoading) return <Loader/>
     return(
        <div className="flex flex-col gap-5 p-5">
         <CustomText value={"Sales Reports"}/>
            <Row gutter={[20,20]}>
             <Col span={12}>
             <div className="w-[700px]">
-                <MonthlySalesChart  />
+                <MonthlySalesChart />
           </div>
             </Col>
             <Col span={12}>
             <div className="w-[700px]">
-          <ProductSalesChart/>
+          <ProductSalesChart  item={slaesDashboard?.categories} />
           </div>
             </Col>
           </Row>
@@ -95,7 +118,7 @@ const SalesReport=()=>{
           </Row>
           <Row>
             <Col span={24}>
-             <EventSales/>
+             <EventSales item={slaesDashboard?.events}/>
              </Col>
           </Row>
          <div className="flex justify-between">

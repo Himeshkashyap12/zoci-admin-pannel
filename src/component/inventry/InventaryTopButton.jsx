@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
-const InventaryTopButton = () => {
+const InventaryTopButton = ({totalVendor}) => {
   const navigate=useNavigate();
   return (
     <>
@@ -27,7 +27,7 @@ const InventaryTopButton = () => {
                 className={"!text-[#fff] !text-[14px]"}
               />
               <CustomText
-                value={"Total No. of Vendors: 23"}
+                value={`Total No. of Vendors: ${totalVendor}`}
                 className={"!text-[#fff] !text-[12px]"}
               />
             </div>

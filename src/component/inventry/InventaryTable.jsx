@@ -1,11 +1,78 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../common/CustomTable";
-import { Avatar } from "antd";
+import { Avatar, Image, Space } from "antd";
 import CustomText from "../common/CustomText";
 import { EditOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProductAsync, getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
+import Cookies from "js-cookie";
+import deleteIcon from "../../assets/icons/deleteIcon.png"
+import CustomModal from "../common/CustomModal";
+import ConfirmationPopup from "../common/ConfirmationPopup";
+import { toast } from "react-toastify";
+import Loader from "../loader/Loader";
 
-const InventaryTable=()=>{
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
+  const [deleteConfirm,setDeleteConfirm]=useState();
+  const [deleteId,setDeleteId]=useState(null);
+  const token=Cookies.get("token");  
+  const dispatch=useDispatch();
+  const {products,isLoading}=useSelector(state=>state?.inventary);
+  const productData=products?.products?.map((item)=>{
+    return {...item,key:item?._id}
+  })
+  console.log(productData,"jhyg");
+  console.log(products,"products");
+  
+  
+  const getAllProducts=async()=>{
+    try {
+    const res=await dispatch(getAllProductAsync({token})).unwrap();
+    console.log(res);
+    
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const confirmationPopUpHandler=async()=>{
+    try {
+      const res=await dispatch(deleteProductAsync({token,id:deleteId})).unwrap();
+      if(res?.success){
+        getAllProducts()
+      }
+      debugger
+      console.log(res);
+      
+      if(res.success){
+        toast.success(res?.message);
+        setDeleteConfirm(false)
+
+      }else{
+        toast.error(res?.message);
+        setDeleteConfirm(false)
+
+
+      }
+
+      
+      
+    } catch (error) {
+      console.log(error);
+        toast.error(error?.message);
+
+        setDeleteConfirm(false)
+
+      
+    }
+     
+  }
+ 
+  useEffect(()=>{
+   getAllProducts();
+  },[])
+
+
+  
      const columns = [
          {
       title: (
@@ -13,109 +80,130 @@ const InventaryTable=()=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 200,
-      render: (text) =>  <CustomText className={"Text-[]"} value={1}/>
+      width: 100,
+      render: (_,record,idx) =>  <CustomText className={  " "} value={idx+1}/>
     },
     
     {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Image"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "images",
+      key: "images",
       width: 200,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
     },
       {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
+
+      ),
+      dataIndex: "title",
+      key: "title",
+      width: 250,
+      render: (text) =>  <CustomText value={text}/>
+    },
+    {
+      title: (
+       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
 
       ),
       dataIndex: "sku",
       key: "sku",
       width: 150,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text}/>
+    },
+    {
+      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>,
+      dataIndex: "size",
+      key: "size",
+      width: 130,
+      render: (text) =>   <CustomText value={text??"Na"}/>
     },
     {
       title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
-
+                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>
       ),
-      dataIndex: "description",
-      key: "description",
-      width: 300,
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>,
       dataIndex: "price",
       key: "price",
-      width: 130,
-      render: (text) =>   <CustomText value={"Product Name"}/>
+      width: 200,
+      align: "center",
+      render: (text) =>  <CustomText value={`Rs. ${text}`}/>
     },
     {
-      title: (
-                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>
-      ),
+      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>),
       dataIndex: "quantity",
       key: "quantity",
       width: 200,
       align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) => <CustomText value={text}/>
     },
     {
-      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
+      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
       dataIndex: "metalType",
       key: "metalType",
       width: 200,
       align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
+      render: (text) => <CustomText value={text??"NA"}/>
     },
     {
-      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
+      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
+      dataIndex: "vendor",
+      key: "vendor",
+      width: 300,
       align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text??"NA"}/>
     },
     {
-      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"In Stock"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
+      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Stock"}/>),
+      dataIndex: "quantity",
       align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      key: "quantity",
+      width: 180,
+      render: (text) =>  <CustomText value={text!=0?"In Stock":"Out Of Stock"}/>
+
+     
     },
-    {
+     {
       title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
       dataIndex: "action",
       align: "center",
       key: "action",
       width: 130,
+      render: (_, record) => (
+        <Space size="middle">
+          <div
+            className="h-[20px] w-[20px] cursor-pointer"
+            onClick={() => {
+              setDeleteConfirm(true),setDeleteId(record?._id);
+            }}
+          >
+            <img src={deleteIcon} alt="deleteIcon"/>
+          </div>
+          <div
+            className="h-[20px] w-[20px] cursor-pointer"
+          >
+            <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
+          </div>
+        </Space>
+      ),
      
     },
   ];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
+
+ const selectTableRowHandler = productKey => {
+    setSelectedRowKeys(productKey);
   };
  const rowSelection = {
     selectedRowKeys,
-    onChange: onSelectChange,
+    onChange: selectTableRowHandler,
   };
+  if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
-
+        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+            <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
+        
         </>
     )
 }

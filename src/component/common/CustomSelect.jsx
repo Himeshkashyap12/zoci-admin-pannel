@@ -1,8 +1,6 @@
 
-import React from "react";
 
 import { Select } from "antd";
-
 const CustomSelect = ({
   options = [],
   onchange,
@@ -13,12 +11,13 @@ const CustomSelect = ({
 }) => {
   return (
     <Select
-      defaultValue="lucy"
+      // defaultValue="lucy"
       value={value}
       onChange={onchange}
       options={options}
       className={`${className}`}
       placeholder={placeholder}
+      
     />
   );
 };

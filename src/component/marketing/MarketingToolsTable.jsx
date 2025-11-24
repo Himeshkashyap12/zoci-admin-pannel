@@ -1,23 +1,27 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../common/CustomTable";
 import CustomText from "../common/CustomText";
-
-const MarketingToolsTable=()=>{
+import Cookies from "js-cookie"
+import { useDispatch, useSelector } from "react-redux";
+import { getMarketingDashboardAsync } from "../../feature/marketing/marketingSlice";
+const MarketingToolsTable=({marketingDashboard})=>{
+     
+  
      const columns = [
          {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Time Period"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "range",
+      key: "range",
       width: 200,
-      render: (text) =>  <CustomText className={"Text-[]"} value={1}/>
+      render: (text) =>  <CustomText className={""} value={text}/>
     },
     
     {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Active Promotion"}/>
       ),
       dataIndex: "title",
       key: "title",
@@ -26,87 +30,38 @@ const MarketingToolsTable=()=>{
     },
       {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Redemption"}/>
 
       ),
-      dataIndex: "sku",
-      key: "sku",
+      dataIndex: "redemptionsInRange",
+      key: "redemptionsInRange",
       width: 150,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text}/>
     },
     {
       title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
+       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Birthday"}/>
 
       ),
-      dataIndex: "description",
-      key: "description",
+      dataIndex: "birthdaysCount",
+      key: "birthdaysCount",
       width: 300,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text}/>
     },
     {
-      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>,
-      dataIndex: "price",
-      key: "price",
+      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Anniversary"}/>,
+      dataIndex: "anniversariesCount",
+      key: "anniversariesCount",
       width: 130,
-      render: (text) =>   <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (
-                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>
-      ),
-      dataIndex: "quantity",
-      key: "quantity",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
-      dataIndex: "metalType",
-      key: "metalType",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"In Stock"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
-      dataIndex: "action",
-      align: "center",
-      key: "action",
-      width: 130,
-     
-    },
+      render: (text) =>   <CustomText value={text}/>
+    }
   ];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
+
 
 
     return(
         <>
-        <CustomTable  dataSource={data} columns={columns}/>
+        <CustomTable  dataSource={marketingDashboard} columns={columns}/>
 
         </>
     )

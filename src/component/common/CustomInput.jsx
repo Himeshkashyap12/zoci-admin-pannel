@@ -1,7 +1,8 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
 
-const CustomInput = ({ onchange, placeholder, type,size,inputValue ,name,className,addonBefore}) => {
+const CustomInput = ({ onchange, placeholder, type,size,value ,name,className,addonBefore,search}) => {
   return (
     <>
         
@@ -11,9 +12,10 @@ const CustomInput = ({ onchange, placeholder, type,size,inputValue ,name,classNa
         type={`${type ?? "text"}`}
         onChange={onchange}
         placeholder={placeholder}
-        value={inputValue}
+        value={value}
         className={`${className}`}
         addonBefore={addonBefore}
+        suffix={search && <SearchOutlined style={{ fontSize: "16px" }} />}
         />
 
        

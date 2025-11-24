@@ -5,7 +5,9 @@ import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
 import { Avatar, Image } from "antd";
-const OnlineOrderChart = () => {
+const OnlineOrderChart = ({onlineOrders}) => {
+ 
+  
   const options = {
     chart: {
       id: "basic-line",
@@ -13,7 +15,7 @@ const OnlineOrderChart = () => {
       zoom: { enabled: false },
     },
     xaxis: {
-      categories: ["Week1", "Week2", "Week3", "week4"],
+      categories:onlineOrders?.weeks?.map((item)=>item?.name) ,
     },
 
     // color for the series
@@ -50,7 +52,7 @@ const OnlineOrderChart = () => {
   const series = [
     {
       name: "series-1",
-      data: [10, 40, 15, 50],
+      data: onlineOrders?.weeks?.map((item)=>item?.value),
     },
   ];
 
@@ -65,10 +67,10 @@ const OnlineOrderChart = () => {
         </div>}/>
     </div>
       <div className="flex flex-col gap-4">
-       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={"+15%"}/>
+       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={`+ ${onlineOrders?.percent}`}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
-       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={"+15%"}/>
+       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={`${`+ ${onlineOrders?.last30Days}`} %`}/>
     </div>
     
 

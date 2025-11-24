@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import {  ConfigProvider, Input } from "antd";
+import {  Button, ConfigProvider, Input } from "antd";
 import {  useNavigate } from "react-router";
 import { loginWithNumberAndPassword } from "../../feature/auth/authApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../feature/auth/authSlice";
 import { toast } from "react-toastify";
 const Login = ({ setSingnin }) => {
@@ -12,6 +12,7 @@ const Login = ({ setSingnin }) => {
     mobile: "",
     password: "",
   });
+  const {isLoading}=useSelector(state=>state?.auth)
 
   const inputHandler = (e) => {
       if(e.target.name==="mobile" && isNaN(e.target.value)){
@@ -51,14 +52,9 @@ const Login = ({ setSingnin }) => {
     }
   };
 
+
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#214344",
-        },
-      }}
-    >
+    
       <div className="w-[20%] mx-auto flex flex-col gap-5     justify-center  items-center h-[100vh]">
         <Input
           type="text"
@@ -79,17 +75,17 @@ const Login = ({ setSingnin }) => {
           placeholder="Enter Password"
           className="w-[100%] px-4 py-2 rounded-full"
         />
-        <button
+        <Button
           onClick={() => {
             signInHandler();
           }}
-          className="w-[100%] bg-[#214344] text-[#fff] rounded-full py-2 "
+          className="w-[100%] !bg-[#214344] !text-[#fff] rounded-full !py-2 "
         >
           Sign in
-        </button>
+        </Button>
       
       </div>
-    </ConfigProvider>
+
   );
 };
 export default Login;

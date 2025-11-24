@@ -1,7 +1,7 @@
 import CustomSlider from "../common/CustomSlider";
 import CustomText from "../common/CustomText";
 
-const EventSales=()=>{
+const EventSales=({item})=>{
     const EventSalesSlider=[
         {
             title:"The lil flea",
@@ -26,7 +26,7 @@ const EventSales=()=>{
         <div className="flex flex-col gap-2">
             <CustomText className={"!text-[16px] font-[400]"} value={"Exhibition or event Sales"}/>
             <div className="w-full bg-[#fff] p-[24px] rounded-md">
-                <CustomSlider EventSalesSlider={EventSalesSlider}/>
+                <CustomSlider EventSalesSlider={item}/>
             </div>
 
         </div>

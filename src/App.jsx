@@ -48,6 +48,8 @@ import ExpiredPromotionPage from "./pages/marketinToolsPage/ExpiredPromotionPage
 import BirthdayPromotionPage from "./pages/marketinToolsPage/BirthdayPromotionPage";
 import BlogManagementPage from "./pages/blogPage/BlogManagementPage";
 import AddNewBlogPage from "./pages/blogPage/AddNewBlogPage";
+import ReturningCustomerDetailsPage from "./pages/salesPage/ReturningCustomerDetailsPage";
+import CreateNewProductPage from "./pages/inventaryPage/CreateNewProduct";
 function App() {
 
 
@@ -67,6 +69,7 @@ function App() {
               <Route  path="stock-alert" element={ <AdminProtectedRoute>  <StockAlertPage />  </AdminProtectedRoute> }/>
               <Route  path="vendor-performance" element={ <AdminProtectedRoute>  <VendorPerformancePage />  </AdminProtectedRoute> }/>
               <Route  path="best-seller" element={ <AdminProtectedRoute>  <BestSellerPage />  </AdminProtectedRoute> }/>
+              <Route  path="create-product" element={ <AdminProtectedRoute>  <CreateNewProductPage />  </AdminProtectedRoute> }/>
             {/* inventary route */}
 
              {/* Order route */}
@@ -96,6 +99,7 @@ function App() {
              <Route  path="net-profit" element={ <AdminProtectedRoute>  <NetProfitPage />  </AdminProtectedRoute> }/>
              <Route  path="total-order" element={ <AdminProtectedRoute>  <TotalOrderPage />  </AdminProtectedRoute> }/>
              <Route  path="returning-customer" element={ <AdminProtectedRoute>  <ReturningCustomerPage />  </AdminProtectedRoute> }/>
+             <Route  path="returning-customer/:id" element={ <AdminProtectedRoute>  <ReturningCustomerDetailsPage />  </AdminProtectedRoute> }/>
              <Route  path="online-sales" element={ <AdminProtectedRoute>  <OnlineSalesListPage />  </AdminProtectedRoute> }/>
              <Route  path="make-order-list" element={ <AdminProtectedRoute>  <MakeToOrderList />  </AdminProtectedRoute> }/>
              <Route  path="offline-sales-list" element={ <AdminProtectedRoute>  <OfflineSalesListPage />  </AdminProtectedRoute> }/>

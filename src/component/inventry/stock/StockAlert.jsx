@@ -7,7 +7,10 @@ import NotifyMeTable from "./NotifyMeTable";
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 const StockAlert=()=>{
-    const [stockAlerstStatus,setStockAlertStatus]=useState("stock")
+    const [stockAlerstStatus,setStockAlertStatus]=useState("stock");
+      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    console.log(selectedRowKeys,"dfdshfjhdsbfkj");
+    
     const navigate=useNavigate()
 
     return(
@@ -19,13 +22,13 @@ const StockAlert=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Inventory Management & Analysis → Stock Level Alerts"}/>
             </div>
             <div>
-                <StockFilter/>
+                <StockFilter stockAlerstStatus={stockAlerstStatus} selectedRowKeys={selectedRowKeys}/>
             </div>
             <div >
                 <StockAlertButton setStockAlertStatus={setStockAlertStatus} stockAlerstStatus={stockAlerstStatus}/>
             </div>
               <div>
-                {stockAlerstStatus=="stock"?<StockAlertTable/>:<NotifyMeTable/>}
+                {stockAlerstStatus=="stock"?<StockAlertTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>:<NotifyMeTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>}
               </div>
         </div>
     )

@@ -48,14 +48,14 @@ const CustomSlider = ({EventSalesSlider}) => {
         spaceBetween={30}
         onSwiper={setSwiperInstance} // 👈 capture swiper instance
       >
-       {EventSalesSlider.map((item,idx)=>{
+       {EventSalesSlider?.map((item,idx)=>{
         return(
             <SwiperSlide>
           <div className=" flex justify-between items-center px-20 ">
-            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item.title}/>
-            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item.place}/>
-            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item.price}/>
-            <Image className="!size-[100px] object-cover" src={"https://picsum.photos/200/300"}/>
+            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item?.sourceName}/>
+            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item?.city??"Not mentioned"}/>
+            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={`Rs. ${item?.sales}`}/>
+            <Image className="!size-[100px] object-cover" src={item?.image??"https://zoci-data.s3.ap-south-1.amazonaws.com/productImages/1763887620428_no-image-icon-6.png"}/>
             </div>
         </SwiperSlide>
         )

@@ -1,101 +1,124 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { getOfflineListAsync } from "../../../feature/sales/salesSlice";
+import Cookies from "js-cookie"
+import { Image } from "antd";
 const OfflineSalesTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
+      const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
+            console.log(offlineOrder,"offlineOrder");
+            
+        const getOfflineSalesList=async()=>{
+          try {
+          const res=await dispatch(getOfflineListAsync({token})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        useEffect(()=>{
+        getOfflineSalesList();
+        },[])
      const columns = [
-         {
-      title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
-      ),
-      dataIndex: "title",
-      key: "title",
-      width: 200,
-      render: (text) =>  <CustomText  value={1}/>
-    },
-    
-    {
-      title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
-      ),
-      dataIndex: "title",
-      key: "title",
-      width: 200,
-      render: (text) =>  <div onClick={()=>{navigate("")}}><CustomText value={"Product Name"}/></div>
-    },
-      {
-      title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+                  {
+                title: (
+                  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
+                ),
+                dataIndex: "title",
+                key: "title",
+                width: 100,
+                render: (text) => <CustomText  value={1}/>
+              },
+              
+              {
+                title: (
+                  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Pic"}/>
+                ),
+                dataIndex: "pic",
+                key: "pic",
+                align:"center",
+                width: 200,
+                render: (text) => <div className="flex justify-center"> <div className="size-[70px] "><Image className="h-full w-full object-cover" src={text}/></div></div>
+              },
+              {
+                title: (
+                <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/> ),
+                dataIndex: "sku",
+                key: "sku",
+                align:"center",
+                width: 200,
+                render: (text) =>   <CustomText value={text}/>
 
-      ),
-      dataIndex: "sku",
-      key: "sku",
-      width: 150,
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
+              },
+              {
+                title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Exhibition/ Event"}/>),
+                dataIndex: "eventType",
+                key: "eventType",
+                width: 250,
+                align: "center",
+                render: (text) =>  <CustomText value={text}/>
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Customer Name"}/>),
+                dataIndex: "customerName",
+                key: "customerName",
+                width: 250,
+                align: "start",
+                render: (text) => <CustomText value={text}/>
+              },
+              
+              {
+                title: (
+                <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Category"}/> ),
+                dataIndex: "category",
+                key: "category",
+                width: 150,
+                align:"center",
+                render: (text) =>   <CustomText value={text}/>
 
-      ),
-      dataIndex: "description",
-      key: "description",
-      width: 300,
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>,
-      dataIndex: "price",
-      key: "price",
-      width: 130,
-      render: (text) =>   <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (
-                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>
-      ),
-      dataIndex: "quantity",
-      key: "quantity",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
-      dataIndex: "metalType",
-      key: "metalType",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"In Stock"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
-      dataIndex: "action",
-      align: "center",
-      key: "action",
-      width: 130,
-     
-    },
-  ];
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Billing Place"}/>),
+                dataIndex: "billingPlace",
+                key: "billingPlace",
+                width: 250,
+                align: "center",
+                render: (text) => <CustomText value={`${text}`}/>
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Quantity"}/>),
+                dataIndex: "quantity",
+                key: "quantity",
+                width: 250,
+                align: "center",
+                render: (text) => <CustomText value={`${text}`}/>
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>),
+                dataIndex: "price",
+                key: "price",
+                width: 250,
+                align: "center",
+                render: (text) => <CustomText value={`Rs. ${text}`}/>
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Total sales"}/>),
+                dataIndex: "totalSales",
+                key: "totalSales",
+                width: 250,
+                align: "center",
+                render: (text) => <CustomText value={`Rs. ${text}`}/>
+              },
+              
+
+             
+            ];
+
 const data = [
   {
     key: '1',
@@ -114,7 +137,7 @@ const data = [
   };
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
+              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={offlineOrder?.data} columns={columns}/>
 
         </>
     )
