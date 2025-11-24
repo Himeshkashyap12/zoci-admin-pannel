@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllVisitorsAsync } from "../../../feature/crm/crmSlice";
-import { isoToIST } from "../../../../../../AAJEEVAN_SANG_ADMIN/src/constant/constant";
 import {EyeOutlined } from "@ant-design/icons";
 import Loader from "../../loader/Loader";
+import { isoToIST } from "../../../constants/constants";
 const AllVisitorsTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
