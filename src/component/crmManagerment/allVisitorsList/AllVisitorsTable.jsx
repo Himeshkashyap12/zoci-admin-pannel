@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
-
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllVisitorsAsync } from "../../../feature/crm/crmSlice";
+import { isoToIST } from "../../../../../../AAJEEVAN_SANG_ADMIN/src/constant/constant";
+import {EyeOutlined } from "@ant-design/icons";
+import Loader from "../../loader/Loader";
 const AllVisitorsTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
+      const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {allvisitors,isLoading}=useSelector(state=>state?.crm);
+            console.log(allvisitors,"allvisitors");
+    
+        const getAllVisitors=async()=>{
+          try {
+          const res=await dispatch(getAllVisitorsAsync({token})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+         useEffect(()=>{
+                getAllVisitors();
+                },[])
+        
      const columns = [
          {
       title: (
@@ -13,97 +34,63 @@ const AllVisitorsTable=()=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 200,
+      width: 100,
       render: (text) => <CustomText  value={1}/>
     },
     
     {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Name"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "name",
+      key: "name",
       width: 200,
-      render: (text) =>  <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-all-visitors-list/${1}`)}}><CustomText value={"Product Name"}/></div>
+      render: (text) =>  <CustomText value={text??"NA"}/>
     },
       {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
-
-      ),
-      dataIndex: "sku",
-      key: "sku",
-      width: 150,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"WhatsApp Number"}/>  ),
+      dataIndex: "mobile",
+      key: "mobile",
+      width: 250,
+      render: (text) =>  <CustomText value={text}/>
     },
     {
       title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
-
-      ),
-      dataIndex: "description",
-      key: "description",
-      width: 300,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Date"}/> ),
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: 200,
+      render: (text) =>  <CustomText value={isoToIST(text)}/>
     },
     {
-      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>,
-      dataIndex: "price",
-      key: "price",
+      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Bag"}/>,
+      dataIndex: "bag",
+      key: "bag",
       width: 130,
-      render: (text) =>   <CustomText value={"Product Name"}/>
+      align:"center",
+      render: (text) =>   <CustomText value={text}/>
     },
     {
       title: (
-                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>
+                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Wishlist"}/>
       ),
-      dataIndex: "quantity",
-      key: "quantity",
+      dataIndex: "wishlist",
+      key: "wishlist",
       width: 200,
       align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text}/>
     },
     {
-      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
+      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
       dataIndex: "metalType",
       key: "metalType",
       width: 200,
       align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"In Stock"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
-      dataIndex: "action",
-      align: "center",
-      key: "action",
-      width: 130,
-     
-    },
+      render: (text) => <div><EyeOutlined style={{fontSize:"20px"}} /></div>
+    }
   ];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
+
  const onSelectChange = newSelectedRowKeys => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -112,9 +99,11 @@ const data = [
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if(isLoading) return <Loader/>
+  
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={data} columns={columns}/>
+              <CustomTable scroll={{x:1500}} rowSelection={rowSelection}  dataSource={allvisitors?.data} columns={columns}/>
 
         </>
     )

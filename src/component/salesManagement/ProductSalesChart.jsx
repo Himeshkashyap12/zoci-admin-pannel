@@ -6,7 +6,9 @@ import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
 import { Avatar, Image } from "antd";
-const ProductSalesChart=()=>{
+const ProductSalesChart=({item})=>{
+  console.log(item);
+  
       const options = {
     chart: {
       id: "basic-line",
@@ -14,7 +16,7 @@ const ProductSalesChart=()=>{
       zoom: { enabled: false },
     },
     xaxis: {
-      categories: ["Rings", "Earrings", "Necklaces", "Instagram","Social","Referral"],
+      categories: item?.map((item)=>item?.category),
     },
 
     // color for the series
@@ -51,7 +53,7 @@ const ProductSalesChart=()=>{
   const series = [
     {
       name: "series-1",
-      data: [10, 40, 15, 50,89,37],
+      data: item?.map((item)=>item?.qty),
     },
   ];
 

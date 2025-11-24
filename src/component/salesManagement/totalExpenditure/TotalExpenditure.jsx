@@ -6,23 +6,43 @@ import SalesCard from "../SalesCard";
 import { Col, Row } from "antd";
 import TotalExpenditureFilter from "./TotalExpenditureFilter";
 import TotalExpenditureTable from "./TotalExpenditureTable";
-
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../loader/Loader";
+import { getTotalExpenditureAsync } from "../../../feature/sales/salesSlice";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
 const TotalExpenditure = () => {
   const navigate = useNavigate();
-  const totalSales=[
-     {
-    title: "Exhibition Expenses",
-    value: "Rs. 45789",
-  },
-   {
-    title: "Event Expenses",
-    value: "Rs. 45789",
-  },
-   {
-    title: "Online/Operational Expenses",
-    value: "Rs. 1,00,000",
-  },
-  ]
+  const token=Cookies.get("token");
+    const dispatch=useDispatch();
+      const {totalExpenditure,isLoading}=useSelector(state=>state?.sales);            
+            const totalExpenditureHandler=async()=>{
+              try {
+              const res=await dispatch(getTotalExpenditureAsync({token})).unwrap();
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          const totalExpenditureCards=[
+            {
+            title: "Exhibition Expenses",
+            value: `Rs. ${totalExpenditure?.totals?.exhibitionExpenses}`,
+          },
+          {
+            title: "Event Expenses",
+            value: `Rs. ${totalExpenditure?.totals?.eventExpenses}`,
+          },
+          {
+            title: "Online/Operational Expenses",
+            value: `Rs. ${totalExpenditure?.totals?.onlineExpenses}`,
+          },
+          ]
+
+    useEffect(()=>{
+                totalExpenditureHandler();
+              },[]);
+
+    if(isLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -45,7 +65,7 @@ const TotalExpenditure = () => {
       <div>
         <Row gutter={[10]}>
 
-           {totalSales?.map((item)=>{
+           {totalExpenditureCards?.map((item)=>{
             return(
                 <Col span={8}>
              <SalesCard item={item}/>
@@ -59,7 +79,7 @@ const TotalExpenditure = () => {
         <TotalExpenditureFilter />
       </div>
       <div>
-        <TotalExpenditureTable />
+        <TotalExpenditureTable item={totalExpenditure?.data} />
       </div>
     </div>
   );

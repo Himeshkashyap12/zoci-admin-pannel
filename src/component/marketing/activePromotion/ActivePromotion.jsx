@@ -5,9 +5,9 @@ import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import ActivePromotionFilter from "./ActivePromotionFilter";
 import ActivePromotionTable from "./ActivePromotionTable";
-
 const ActivePromotion=()=>{
-    const navigate=useNavigate()
+    const navigate=useNavigate();
+     
     return(
         <div className="flex flex-col gap-5 p-[24px]">
             <div className="flex gap-2 items-center">

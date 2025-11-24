@@ -10,10 +10,29 @@ import CustomText from "../common/CustomText";
 import BlogFilter from "./BlogFilter";
 import BlogCard from "./BlogCard";
 import { Col, Row } from "antd";
-
+import Cookies from "js-cookie"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getBlogAsync } from "../../feature/blog/blogSlice";
+import Loader from "../loader/Loader";
 const Blog = () => {
-  const navigate = useNavigate();
- 
+      const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {blog,isLoading}=useSelector(state=>state?.blog);
+      console.log(blog,"bestSeller");
+  
+  const getBlogData=async()=>{
+    try {
+    const res=await dispatch(getBlogAsync({token})).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+   getBlogData();
+  },[])
+
+  if(isLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -24,16 +43,15 @@ const Blog = () => {
       </div>
      
       <div>
-        {/* <BirthdayReminderFilter /> */}
         <BlogFilter/>
       </div>
       <div>
         <Row gutter={[20,20]}>
-            {[1,2,3,4,5,6].map(()=>{
+            {blog?.blogs?.map((item)=>{
                 return(
                     <>
                     <Col span={6}>
-                           <BlogCard/>
+                           <BlogCard item={item}/>
 
                     </Col>
 

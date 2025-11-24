@@ -3,110 +3,66 @@ import { useState } from "react";
 import CustomTable from "../common/CustomTable";
 import CustomText from "../common/CustomText";
 
-const CrmTable=()=>{
+const CrmTable=({item})=>{
      const columns = [
          {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Time Period"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "timePeriod",
+      key: "timePeriod",
       width: 200,
-      render: (text) =>  <CustomText className={"Text-[]"} value={1}/>
+      render: (text) =>  <CustomText className={"Text-[]"} value={text}/>
     },
     
     {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Visitors"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "visitors",
+      key: "visitors",
       width: 200,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      align:"center",
+      render: (text) =>  <CustomText value={text}/>
     },
       {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"New Orders"}/>
 
       ),
-      dataIndex: "sku",
-      key: "sku",
+      dataIndex: "newOrders",
+      key: "newOrders",
       width: 150,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      align:"center",
+      render: (text) =>  <CustomText value={text}/>
     },
     {
       title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
+       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Birthday"}/>
 
       ),
-      dataIndex: "description",
-      key: "description",
+      dataIndex: "birthday",
+      key: "birthday",
       width: 300,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      align:"center",
+      render: (text) =>  <CustomText value={text}/>
     },
     {
-      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>,
-      dataIndex: "price",
-      key: "price",
+      title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Anniversary"}/>,
+      dataIndex: "anniversary",
+      key: "anniversary",
       width: 130,
-      render: (text) =>   <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (
-                <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>
-      ),
-      dataIndex: "quantity",
-      key: "quantity",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
-      dataIndex: "metalType",
-      key: "metalType",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) => <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"In Stock"}/>),
-      dataIndex: "category",
-      key: "category",
-      width: 200,
-      align: "center",
-      render: (text) =>  <CustomText value={"Product Name"}/>
-    },
-    {
-      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
-      dataIndex: "action",
-      align: "center",
-      key: "action",
-      width: 130,
-     
-    },
+      align:"center",
+      render: (text) =>   <CustomText value={text}/>
+    }
+   
   ];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
+
 
 
     return(
         <>
-        <CustomTable  dataSource={data} columns={columns}/>
+        <CustomTable  dataSource={item} columns={columns}/>
 
         </>
     )

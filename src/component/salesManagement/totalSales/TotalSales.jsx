@@ -5,24 +5,43 @@ import TotalSalesTable from "./TotalSalesTable";
 import { LeftOutlined } from "@ant-design/icons";
 import SalesCard from "../SalesCard";
 import { Col, Row } from "antd";
-
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
+import { useEffect } from "react";
+import Loader from "../../loader/Loader";
 const TotalSales = () => {
   const navigate = useNavigate();
-  const totalSales=[
-     {
-    title: "Exhibition Sales",
-    value: "Rs. 45789",
-  },
-   {
-    title: "Event Sales",
-    value: "Rs. 45789",
-  },
-   {
-    title: "Online Sales",
-    value: "Rs. 1,00,000",
-  },
-  ]
-  return (
+     const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {totalSales,isLoading}=useSelector(state=>state?.sales);
+            
+            const getTotalSalesHandler=async()=>{
+              try {
+              const res=await dispatch(getTotalSalesAsync({token})).unwrap();
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            const totalSalesCard=[
+              {
+              title: "Exhibition Sales",
+              value: `Rs. ${totalSales?.totals?.exhibitionSales}`,
+            },
+            {
+              title: "Event Sales",
+              value: `Rs. ${totalSales?.totals?.eventSales}`,
+            },
+            {
+              title: "Online Sales",
+              value: `Rs. ${totalSales?.totals?.onlineSales}`,
+            },
+            ]
+            useEffect(()=>{
+              getTotalSalesHandler();
+            },[])
+  if(isLoading) return <Loader/>
+   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
         <div
@@ -44,7 +63,7 @@ const TotalSales = () => {
       <div>
         <Row gutter={[10]}>
 
-           {totalSales?.map((item)=>{
+           {totalSalesCard?.map((item)=>{
             return(
                 <Col span={8}>
              <SalesCard item={item}/>
@@ -55,10 +74,10 @@ const TotalSales = () => {
         </Row>
       </div>
       <div>
-        <ToTalSalesFilter />
+        <ToTalSalesFilter  />
       </div>
       <div>
-        <TotalSalesTable />
+        <TotalSalesTable  totalSales={totalSales?.data}/>
       </div>
     </div>
   );

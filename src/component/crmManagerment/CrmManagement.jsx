@@ -4,49 +4,48 @@ import SalesCard from "../salesManagement/SalesCard";
 import CustomText from "../common/CustomText";
 import { Col, Row } from "antd";
 import CrmTable from "./CrmTable";
-
+import Cookies from "js-cookie"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getCrmAsync } from "../../feature/crm/crmSlice";
+import CrmCard from "./CrmCard";
+import Loader from "../loader/Loader";
 const CrmManagement=()=>{
-    const navigate=useNavigate();
-     const dashboardData = [
-  {
-    title: "Total Costumers",
-    value: "125,450",
-    percent: "+12%"
-  },
-  {
-    title: "New Costumers",
-    value: "Rs. 25,450",
-    percent: "+8%"
-  },
-  {
-    title: "Top Customer Spend",
-    value: "$143.37",
-    percent: "-3%"
-  },
-  {
-    title: "Frequent Shoppers",
-    value: "350",
-    percent: "+1.5%"
-  },
-  {
-    title: "Birthday Reminders",
-    value: "$125,450",
-    percent: "+12%"
-  },
-  {
-    title: "Anniversary Reminders",
-    value: "875",
-    percent: "+8%"
-  }
-  
-];
+      const navigate=useNavigate();
+      const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {crmDashboard,isLoading}=useSelector(state=>state?.crm);
+            console.log(crmDashboard,"crmDashboard");
+    
+        const getcrmHandler=async()=>{
+          try {
+          const res=await dispatch(getCrmAsync({token})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+   const cardData=[
+        {value:crmDashboard?.data?.anniversaryReminders,title:"Anniversary Reminders"},
+        {value:crmDashboard?.data?.totalCustomers,title:"Total Costumers"},
+        {value:crmDashboard?.data?.newCustomers,title:"New Costumers"},
+        {value:crmDashboard?.data?.topCustomerSpend,title:"Top Customer Spend"},
+        {value:crmDashboard?.data?.frequentShoppers,title:"Frequent Shoppers"},
+        {value:crmDashboard?.data?.birthdayReminders,title:"Birthday Reminders"}
+
+      ]  
+
+        useEffect(()=>{
+        getcrmHandler();
+        },[])
+   if(isLoading) return <Loader/>
     return(
         <div className="flex flex-col gap-5 p-5">
           <Row gutter={[20,20]}>
-           {dashboardData?.map((item,idx)=>{
+           {cardData?.map((item,idx)=>{
               return(
                  <Col span={8}>  
-                    <SalesCard item={item} />
+                    <CrmCard item={item} />
                   </Col>
               )
            })}
@@ -58,7 +57,7 @@ const CrmManagement=()=>{
           <CustomButton onclick={()=>{navigate("/admin/crm-anniversary-reminder")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Anniversary Reminders"}/>
          </div>
          <div className="">
-          <CrmTable />
+          <CrmTable  item={crmDashboard?.data?.timeWiseData}/>
 
          </div>
          <div>

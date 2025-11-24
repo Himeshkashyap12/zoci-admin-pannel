@@ -5,7 +5,7 @@ import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
 import { Avatar, Image } from "antd";
-const UnitSoldByCategary=()=>{
+const UnitSoldByCategary=({unitSoldByCategory})=>{
       const options = {
     chart: {
       id: "basic-line",
@@ -13,7 +13,7 @@ const UnitSoldByCategary=()=>{
       zoom: { enabled: false },
     },
     xaxis: {
-      categories: ["Rings", "Earrings", "Necklaces", "Instagram","Social","Referral"],
+      categories: unitSoldByCategory?.data?.map(item=>item?.category),
     },
 
     // color for the series
@@ -50,7 +50,7 @@ const UnitSoldByCategary=()=>{
   const series = [
     {
       name: "series-1",
-      data: [10, 40, 15, 50,89,37],
+      data:  unitSoldByCategory?.data?.map(item=>item?.unitsSold),
     },
   ];
 
@@ -65,10 +65,10 @@ const UnitSoldByCategary=()=>{
         </div>}/>
     </div>
     <div className="flex flex-col gap-4">
-       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={"+10%"}/>
+       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={unitSoldByCategory?.change}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
-       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={"+10%"}/>
+       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={unitSoldByCategory?.change}/>
        </div>
     </div>
     <div>

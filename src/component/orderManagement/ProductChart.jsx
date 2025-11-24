@@ -6,7 +6,9 @@ import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
 import { Avatar, Image } from "antd";
-const ProductChart=()=>{
+const ProductChart=({exchangedCategories})=>{
+  console.log(exchangedCategories,"exchangedCategories");
+  
       const options = {
     chart: {
       id: "basic-line",
@@ -14,7 +16,7 @@ const ProductChart=()=>{
       zoom: { enabled: false },
     },
     xaxis: {
-      categories: ["Rings", "Earrings", "Necklaces", "Instagram","Social","Referral"],
+      categories: exchangedCategories?.categories?.map((item)=>item?.name),
     },
 
     // color for the series
@@ -51,7 +53,7 @@ const ProductChart=()=>{
   const series = [
     {
       name: "series-1",
-      data: [10, 40, 15, 50,89,37],
+      data: exchangedCategories?.categories?.map((item)=>item?.value),
     },
   ];
 
@@ -66,10 +68,10 @@ const ProductChart=()=>{
         </div>}/>
     </div>
     <div className="flex flex-col gap-4">
-       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={"+10%"}/>
+       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={`+ ${exchangedCategories?.percent}`}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
-       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={"+10%"}/>
+       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={`+ ${exchangedCategories?.last30Days} %`}/>
        </div>
     </div>
     <div>

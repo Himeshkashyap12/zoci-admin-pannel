@@ -17,7 +17,6 @@ const BirthdayPromotionFilter=()=>{
                  
                  <Col span={16}>
                  <div className="flex gap-5 justify-end"> 
-                     <CustomButton className={"!text-[#fff]"} value={`Promocode: BIGGIFT`}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                     <CustomText className={"!text-[#fff]"} value={"Filter"}/>
