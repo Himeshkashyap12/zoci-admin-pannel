@@ -6,9 +6,9 @@ import Cookies from "js-cookie"
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBirthdayPromotion } from "../../../feature/marketing/marketingSlice";
 import Loader from "../../loader/Loader";
-import { isoToIST } from "../../../../../../AAJEEVAN_SANG_ADMIN/src/constant/constant";
 import { CopyOutlined } from "@ant-design/icons";
 import {toast} from "react-toastify"
+import { isoToIST } from "../../../constants/constants";
 const BirthdayPromotionTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
