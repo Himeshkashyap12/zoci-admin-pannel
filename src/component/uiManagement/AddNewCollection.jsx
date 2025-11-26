@@ -13,6 +13,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import blogUpload from "../../assets/icons/blogUpload.png"
 import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
+import ImageLoader from "../loader/ImageLoader";
 const AddNewCollection = ({ setOpen }) => {
   const dispatch = useDispatch();
   const token = Cookies.get("token");
@@ -93,7 +94,7 @@ const handleUpload = async (e) => {
                 className={"text-[16px] "}
                 value={"Collection Image"}
               />
-               {isMediaLoading?<Loader imageLoader/>:<CustomImageUpload  imageUploadHandler={handleUpload} label={
+               {isMediaLoading?<ImageLoader/>:<CustomImageUpload  imageUploadHandler={handleUpload} label={
              !collection?.thumbnail?  <div className="flex flex-col gap-3 items-center cursor-pointer ">
                    <Image preview={false} className="!size-[30px]" src={blogUpload}/>
                 <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
