@@ -15,8 +15,11 @@ import "./inventary.css"
 import CustomMultipleFilter from "../common/CustumMultipleFilter";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import CustomModal from "../common/CustomModal";
+import CreateBulkProduct from "./CreateBulkProduct";
 const ProductList=({selectedRowKeys})=>{
   const [search,setSearch]=useState("");
+  const [productListBulkModel,setproductListBulkModel]=useState(false)
   const [filterKey,setFilter]=useState([])
   const [sortKey,setSort]=useState([])
   const debouncedText = useDebounce(search, 500);
@@ -155,6 +158,7 @@ const dataExportInExcelHandler = async () => {
 
     }
   }
+  
   useEffect(() => {
   if (debouncedText || !search) {
    getAllProducts();
@@ -175,8 +179,8 @@ const dataExportInExcelHandler = async () => {
                  </Col>
                  <Col span={24}>
                  <div className="flex gap-2"> 
-                  <CustomButton className={"!text-[#fff]"} value={"Print"}/>
-                  <CustomButton className={"!text-[#fff]"} value={"Import bulk product"}/>
+                  {/* <CustomButton className={"!text-[#fff]"} value={"Print"}/> */}
+                  <CustomButton onclick={()=>{setproductListBulkModel(true)}}   className={"!text-[#fff]"} value={"Import bulk product"}/>
                   <CustomButton onclick={()=>{navigate("/admin/create-product")}} className={"!text-[#fff]"} value={"Create individual product"}/>
                   <CustomButton value={<div className="flex items-center justify-between gap-1 ">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
@@ -196,6 +200,8 @@ const dataExportInExcelHandler = async () => {
                   </Col>
                
             </Row>
+            <CustomModal closeIcon  footer={false} setOpen={setproductListBulkModel} open={productListBulkModel} modalBody={<CreateBulkProduct setproductListBulkModel={setproductListBulkModel}/>} width={"490px"}  align={"center"}/>
+
             </div>
         
     )

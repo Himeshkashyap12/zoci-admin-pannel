@@ -36,14 +36,14 @@ export const mediaSlice = createSlice({
   },
   extraReducers: (builder) => {
        builder.addCase(getImageUrlAsync.pending, (state) => {
-          state.isLoading = true;
+          state.isMediaLoading = true;
         });
         builder.addCase(getImageUrlAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;
+          state.isMediaLoading = false;
           state.imageUrl = action.payload;
         });
         builder.addCase(getImageUrlAsync.rejected, (state, action) => {
-          state.isLoading = false;
+          state.isMediaLoading = false;
           state.error = action;
         });
         

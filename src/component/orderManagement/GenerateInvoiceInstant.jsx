@@ -1,7 +1,9 @@
+import GenerateInvoiceForm from "../admin/GenerateInvoiceForm";
+
 const GenerateInvoiceInstant=()=>{
     return(
         <>
-        GenerateInvoiceInstant
+         <GenerateInvoiceForm/>
         </>
     )
 }

@@ -9,6 +9,7 @@ const initialState = {
   bestSeller:[],
   isLoading: false,
   isDashboardLoading:false,
+  isCreateProductLoading:false,
   error: null,
 };
 
@@ -172,6 +173,39 @@ export const createVendorAsync = createAsyncThunk(
     }
   }
 );
+export const createProductHandlerAsync = createAsyncThunk(
+  "inventary/createProduct",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/product/create-new-product`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const createBulkProductAsync = createAsyncThunk(
+  "inventary/createBulkProduct",
+ async ({token,formData}) => {
+        try {
+      const res = await api.post(`/product/bulk-upload-products`,formData,{
+        headers: {
+         "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`,
+        }
+      });      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 
 export const inventarySlice = createSlice({
   name: "inventary",
@@ -288,6 +322,29 @@ export const inventarySlice = createSlice({
           state.isLoading = false;
           state.error = action.payload;
         });
+        builder.addCase(createProductHandlerAsync.pending, (state) => {
+          state.isCreateProductLoading = true;
+        });
+        builder.addCase(createProductHandlerAsync.fulfilled, (state, action) => {                
+          state.isCreateProductLoading = false;   
+
+        });
+        builder.addCase(createProductHandlerAsync.rejected, (state, action) => {
+          state.isCreateProductLoading = false;
+          state.error = action.payload;
+        });
+         builder.addCase(createBulkProductAsync.pending, (state) => {
+          state.isCreateProductLoading = true;
+        });
+        builder.addCase(createBulkProductAsync.fulfilled, (state, action) => {                
+          state.isCreateProductLoading = false;   
+
+        });
+        builder.addCase(createBulkProductAsync.rejected, (state, action) => {
+          state.isCreateProductLoading = false;
+          state.error = action.payload;
+        });
+        
         
   },
 });

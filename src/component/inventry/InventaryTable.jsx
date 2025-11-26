@@ -183,7 +183,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
           <div
             className="h-[20px] w-[20px] cursor-pointer"
           >
-            <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
+            {/* <EditOutlined style={{ color: "#214344", fontSize: "24px" }} /> */}
           </div>
         </Space>
       ),

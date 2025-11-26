@@ -1,9 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../common/CustomTable";
 import CustomText from "../common/CustomText";
-
 const SalesReportTable=()=>{
+
      const columns = [
          {
       title: (

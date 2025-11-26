@@ -4,8 +4,14 @@ import logo from "../../assets/header.png";
 import { Menu, Typography } from "antd";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import CustomText from "../common/CustomText";
+import { logOutApi } from "../../feature/auth/authApi";
+import { logout } from "../../feature/auth/authSlice";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 const CustomSidebar = () => {
   const [selectKey, setSelectKey] = useState(0);
+  const dispatch=useDispatch();
   const siderStyle = {
     color: "#fff",
     backgroundColor: "#214344",
@@ -169,10 +175,20 @@ const CustomSidebar = () => {
       navigate(selectedItem.path);
     }
   };
-
+const logoutHandler = async () => {
+    try {
+      const res = await logOutApi();
+      dispatch(logout());
+      toast.success(res.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
   return (
     <>
       <Sider width="18%" style={siderStyle}>
+      <div className="flex flex-col h-[100vh] justify-between">
         <div className="pt-5">
           <div className="lg:h-[50px] h-[30px] lg:w-[150px] w-[100px] mx-auto">
             <img src={logo} alt="logo" />
@@ -189,7 +205,12 @@ const CustomSidebar = () => {
             />
           </div>
         </div>
+        <div className="p-[20px] cursor-pointer" onClick={()=>{logoutHandler()}}>
+          <CustomText className={"!text-[#ECD29E]"} value={"Logout"}/>
+        </div>
+        </div>
       </Sider>
+      
     </>
   );
 };

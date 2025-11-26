@@ -43,7 +43,7 @@ const OrderManagement=()=>{
           <Row>
             <Col span={24}>
             <div className="!h-[400px]">
-            <OnlineOrderChart onlineOrders={orderDashboard?.onlineOrders} />
+            {/* <OnlineOrderChart onlineOrders={orderDashboard?.onlineOrders} /> */}
             </div>
             </Col>
           </Row>
