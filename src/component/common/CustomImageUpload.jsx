@@ -12,7 +12,7 @@ const CustomImageUpload=({label,imageUploadHandler})=>{
         <input
           type="file"
           onChange={(e)=>{imageUploadHandler(e)}}
-          accept="image/*"
+          accept=".csv,image/*,video/*"
           className="hidden"
         />
       </label>

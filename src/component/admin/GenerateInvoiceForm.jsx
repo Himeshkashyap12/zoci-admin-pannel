@@ -10,11 +10,15 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import CustomTable from "../common/CustomTable";
+import CustomText from "../common/CustomText";
+import Loader from "../loader/Loader";
 const GenerateInvoiceForm = () => {
   const dispatch=useDispatch();
   const navigate=useNavigate();
   const {skuData}=useSelector(state=>state?.admin);
   const skuFilteredData=skuData.filter((item)=>item.stock>0);
+  const [isLoading,setIsLoading]=useState(false)
   
   const [invoiceInputHandler,setInvoiceInputHandler]=useState({
     name: "",
@@ -26,7 +30,6 @@ const GenerateInvoiceForm = () => {
     discount: "",
     paymentMethod: "cash",
     invoiceData:[]
-      
   })
   const subTotal = invoiceInputHandler?.invoiceData?.reduce((accumulator, currentValue) =>{
     return accumulator+(currentValue?.price*currentValue?.quantity);
@@ -68,7 +71,6 @@ const data=[...invoiceInputHandler?.invoiceData];
 
 
 const skuSearchHandler=async(e)=>{
-      
   if(e.target.value=="") return dispatch(addSku([]));
   try {
     const data={sku:e.target.value}
@@ -80,12 +82,15 @@ const skuSearchHandler=async(e)=>{
      }
      
   } catch (error) {
+       dispatch(addSku([]));
     
   }
   
 }
   
 const previewPdf=async()=>{
+      setIsLoading(true)
+
   try {
     const item=invoiceInputHandler?.invoiceData?.map((item)=>{
       return {sku:item?.sku,quantity:item?.quantity}
@@ -101,26 +106,33 @@ const previewPdf=async()=>{
     discount: invoiceInputHandler?.discount,
     paymentMethod:invoiceInputHandler?.paymentMethod
     ,items:item}
-    const res=await previewPdfHandler(data);    
+    const res=await previewPdfHandler(data); 
+      setIsLoading(false)
+
   } catch (error) {
     console.log(error);
+      setIsLoading(false)
     
     
   }
 }
 
 const addSkuHandler=(item)=>{
-
+   
   const data={...item,quantity:1}
  
-  if(invoiceInputHandler.invoiceData.some(product=>product.sku==item.sku)){
+  if(invoiceInputHandler.invoiceData.some(product=>product?.sku==item?.sku)){
     return toast.error("Item already exist")
   }else{
- setInvoiceInputHandler({...invoiceInputHandler,invoiceData:[...invoiceInputHandler?.invoiceData,data]})
+ setInvoiceInputHandler({...invoiceInputHandler,invoiceData:[...invoiceInputHandler?.invoiceData,data]});
+
+ dispatch(addSku([]))
   }
   
 }
 const generateInvoiceHandler=async()=>{
+      setIsLoading(true)
+
   console.log(invoiceInputHandler);
   
   if(invoiceInputHandler?.name=="" || 
@@ -151,11 +163,13 @@ const generateInvoiceHandler=async()=>{
     console.log(res);
     if(res.success){
       toast.success(res?.message)
-      navigate("/admin/invoice");
+      setIsLoading(false)
+
     }
     
     
   } catch (error) {
+      setIsLoading(false)
     
   }
 }
@@ -171,20 +185,36 @@ const removeproductHandler=(item)=>{
   
 
 }
+const cancelInvoiceHandler=()=>{
+  setInvoiceInputHandler({
+    
+    name: "",
+    mobile: "",
+    address: "",
+    exhibitionPlace: "",
+    eventType: "",
+    date: dayjs().format("YYYY-MM-DD"),
+    discount: "",
+    paymentMethod: "cash",
+    invoiceData:[]
+  
+  })
+
+}
   const columns = [
     {
       title: (
-        <Typography.Text className="text-[#fff]">S. No.</Typography.Text>
+       <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
       ),
       dataIndex: "id",
       key: "id",
       width: 160,
       align: "center",
-      render: (_,record) => <Typography.Text>{record?.id.slice(0,5)}</Typography.Text>
+      render: (_,record,idx) => <Typography.Text>{idx+1}</Typography.Text>
     },
     {
       title: (
-        <Typography.Text className="text-[#fff]">Product Name</Typography.Text>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
       ),
       dataIndex: "title",
       key: "title",
@@ -195,7 +225,8 @@ const removeproductHandler=(item)=>{
     },
     {
       title: (
-        <Typography.Text className="text-[#fff]">SKU</Typography.Text>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+
       ),
       dataIndex: "sku",
       key: "sku",
@@ -205,7 +236,8 @@ const removeproductHandler=(item)=>{
     },
      {
       title: (
-        <Typography.Text className="text-[#fff]">Size</Typography.Text>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>
+
       ),
       dataIndex: "size",
       key: "size",
@@ -215,7 +247,7 @@ const removeproductHandler=(item)=>{
     },
     {
       title: (
-        <Typography.Text className="text-[#fff]">Quantity</Typography.Text>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Quantity"}/>
       ),
       dataIndex: "stock",
       key: "stock",
@@ -238,8 +270,8 @@ const removeproductHandler=(item)=>{
    
     {
       title: (
-        <Typography.Text className="text-[#fff]">Price</Typography.Text>
-      ),
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>
+              ),
       dataIndex: "price",
       key: "price",
       width: 160,
@@ -248,7 +280,7 @@ const removeproductHandler=(item)=>{
     },
       {
       title: (
-        <Typography.Text className="text-[#fff]">Action</Typography.Text>
+        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>
       ),
       dataIndex: "price",
       key: "price",
@@ -270,7 +302,7 @@ const removeproductHandler=(item)=>{
     
    
   ];
-
+if(isLoading) return <Loader/>
   return (
    <>
    <div className="py-2 ps-3">
@@ -355,7 +387,8 @@ const removeproductHandler=(item)=>{
     <div className="flex flex-col gap-2 relative">  
            <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Product SKU</Typography.Text>
            <Input   onChange={(e)=>{skuSearchHandler(e)}}  className="rounded-full !border-[#214344] "  placeholder="Please Entert SKU" />
-             {skuFilteredData?.length>0 ? <div className="absolute top-16 w-[100%] bg-[#ffff] z-[9999] h-[200px] overflow-auto rounded-md ">
+             {skuFilteredData?.length>0 ?
+              <div className="absolute top-16 w-[100%] bg-[#ffff] z-[9999] h-[200px] overflow-auto rounded-md ">
                 {skuFilteredData?.map((item)=>{
                   return(
                     <div  className="flex gap-3 items-center p-2 cursor-pointer" onClick={()=>{addSkuHandler(item)}}>
@@ -371,8 +404,6 @@ const removeproductHandler=(item)=>{
                          Quantity : {item?.stock}
                         </Typography.Text>
                       </div>
-                      
-
                     </div>
                   )
                 })}
@@ -391,7 +422,7 @@ const removeproductHandler=(item)=>{
     > 
     <div className="flex flex-col gap-2">  
            <Typography.Text className="text-[#214344] !font-[600] !text-[14px] ">Discount</Typography.Text>
-        <Input name="discount" onChange={(e)=>{invoiceInputDataHandler(e)}} value={invoiceInputHandler?.discount}  className="rounded-full !border-[#214344] "  placeholder="Enter Discount in %" />
+           <Input name="discount" onChange={(e)=>{invoiceInputDataHandler(e)}} value={invoiceInputHandler?.discount}  className="rounded-full !border-[#214344] "  placeholder="Enter Discount in %" />
         </div>
 
     </Form.Item>
@@ -403,7 +434,7 @@ const removeproductHandler=(item)=>{
     > 
     <div className="flex flex-col gap-2">  
            <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Payment Mode</Typography.Text>
-         <Form.Item   rules={[{ required: true }]}>
+           <Form.Item   rules={[{ required: true }]}>
             <Select onChange={(e)=>{invoiceInputDataHandler(e,"paymentMethod")}} value={invoiceInputHandler?.paymentMethod}  className="rounded-full !border-[#214344] " placeholder="Select Payment Method">
               <Option value="upi">UPI</Option>
               <Option value="online">Online</Option>
@@ -423,7 +454,7 @@ const removeproductHandler=(item)=>{
     > 
     <div className="flex flex-col gap-2">  
            <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Date</Typography.Text>
-        <DatePicker defaultValue={dayjs()}  onChange={(e)=>{invoiceInputDataHandler(e,"date")}} />
+           <DatePicker defaultValue={dayjs()}  onChange={(e)=>{invoiceInputDataHandler(e,"date")}} />
         </div>
 
     </Form.Item>
@@ -431,12 +462,13 @@ const removeproductHandler=(item)=>{
       
     </Row>
     <Row>
-      <Table
-            scroll={{ x: 1300 }}
+      <Col span={24}>
+      <CustomTable
             pagination={false}
             columns={columns}
             dataSource={invoiceInputHandler?.invoiceData}
           />
+          </Col>
          
     </Row>
     {invoiceInputHandler?.invoiceData?.length>0 &&  <div className="flex flex-col gap-3 bg-[#fff] px-20 w-[96%] py-5">
@@ -460,7 +492,7 @@ const removeproductHandler=(item)=>{
       <Button onClick={()=>{previewPdf()}} className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 " htmlType="submit">
         Preview and Print
       </Button>
-       <Button className=" !text-[#214344] !border-[#214344] !rounded-full !w-[250px] !text-[16px] py-3" >
+       <Button onClick={()=>{cancelInvoiceHandler()}} className=" !text-[#214344] !border-[#214344] !rounded-full !w-[250px] !text-[16px] py-3" >
         Cancel
       </Button>
      

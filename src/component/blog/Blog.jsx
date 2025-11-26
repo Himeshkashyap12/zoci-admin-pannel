@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 import CustomText from "../common/CustomText";
@@ -19,6 +13,7 @@ const Blog = () => {
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
       const {blog,isLoading}=useSelector(state=>state?.blog);
+      const {isMediaLoading} =useSelector(state=>state?.media)
       console.log(blog,"bestSeller");
   
   const getBlogData=async()=>{
@@ -32,7 +27,7 @@ const Blog = () => {
    getBlogData();
   },[])
 
-  if(isLoading) return <Loader/>
+  if(isMediaLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">

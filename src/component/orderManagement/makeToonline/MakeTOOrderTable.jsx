@@ -19,6 +19,17 @@ const MakeToOrderTablePage=()=>{
       const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);
             console.log(makeOnlineOrders,"makeOnlineOrders");
             
+
+            const orderStatusOption=[
+            { label:<CustomText className={"!text-[orange]"} value={"Ordered"}/>,value:"Ordered"},
+            { label:<CustomText className={"!text-[#FFDB58]"} value={"Pending"}/>,value:"Pending"},
+            { label:<CustomText className={"!text-[green]"} value={"Delivered"}/>,value:"Delivered"},
+            { label:<CustomText className={"!text-[red]"} value={"Cancelled"}/>,value:"Cancelled"}
+            ]
+            const orderChangeHandler=(e)=>{
+              console.log(e,"dsfbdh");
+              
+            }
         const getMakeToOnlineOrder=async()=>{
           try {
           const res=await dispatch(getManageOnlineOrderAsync({token})).unwrap();
@@ -129,9 +140,18 @@ const MakeToOrderTablePage=()=>{
                 key: "date",
                 width: 200,
                 align: "center",
-                render: (_,text) => <div className="flex flex-col justify-center "><CustomText value={text?.date}/>
-                                <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{setOrderStatus(e)}} options={[{label:<CustomText className={"!text-[red]"} value={"Ordered"}/>,value:""}]} />
-                                </div>
+                render: (_,text) => {
+                  console.log(text,"text");
+                  
+                  return(
+                           
+                           
+                           <div className="flex flex-col justify-center "><CustomText value={text?.date}/>
+                                <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{orderChangeHandler(e)}} options={orderStatusOption} />
+                              </div>
+                  )
+                
+                      }
               }
             ];
 

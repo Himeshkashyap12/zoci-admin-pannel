@@ -5,6 +5,7 @@ import { loginWithNumberAndPassword } from "../../feature/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../feature/auth/authSlice";
 import { toast } from "react-toastify";
+import Loader from "../loader/Loader";
 const Login = ({ setSingnin }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -12,8 +13,7 @@ const Login = ({ setSingnin }) => {
     mobile: "",
     password: "",
   });
-  const {isLoading}=useSelector(state=>state?.auth)
-
+const [isLoading,setIsLoading]=useState(false);
   const inputHandler = (e) => {
       if(e.target.name==="mobile" && isNaN(e.target.value)){
         return;
@@ -25,6 +25,7 @@ const Login = ({ setSingnin }) => {
   };
 
   const signInHandler = async () => {
+    setIsLoading(true)
     if (input.mobile.length < 10 || input.mobile == "")
       return toast.error("Please enter valid mobile number");
     if (input.password == "" || input.password.length < 6)
@@ -38,6 +39,7 @@ const Login = ({ setSingnin }) => {
         dispatch(loginSuccess({ token: res.data.token, users: res.data }));
         if (res.data.role === "admin") {
           navigate("/admin/inventary");
+          setIsLoading(false)
         } else {
           navigate("/");
         }
@@ -49,10 +51,12 @@ const Login = ({ setSingnin }) => {
         mobile: input.mobile,
         password: "",
       });
+          setIsLoading(false)
+
     }
   };
 
-
+if(isLoading) return <Loader/>
   return (
     
       <div className="w-[20%] mx-auto flex flex-col gap-5     justify-center  items-center h-[100vh]">

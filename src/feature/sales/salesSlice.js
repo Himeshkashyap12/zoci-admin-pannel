@@ -11,6 +11,7 @@ const initialState = {
   totalOrders:[],
   returningCustomers:[],
   returningCustomerDetails:[],
+  salesTime:[],
   isLoading: false,
   error: null,
 };
@@ -184,6 +185,24 @@ export const getReturningCustomerDetailsAsync = createAsyncThunk(
 );
 
 
+export const getSalesTimeAsync = createAsyncThunk(
+  "sales/salesEarning",
+ async ({token}) => {
+        try {
+      const res = await api.get(`user/revenue-table/all`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 
 
 
@@ -301,6 +320,17 @@ export const salesSlice = createSlice({
           state.returningCustomerDetails = action.payload;
         });
         builder.addCase(getReturningCustomerDetailsAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        }); 
+         builder.addCase(getSalesTimeAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getSalesTimeAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.salesTime = action.payload;
+        });
+        builder.addCase(getSalesTimeAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
         }); 

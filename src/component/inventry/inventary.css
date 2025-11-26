@@ -66,3 +66,7 @@
 .inventary .ant-select-arrow svg {
   fill: white !important;
 }
+
+.product-form .ant-select-selector{
+  border-radius: 20px;
+}

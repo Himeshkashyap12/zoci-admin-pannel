@@ -19,9 +19,9 @@ import Loader from "../loader/Loader";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const navigate=useNavigate();
-    const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
+  const token=Cookies.get("token");  
+  const dispatch=useDispatch();
+  const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
             console.log(slaesDashboard);
             
         const getSalesDashboard=async()=>{

@@ -52,7 +52,6 @@ const Inventary=()=>{
             </Col>
           </Row>
           <InventaryCountCards cardData={inventaryDashboard?.cards}/>
-          {/* <ChangeProductPrice/> */}
           <ProductList selectedRowKeys={selectedRowKeys}/>
           <InventaryTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>
           

@@ -17,16 +17,7 @@ const AdminLayout = () => {
     height: "100vh",
   };
 
-  const logoutHandler = async () => {
-    try {
-      const res = await logOutApi();
-      dispatch(logout());
-      toast.success(res.message);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
+  
 
 
   return (
