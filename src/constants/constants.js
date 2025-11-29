@@ -67,5 +67,8 @@ export function compareNewAndOldObject({oldObj, newObj}) {
 
   return changed;
 }
+export const isoTODate = (isoDate) => {
+  return new Date(isoDate).toISOString().slice(0, 10);
+};
 
  

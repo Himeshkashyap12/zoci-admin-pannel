@@ -7,7 +7,6 @@ import { useState } from "react";
 import CustomRadio from "../../common/CustomRadio";
 import TextArea from "antd/es/input/TextArea";
 import CustomDate from "../../common/CustomDate";
-import { isoTODate } from "../../../../../../zoci-frontend/src/components/constants/constants";
 import CustomImageUpload from "../../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +15,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { createExpenseAsync, getTotalExpenditureAsync } from "../../../feature/sales/salesSlice";
 import {useNavigate} from "react-router-dom";
+import { isoTODate } from "../../../constants/constants";
 const AddExpense=({setOpen})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
