@@ -13,7 +13,7 @@ const BlogPreviewModel=({newBlogInput,setPreviewModel})=>{
         <>
          <div className="relative flex flex-col gap-2 bg-[#fff] rounded-2xl p-[8px]">
                 <div className="">
-                  <Image className="w-full h-full object-cover rounded-t-2xl" preview={false} src={blog} />
+                  <Image className="w-full h-full object-cover rounded-t-2xl" preview={false} src={newBlogInput?.image} />
                 </div>
                 <div className="flex flex-col gap-5">
                   <div className="flex flex-col gap-5">

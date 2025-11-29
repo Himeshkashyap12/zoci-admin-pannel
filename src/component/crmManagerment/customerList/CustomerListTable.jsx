@@ -14,6 +14,7 @@ const CustomerListTable=()=>{
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
       const {customerList,isLoading}=useSelector(state=>state?.crm);
+console.log(customerList,"knjb");
 
         const getAllCustomerListHandler=async()=>{
           try {
@@ -55,7 +56,7 @@ const CustomerListTable=()=>{
       dataIndex: "name",
       key: "name",
       width: 200,
-      render: (text) =>  <CustomText value={text??"NA"}/>
+      render: (_,text) =>  <div onClick={()=>{navigate(`/admin/crm-customer-list/${text?.id}`)}}><CustomText value={text?.name??"NA"}/></div>
     },
       {
       title: (

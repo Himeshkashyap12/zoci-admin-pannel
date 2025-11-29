@@ -46,15 +46,10 @@ const AddNewVendor=({setOpen})=>{
         console.log(res);
         
       } catch (err) {
+        console.log(err);
+        
         toast.error("Something went wrong")
-        setOpen(false);
-        setVenderInput({
-          companyName: "",
-          vendorName: "",
-          address: "",
-          gst: "",
-          phoneNumber: ""
-        });
+       
         
       }
        
@@ -108,7 +103,7 @@ const AddNewVendor=({setOpen})=>{
                    
                 </Row>
                 <div className="flex justify-center gap-4 pt-10">
-                    <CustomButton onclick={()=>{createVendorHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={"Yes, Add New Vendor"}/>
+                    <CustomButton onclick={()=>{createVendorHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={isLoading?"Loading...":"Yes, Add New Vendor"}/>
                     <Button onClick={()=>{setOpen(false)}} className="!border-[2px] !border-[#214344] rounded-full  w-[180px] text-[14px]">No, Cancel</Button>
                 </div>
             </div>

@@ -133,7 +133,7 @@ const ReturningCustomerTable=({returningCustomers})=>{
                   align: "center",
                   render: (_,text) => {
                     return(
-                      <div className="cursor-pointer" onClick={()=>{navigate(`/admin/returning-customer/${text?.lastOrderId}`)}}>
+                      <div className="cursor-pointer" onClick={()=>{navigate(`/admin/returning-customer/${text?.historyKey}`)}}>
                       <EyeOutlined style={{ fontSize: 18 }} />
                     </div>
                     )   

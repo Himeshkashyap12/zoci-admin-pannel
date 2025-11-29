@@ -4,7 +4,7 @@ import { useState } from "react";
 import UiManagementButton from "./UiManagementButton.jsx";
 import UiManagementFilter from "./UiManagementFilter.jsx";
 import CollectionTable from "./CollectionTable.jsx";
-import CarousalUi from "./CarousalUi.jsx";
+import CarousalUi from "./uiCarousal/CarousalUi.jsx";
 const UiManagement=()=>{
     const [collection,setCollection]=useState(false)
     return(
@@ -14,9 +14,9 @@ const UiManagement=()=>{
           className={"!text-[#214344] !text-[20px]"}
           value={"Ui Management"}
         />
-        {/* <UiManagementButton setCollection={setCollection} collection={collection}/> */}
-        <UiManagementFilter/>
-        <CollectionTable/>
+        <UiManagementButton setCollection={setCollection} collection={collection}/>
+        {collection && <UiManagementFilter/>}
+       {collection? <CollectionTable/>:<CarousalUi/>}
       </div>
      
         </>

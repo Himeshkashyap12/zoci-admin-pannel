@@ -4,7 +4,10 @@ const initialState = {
   crmDashboard:[], 
   allvisitors:[],
   customerList:[],
+  visitorsDetails:[],
   birthdayAnniversaryReminder:[],
+  wishListAndBag:[],
+  orderHistory:[],
   isLoading: false,
   error: null,
 };
@@ -90,6 +93,58 @@ export const getBirthdayAnniversaryReminderAsync = createAsyncThunk(
   }
 );
 
+export const allVisitorsDetailsAsync = createAsyncThunk(
+  "crm/visitorsDetailsAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.get(`/user/customersAdmin/interactions/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
+export const customerWishListAndBagAsync = createAsyncThunk(
+  "crm/wishListAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.get(`/user/customersAdmin/customers/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const CustomerOrderHistoryAsync = createAsyncThunk(
+  "crm/orderHistoryAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.get(`/user/customersAdmin/orders/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 
 export const crmSlice = createSlice({
   name: "crm",
@@ -139,6 +194,39 @@ export const crmSlice = createSlice({
           state.birthdayAnniversaryReminder = action.payload;
         });
         builder.addCase(getBirthdayAnniversaryReminderAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+          builder.addCase(allVisitorsDetailsAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(allVisitorsDetailsAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.visitorsDetails = action.payload;
+        });
+        builder.addCase(allVisitorsDetailsAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(customerWishListAndBagAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(customerWishListAndBagAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.wishListAndBag = action.payload;
+        });
+        builder.addCase(customerWishListAndBagAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(CustomerOrderHistoryAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(CustomerOrderHistoryAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.orderHistory = action.payload;
+        });
+        builder.addCase(CustomerOrderHistoryAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
         });

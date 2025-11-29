@@ -5,143 +5,145 @@ import CustomTable from "../../../common/CustomTable";
 import CustomText from "../../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { Image } from "antd";
 
-const ReturningCustomerDetailsTable=({returningCustomers})=>{
+const ReturningCustomerDetailsTable=()=>{
+    const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);      
+     console.log(returningCustomerDetails,"fjbdhfdhb");
+     
        const [selectedRowKeys, setSelectedRowKeys] = useState([]);
        const navigate=useNavigate();
-                const columns = [
+               const columns = [
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="SNo."
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"SNo."}
                     />
                   ),
                   dataIndex: "sNo",
                   key: "sNo",
                   width: 80,
-                  render: (_, __, index) => <CustomText value={index + 1} />,
+                  render: (text) => <CustomText value={`${text}.`} />,
                 },
 
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Last Order ID"
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Product image"}
                     />
                   ),
-                  dataIndex: "lastOrderId",
-                  key: "lastOrderId",
-                  width: 200,
-                  align:"center",
-                  render: (text) => <CustomText value={text} />,
+                  dataIndex: "productImage",
+                  key: "productImage",
+                  width: 120,
+                  render: (img) =>
+                    img ? (
+                      <Image
+                        src={img}
+                        alt="product"
+                        style={{ width: 60, height: 60, objectFit: "contain" }}
+                      />
+                    ) : (
+                      <CustomText value="No Image" />
+                    ),
                 },
 
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Customer Name"
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Order ID"}
                     />
                   ),
-                  dataIndex: "customerName",
-                  key: "customerName",
-                  width: 200,
-                  render: (text) => <CustomText value={text} />,
-                },
-
-                {
-                  title: (
-                    <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Contact Number"
-                    />
-                  ),
-                  dataIndex: "contactNumber",
-                  key: "contactNumber",
+                  dataIndex: "orderId",
+                  key: "orderId",
                   width: 150,
-                  align:"center",
-                  render: (text) => <CustomText value={text} />,
+                  render: (text) => <CustomText value={text || "-"} />,
                 },
 
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Exhibition /Event/Online"
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Product Name"}
+                    />
+                  ),
+                  dataIndex: "productName",
+                  key: "productName",
+                  width: 150,
+                  render: (text) => <CustomText value={text || "-"} />,
+                },
+
+                {
+                  title: (
+                    <CustomText
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"SKU"}
+                    />
+                  ),
+                  dataIndex: "sku",
+                  key: "sku",
+                  width: 100,
+                  render: (text) => <CustomText value={text || "-"} />,
+                },
+
+                {
+                  title: (
+                    <CustomText
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Size"}
+                    />
+                  ),
+                  dataIndex: "size",
+                  key: "size",
+                  width: 80,
+                  render: (text) => <CustomText value={text || "-"} />,
+                },
+
+                {
+                  title: (
+                    <CustomText
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Exhibition /Event/Online"}
                     />
                   ),
                   dataIndex: "exhibitionEventOnline",
                   key: "exhibitionEventOnline",
                   width: 200,
-                  align:"center",
-                  render: (text) => <CustomText value={text} />,
+                  render: (text) => <CustomText value={text || "-"} />,
                 },
 
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Last Purchase Date"
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Date"}
                     />
                   ),
-                  dataIndex: "lastPurchaseDate",
-                  key: "lastPurchaseDate",
-                  width: 150,
-                  align: "center",
-                  render: (date) => (
-                    <CustomText value={new Date(date).toISOString().split("T")[0]} />
-                  ),
-                },
-
-                {
-                  title: (
-                    <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Total Orders"
-                    />
-                  ),
-                  dataIndex: "totalOrders",
-                  key: "totalOrders",
+                  dataIndex: "date",
+                  key: "date",
                   width: 120,
-                  align: "center",
-                  render: (text) => <CustomText value={text} />,
+                  render: (text) => <CustomText value={text || "-"} />,
                 },
 
                 {
                   title: (
                     <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="Total Spends"
+                      className="!text-[14px] !text-white font-semibold"
+                      value={"Price"}
                     />
                   ),
-                  dataIndex: "totalSpends",
-                  key: "totalSpends",
-                  width: 150,
-                  align: "center",
-                  render: (text) => <CustomText value={`Rs. ${text}`} />,
-                },
-
-                {
-                  title: (
-                    <CustomText
-                      className="!text-[14px] !text-[#fff] font-semibold"
-                      value="History"
-                    />
-                  ),
-                  dataIndex: "historyKey",
-                  key: "historyKey",
+                  dataIndex: "price",
+                  key: "price",
                   width: 120,
-                  align: "center",
-                  render: (_,text) => {
-                    return(
-                      <div className="cursor-pointer" onClick={()=>{navigate(`/admin/returning-customer/${text?.lastOrderId}`)}}>
-                      <EyeOutlined style={{ fontSize: 18 }} />
-                    </div>
-                    )   
-                  },
+                  render: (value) => (
+                    <CustomText value={`₹${value?.toLocaleString() || "0"}`} />
+                  ),
                 },
               ];
+
 
 
  const onSelectChange = newSelectedRowKeys => {
@@ -154,7 +156,7 @@ const ReturningCustomerDetailsTable=({returningCustomers})=>{
   };
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={returningCustomers?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={returningCustomerDetails?.data?.rows} columns={columns}/>
 
         </>
     )

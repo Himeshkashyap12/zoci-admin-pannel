@@ -201,6 +201,25 @@ export const getSalesTimeAsync = createAsyncThunk(
     }
   }
 );
+export const createExpenseAsync = createAsyncThunk(
+  "sales/expenseAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/expense/add-expense`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
+
 
 
 
@@ -334,7 +353,16 @@ export const salesSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         }); 
-
+        builder.addCase(createExpenseAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(createExpenseAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(createExpenseAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        }); 
         
   },
 });

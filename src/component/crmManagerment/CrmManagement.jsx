@@ -50,7 +50,7 @@ const CrmManagement=()=>{
               )
            })}
           </Row>
-         <div className="flex justify-between">
+         <div className="flex flex-wrap gap-3 justify-between">
           <CustomButton onclick={()=>{navigate("/admin/crm-all-visitors-list")}}  className={"!text-[#fff] !w-[250px] !h-[60px]"} value={"All Visitor List"}/>
           <CustomButton onclick={()=>{navigate("/admin/crm-customer-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Customers List "}/>
           <CustomButton onclick={()=>{navigate("/admin/crm-birthday-reminder")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Birthday Reminders"}/>

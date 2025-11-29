@@ -14,12 +14,12 @@ const InventaryTopButton = ({totalVendor}) => {
       <div className="flex gap-10">
         <CustomButton
           onclick={()=>{navigate("/admin/stock-alert")}}
-          className={"!text-[14px] font-semibold w-[370px] !h-[50px] !text-[#fff]"}
+          className={"!text-[14px] font-semibold  w-[330px]  !h-[50px] !text-[#fff]"}
           value={"Stock Level Alerts & Notify Me"}
         />
         <CustomButton
           onclick={()=>{navigate("/admin/vendor-performance")}}
-          className={" w-[370px] !h-[50px]"}
+          className={" w-[330px] !h-[50px]"}
           value={
             <div className="flex flex-col  items-center ">
               <CustomText
@@ -35,7 +35,7 @@ const InventaryTopButton = ({totalVendor}) => {
         />
         <CustomButton
           onclick={()=>{navigate("/admin/best-seller")}}
-          className={"!text-[14px] font-semibold w-[370px] !h-[50px] !text-[#fff]"}
+          className={"!text-[14px] font-semibold  w-[330px] !h-[50px] !text-[#fff]"}
           value={"Best-selling Product "}
         />
       </div>

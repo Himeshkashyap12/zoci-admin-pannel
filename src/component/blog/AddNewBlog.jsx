@@ -109,7 +109,7 @@ const AddNewBlog=()=>{
 
            </div>
            <div className="flex justify-center gap-5 pt-10">
-            <CustomButton onclick={()=>{setPreviewModel(true)}} value={"Previous"} className={"!bg-[#214344] !text-[#fff] w-[250px]"}/>
+            <CustomButton onclick={()=>{setPreviewModel(true)}} value={"Preview"} className={"!bg-[#214344] !text-[#fff] w-[250px]"}/>
             <Button onClick={()=>{createBlogHandler()}} className="rounded-full w-[250px] border-[2px] !border-[#214344] !bg-[#EFE6DC]">Submit</Button>
            </div>
                 </div>

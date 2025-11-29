@@ -13,7 +13,7 @@ const OrderTopButton = () => {
           className={"!text-[#214344] !text-[20px] "}
         />
       </div>
-      <div className="flex gap-10">
+      <div className="flex    gap-5 flex-wrap">
         <CustomButton
           onclick={()=>{navigate("/admin/order-online")}}
           className={"!text-[14px] font-semibold w-[200px] !h-[50px] !text-[#fff]"}

@@ -131,7 +131,6 @@ const addSkuHandler=(item)=>{
   
 }
 const generateInvoiceHandler=async()=>{
-      setIsLoading(true)
 
   console.log(invoiceInputHandler);
   
@@ -143,11 +142,17 @@ const generateInvoiceHandler=async()=>{
       invoiceInputHandler?.date=="" ||
       invoiceInputHandler?.paymentMethod=="" ||
       invoiceInputHandler?.invoiceData?.length==0 
-    ) return toast.error("please Enter all required field")
+    
+    ){
+       toast.error("please Enter all required field")
+    } 
   try {
+      
+
       const item=invoiceInputHandler?.invoiceData?.map((item)=>{
       return {sku:item?.sku,quantity:item?.stock}
     })
+    setIsLoading(true)
     const data={ 
       
       name:  invoiceInputHandler?.name,
@@ -169,6 +174,8 @@ const generateInvoiceHandler=async()=>{
     
     
   } catch (error) {
+    toast.error(error?.response?.data?.message);
+    
       setIsLoading(false)
     
   }
@@ -379,40 +386,19 @@ if(isLoading) return <Loader/>
 
     </Form.Item>
     </Col>
-      <Col span={12}>
+     <Col span={12}>
        <Form.Item
   
       rules={[{ required: true, message: 'Please input your username!' }]}
     > 
-    <div className="flex flex-col gap-2 relative">  
-           <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Product SKU</Typography.Text>
-           <Input   onChange={(e)=>{skuSearchHandler(e)}}  className="rounded-full !border-[#214344] "  placeholder="Please Entert SKU" />
-             {skuFilteredData?.length>0 ?
-              <div className="absolute top-16 w-[100%] bg-[#ffff] z-[9999] h-[200px] overflow-auto rounded-md ">
-                {skuFilteredData?.map((item)=>{
-                  return(
-                    <div  className="flex gap-3 items-center p-2 cursor-pointer" onClick={()=>{addSkuHandler(item)}}>
-                      <div><Avatar src={item?.image}/></div>
-                      <div className="flex flex-col gap-1">
-                        <Typography.Text className="!text-[14px] ">
-                         Title : {item?.title}
-                        </Typography.Text>
-                        <Typography.Text className="!text-[14px] ">
-                         SKU : {item?.sku}
-                        </Typography.Text>
-                         <Typography.Text className="!text-[14px] ">
-                         Quantity : {item?.stock}
-                        </Typography.Text>
-                      </div>
-                    </div>
-                  )
-                })}
-           </div>:<Typography.Text className="text-[red]">No data found or Out of stock</Typography.Text>}
-
+    <div className="flex flex-col gap-2">  
+           <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Date</Typography.Text>
+           <DatePicker defaultValue={dayjs()}  onChange={(e)=>{invoiceInputDataHandler(e,"date")}} />
         </div>
 
     </Form.Item>
     </Col>
+     
     </Row>
      <Row gutter={40} >
      <Col span={12}>
@@ -447,14 +433,37 @@ if(isLoading) return <Loader/>
     </Col>
     </Row>
      <Row gutter={40} >
+    
      <Col span={12}>
        <Form.Item
   
       rules={[{ required: true, message: 'Please input your username!' }]}
     > 
-    <div className="flex flex-col gap-2">  
-           <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Date</Typography.Text>
-           <DatePicker defaultValue={dayjs()}  onChange={(e)=>{invoiceInputDataHandler(e,"date")}} />
+    <div className="flex flex-col gap-2 relative">  
+           <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">Search Products</Typography.Text>
+           <Input   onChange={(e)=>{skuSearchHandler(e)}}  className="rounded-full !border-[#214344] "  placeholder="Please Entert SKU" />
+             {skuFilteredData?.length>0 ?
+              <div className="absolute top-16 w-[100%] bg-[#ffff] z-[9999] h-[200px] overflow-auto rounded-md ">
+                {skuFilteredData?.map((item)=>{
+                  return(
+                    <div  className="flex gap-3 items-center p-2 cursor-pointer" onClick={()=>{addSkuHandler(item)}}>
+                      <div><Avatar src={item?.image}/></div>
+                      <div className="flex flex-col gap-1">
+                        <Typography.Text className="!text-[14px] ">
+                         Title : {item?.title}
+                        </Typography.Text>
+                        <Typography.Text className="!text-[14px] ">
+                         SKU : {item?.sku}
+                        </Typography.Text>
+                         <Typography.Text className="!text-[14px] ">
+                         Quantity : {item?.stock}
+                        </Typography.Text>
+                      </div>
+                    </div>
+                  )
+                })}
+           </div>:<Typography.Text className="text-[red]">No data found or Out of stock</Typography.Text>}
+
         </div>
 
     </Form.Item>
