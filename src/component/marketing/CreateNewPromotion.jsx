@@ -3,7 +3,6 @@
 import { Button, Col, Image, Row } from "antd";
 import { useState } from "react";
 import TextArea from "antd/es/input/TextArea";
-import { isoTODate } from "../../../../../zoci-frontend/src/components/constants/constants";
 import CustomImageUpload from "../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +17,7 @@ import CustomDate from "../common/CustomDate";
 import CustomSelect from "../common/CustomSelect";
 import { CreateNewPromotionAsync, getAllPromotionAsync } from "../../feature/marketing/marketingSlice";
 import Loader from "../loader/Loader";
+import { isoTODate } from "../../constants/constants";
 const CreateNewPromotion=({setOpen})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
