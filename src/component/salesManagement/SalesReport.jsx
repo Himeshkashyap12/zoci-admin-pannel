@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import AddExpense from "./addNewExpense/AddExpence";
 import Cookies from "js-cookie"
 import { useDispatch, useSelector } from "react-redux";
-import { getSalesDashboardAsync } from "../../feature/sales/salesSlice";
+import { getSalesDashboardAsync, getSalesTimeAsync } from "../../feature/sales/salesSlice";
 import Loader from "../loader/Loader";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
@@ -22,7 +22,7 @@ const SalesReport=()=>{
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
   const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
-            console.log(slaesDashboard);
+            console.log(slaesDashboard,"lmknjn");
             
         const getSalesDashboard=async()=>{
           try {
@@ -31,54 +31,68 @@ const SalesReport=()=>{
             console.log(error);
           }
         }
+       
+          const getSalesRevenue=async()=>{
+    try {
+      const res=await dispatch(getSalesTimeAsync({token}))
+      console.log(res);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
         useEffect(()=>{
         getSalesDashboard();
+
+        getSalesRevenue();
         },[])
         if(isLoading) return <Loader/>
 
-    const dashboardData = [
-  {
-    title: "Total Sales",
-    value: slaesDashboard?.summary?.totalSales,
-    percent: "+12%"
-  },
-  {
-    title: "Total Expenditure",
-    value: slaesDashboard?.summary?.totalExpenditure,
-    percent: "+8%"
-  },
-  {
-    title: "Net Profit",
-    value: slaesDashboard?.summary?.netProfit,
-    percent: "-3%"
-  },
-  {
-    title: "Total Orders",
-    value: slaesDashboard?.summary?.totalOrders,
-    percent: "+1.5%"
-  },
-  {
-    title: "Total Orders Value",
-    value: slaesDashboard?.summary?.totalOrderValue??0,
-    percent: "+12%"
-  },
-  {
-    title: "Average Order Value",
-    value: slaesDashboard?.summary?.avgOrderValue,
-    percent: "+8%"
-  },
-  {
-    title: "Top-Selling Category",
-    value: slaesDashboard?.summary?.topCategory
-,
-    percent: "+12%"
-  },
-  {
-    title: "Returning Customers",
-    value: slaesDashboard?.summary?.returningCustomers,
-    percent: "+1.5%"
-  }
-];
+        const dashboardData = [
+      {
+        title: "Total Sales",
+        value: slaesDashboard?.summary?.totalSales,
+        percent: "+12%"
+      },
+      {
+        title: "Total Expenditure",
+        value: slaesDashboard?.summary?.totalExpenditure,
+        percent: "+8%"
+      },
+      {
+        title: "Net Profit",
+        value: slaesDashboard?.summary?.netProfit,
+        percent: "-3%"
+      },
+      {
+        title: "Total Orders",
+        value: slaesDashboard?.summary?.totalOrders,
+        percent: "+1.5%"
+      },
+      {
+        title: "Total Orders Value",
+        value: slaesDashboard?.summary?.totalOrderValue??0,
+        percent: "+12%"
+      },
+      {
+        title: "Average Order Value",
+        value: slaesDashboard?.summary?.avgOrderValue,
+        percent: "+8%"
+      },
+      {
+        title: "Top-Selling Category",
+        value: slaesDashboard?.summary?.topCategory
+    ,
+        percent: "+12%"
+      },
+      {
+        title: "Returning Customers",
+        value: slaesDashboard?.summary?.returningCustomers,
+        percent: "+1.5%"
+      }
+    ];
 
 if(isLoading) return <Loader/>
     return(
@@ -86,18 +100,20 @@ if(isLoading) return <Loader/>
         <CustomText value={"Sales Reports"}/>
            <Row gutter={[20,20]}>
             <Col span={12}>
-            <div className="w-[700px]">
+            <div className="w-auto">
                 <MonthlySalesChart />
           </div>
             </Col>
             <Col span={12}>
-            <div className="w-[700px]">
+            <div className="w-auto">
           <ProductSalesChart  item={slaesDashboard?.categories} />
           </div>
             </Col>
           </Row>
           <Row gutter={[20,20]}>
            {dashboardData.map((item,idx)=>{
+            console.log(item);
+            
               return(
                  <Col span={6}>
                     <Link to={
@@ -128,7 +144,7 @@ if(isLoading) return <Loader/>
           <CustomButton onclick={()=>{setAddExpenseModel(true)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Expenses"}/>
          </div>
          <div>
-            <SalesReportTable />
+            <SalesReportTable  />
            </div>
 
            <CustomModal open={addExpenseModel} setOpen={setAddExpenseModel} modalBody={<AddExpense setOpen={setAddExpenseModel}/>} width={800} />

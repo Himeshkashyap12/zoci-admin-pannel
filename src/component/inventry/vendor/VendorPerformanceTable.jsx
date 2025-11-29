@@ -9,7 +9,8 @@ import Cookies from "js-cookie";
 import Loader from "../../loader/Loader";
 const VendorPerformanceTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const token=Cookies.get("token");  
+      const token=Cookies.get("token"); 
+      const navigate=useNavigate(); 
       const dispatch=useDispatch();
       const {vendorPerformance,isLoading}=useSelector(state=>state?.inventary);            
         const getVendorPerformance=async()=>{
@@ -35,13 +36,19 @@ const VendorPerformanceTable=()=>{
    
       {
       title: (
-        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>
+       <div > <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/></div>
 
       ),
       dataIndex: "vendorName",
       key: "vendorName",
       width: 250,
-      render: (text) =>  <CustomText value={text}/>
+      render: (_,text) => {
+        console.log(text,"dfsdh");
+        
+        return (
+            <div onClick={()=>{navigate(`/admin/vendor-performance/${text?.phoneNumber}`)}}><CustomText value={text?.vendorName}/></div>
+        )
+      } 
     },
     {
       title: (

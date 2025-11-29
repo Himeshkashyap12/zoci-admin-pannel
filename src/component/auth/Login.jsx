@@ -26,10 +26,13 @@ const [isLoading,setIsLoading]=useState(false);
 
   const signInHandler = async () => {
     setIsLoading(true)
-    if (input.mobile.length < 10 || input.mobile == "")
-      return toast.error("Please enter valid mobile number");
-    if (input.password == "" || input.password.length < 6)
-      return toast.error("Please enter valid password");
+    // setIsLoading(true)
+    // if (input.mobile.length < 10 || input.mobile == "")
+    //   return toast.error("Please enter valid mobile number");
+    // setIsLoading(false)
+    // if (input.password == "" || input.password.length < 6)
+    //   return toast.error("Please enter valid password");
+    // setIsLoading(false)
     try {
       const res = await loginWithNumberAndPassword(input);
       if (res.status) {
@@ -46,12 +49,10 @@ const [isLoading,setIsLoading]=useState(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
-      setInput({
-        mobile: input.mobile,
-        password: "",
-      });
           setIsLoading(false)
+
+      toast.error(error.response.data.message);
+     
 
     }
   };

@@ -1,41 +1,27 @@
+
+
 import { useEffect, useState } from "react";
-import CustomTable from "../common/CustomTable";
 import { Avatar, Image, Space } from "antd";
-import CustomText from "../common/CustomText";
+import CustomText from "../../../common/CustomText";
 import { EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProductAsync, getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
+// import { deleteProductAsync, getAllProductAsync } from "../../../feature/inventaryManagement/inventarySlice";
 import Cookies from "js-cookie";
-import deleteIcon from "../../assets/icons/deleteIcon.png"
-import CustomModal from "../common/CustomModal";
-import ConfirmationPopup from "../common/ConfirmationPopup";
+import deleteIcon from "../../../../assets/icons/deleteIcon.png"
+import CustomModal from "../../../common/CustomModal";
+import ConfirmationPopup from "../../../common/ConfirmationPopup";
 import { toast } from "react-toastify";
-import Loader from "../loader/Loader";
-import { useNavigate } from "react-router-dom";
+import Loader from "../../../loader/Loader";
+import CustomTable from "../../../common/CustomTable";
 
-const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
+const VendorPerformanceDetailTable=({setSelectedRowKeys,selectedRowKeys,item})=>{
+    console.log(item);
+    
   const [deleteConfirm,setDeleteConfirm]=useState();
   const [deleteId,setDeleteId]=useState(null);
-  const token=Cookies.get("token");  
-  const dispatch=useDispatch();
-  const navigate=useNavigate()
-  const {products,isLoading}=useSelector(state=>state?.inventary);
-  const productData=products?.products?.map((item)=>{
-    return {...item,key:item?._id}
-  })
-  console.log(productData,"jhyg");
-  console.log(products,"products");
+const {isLoading}=useSelector(state=>state?.inventary)
   
-  
-  const getAllProducts=async()=>{
-    try {
-    const res=await dispatch(getAllProductAsync({token})).unwrap();
-    console.log(res);
-    
-    } catch (error) {
-      console.log(error);
-    }
-  }
+ 
   const confirmationPopUpHandler=async()=>{
     try {
       const res=await dispatch(deleteProductAsync({token,id:deleteId})).unwrap();
@@ -68,10 +54,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
     }
      
   }
- 
-  useEffect(()=>{
-   getAllProducts();
-  },[])
+
 
 
   
@@ -184,7 +167,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
           </div>
           <div
             className="h-[20px] w-[20px] cursor-pointer"
-            onClick={()=>{navigate("/admin/create-product",{state:record?._id})}}
+            onClick={()=>{navigate("/admin/create-product",{state:record})}}
           >
             <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
           </div>
@@ -204,10 +187,10 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={item} columns={columns}/>
             <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         
         </>
     )
 }
-export default InventaryTable;
+export default VendorPerformanceDetailTable;

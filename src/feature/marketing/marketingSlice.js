@@ -20,7 +20,7 @@ export const getMarketingDashboardAsync = createAsyncThunk(
         }
 
       });
-      return res?.data?.data; // No need for `await res.data`
+      return res?.data; // No need for `await res.data`
     } catch (error) {
       throw error;
     }
@@ -82,6 +82,22 @@ export const getAllAnniversaryAsync = createAsyncThunk(
     }
   }
 );
+export const CreateNewPromotionAsync = createAsyncThunk(
+  "marketing/newPromotion",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/promotions/createPromotion`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 export const marketingSlice = createSlice({
   name: "marketing",
   initialState,
@@ -133,6 +149,18 @@ export const marketingSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+         builder.addCase(CreateNewPromotionAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(CreateNewPromotionAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.anniversary = action.payload;
+        });
+        builder.addCase(CreateNewPromotionAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+        
         
   },
 });

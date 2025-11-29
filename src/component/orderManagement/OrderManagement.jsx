@@ -30,12 +30,12 @@ const OrderManagement=()=>{
           <OrderTopButton/>
            <Row gutter={[20,20]}>
             <Col span={12}>
-            <div className="w-[700px]">
+            <div className="!w-auto">
           <OnlineOrderChart onlineOrders={orderDashboard?.onlineOrders} />
           </div>
             </Col>
             <Col span={12}>
-            <div className="w-[700px]">
+            <div className="!w-auto">
           <ProductChart exchangedCategories={orderDashboard?.exchangedCategories}/>
           </div>
             </Col>

@@ -7,6 +7,8 @@ const initialState = {
   notfyMe:[],
   vendorPerformance:[],
   bestSeller:[],
+  vendorPerformanceAnalysisData:[],
+  productById:[],
   isLoading: false,
   isDashboardLoading:false,
   isCreateProductLoading:false,
@@ -31,6 +33,8 @@ export const getInventaryDashbordAsync = createAsyncThunk(
   }
 );
 
+
+
 export const getAllProductAsync = createAsyncThunk(
   "inventary/productAsync",
  async ({token,data}) => {
@@ -41,6 +45,46 @@ export const getAllProductAsync = createAsyncThunk(
           "Authorization": `Bearer ${token}`,
         },params:{
           ...data
+        }
+
+      });
+      
+      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const getAllProductByIdAsync = createAsyncThunk(
+  "inventary/productIdAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.get(`/product/get-productbyid/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+
+      });
+      
+      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
+export const updateProductAsync = createAsyncThunk(
+  "inventary/updateProductAsync",
+ async ({token,data,id}) => {
+        try {
+      const res = await api.put(`/product/updateProduct/${id}`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         }
 
       });
@@ -121,6 +165,22 @@ export const vendorPerformanceAnalysis = createAsyncThunk(
     }
   }
 );
+export const vendorPerformanceDetailsAnalysis = createAsyncThunk(
+  "inventary/vendorPerformanceDetails",
+ async ({token,id}) => {
+        try {
+      const res = await api.get(`/product/performance/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 
 export const bestSellingProducts = createAsyncThunk(
@@ -185,7 +245,11 @@ export const createProductHandlerAsync = createAsyncThunk(
       });      
       return res?.data; // No need for `await res.data`
     } catch (error) {
-      throw error;
+      console.log(error);
+      
+      // throw error;
+      return error;
+      
     }
   }
 );
@@ -288,6 +352,18 @@ export const inventarySlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+          builder.addCase(vendorPerformanceDetailsAnalysis.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(vendorPerformanceDetailsAnalysis.fulfilled, (state, action) => {                
+          state.isLoading = false;   
+          state.vendorPerformanceAnalysisData = action.payload;
+
+        });
+        builder.addCase(vendorPerformanceDetailsAnalysis.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
          builder.addCase(bestSellingProducts.pending, (state) => {
           state.isLoading = true;
         });
@@ -331,6 +407,8 @@ export const inventarySlice = createSlice({
         });
         builder.addCase(createProductHandlerAsync.rejected, (state, action) => {
           state.isCreateProductLoading = false;
+          console.log(action);
+          
           state.error = action.payload;
         });
          builder.addCase(createBulkProductAsync.pending, (state) => {
@@ -344,6 +422,34 @@ export const inventarySlice = createSlice({
           state.isCreateProductLoading = false;
           state.error = action.payload;
         });
+        builder.addCase(updateProductAsync.pending, (state) => {
+          state.isCreateProductLoading = true;
+        });
+        builder.addCase(updateProductAsync.fulfilled, (state, action) => {                
+          state.isCreateProductLoading = false;   
+
+        });
+        builder.addCase(updateProductAsync.rejected, (state, action) => {
+          state.isCreateProductLoading = false;
+          console.log(action.payload);
+          
+          state.error = action.payload;
+        });
+          builder.addCase(getAllProductByIdAsync.pending, (state) => {
+          state.isCreateProductLoading = true;
+        });
+        builder.addCase(getAllProductByIdAsync.fulfilled, (state, action) => {                
+          state.isCreateProductLoading = false;  
+          state.productById=action.payload; 
+
+        });
+        builder.addCase(getAllProductByIdAsync.rejected, (state, action) => {
+          state.isCreateProductLoading = false;
+          console.log(action.payload);
+          
+          state.error = action.payload;
+        });
+        
         
         
   },

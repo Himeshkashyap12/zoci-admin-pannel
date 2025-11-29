@@ -87,7 +87,7 @@ const AllVisitorsTable=()=>{
           key: "metalType",
           width: 200,
           align: "center",
-          render: (text) => <div><EyeOutlined style={{fontSize:"20px"}} /></div>
+          render: (_,text) => <div onClick={()=>{navigate(`/admin/crm-all-visitors-list/${text?._id}`)}}><EyeOutlined style={{fontSize:"20px"}} /></div>
         }
       ];
 

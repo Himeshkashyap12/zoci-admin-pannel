@@ -1,5 +1,5 @@
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomText from "../common/CustomText";
 import { Button, Col, Image, Row } from "antd";
 import CustomInput from "../common/CustomInput";
@@ -17,14 +17,22 @@ import { getCategoryAsync } from "../../feature/uiManagement/UiManagementSlice";
 import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import Loader from "../loader/Loader";
-import { createProductHandlerAsync } from "../../feature/inventaryManagement/inventarySlice";
+import { createProductHandlerAsync, getAllProductByIdAsync, updateProductAsync } from "../../feature/inventaryManagement/inventarySlice";
+import { compareNewAndOldObject } from "../../constants/constants";
 const CreateNewProduct = () => {
+  const {state}=useLocation();
+  console.log(state,"status");
+  
   const navigate = useNavigate();
   const dispatch=useDispatch();
   const token=Cookies.get("token")
   const {category}=useSelector(state=>state?.ui);
-  const {isCreateProductLoading}=useSelector(state=>state?.inventary);
+  const {isCreateProductLoading,productById,error}=useSelector(state=>state?.inventary);
   const {isMediaLoading}=useSelector(state=>state?.media);
+console.log(productById?.product);
+
+  console.log(error,"bhhb");
+  
   const [productInput,setProductInput]=useState({
     title: "",
     description: "",
@@ -42,7 +50,7 @@ const CreateNewProduct = () => {
     designTags:"",
     weight: 0,
     size: "",
-    quantity: 10,
+    quantity: 0,
     hudNo: "",
     madefor: "",
     exclusive: "",
@@ -126,24 +134,62 @@ const CreateNewProduct = () => {
             }
       };
   const createProductHandler=async()=>{
-   
-
    try {
+    if(!state){
     const data={...productInput}
-    const res=await dispatch(createProductHandlerAsync({token,data})).unwrap();
-    console.log(res);
+       const res=await dispatch(createProductHandlerAsync({token,data})).unwrap();
+        if(res.status && res.status==200){
+      toast.success(res.message);
+      navigate("/admin/inventary")
+        }else{
+      {res?.response?.data?.errors.map((item)=>{
+        return( toast.error(item))
+      })}
+      
+    }
     
-    if(res.status){
+    }else{
+      const updatedData=compareNewAndOldObject({oldObj:productById?.product,newObj:productInput})
+      console.log(updatedData,"jbhvh");
+       const res=await dispatch(updateProductAsync({token,data:updatedData,id:productById?.product?._id})).unwrap();
+
+       if(res.status){
       toast.success(res.message);
       navigate("/admin/inventary")
     }
+    }
+   
     
+   
    } catch (error) {
+    console.log(error);
+    
     toast.error("Something went wrong!")
     
    }
     
   }
+
+
+  const getProductByIdData=async()=>{
+    try {
+
+      const res=await dispatch(getAllProductByIdAsync({token,id:state})).unwrap();
+      
+      if(res.success){
+        setProductInput(res.product)
+      }
+   
+   }
+      
+     catch (error) {
+      console.log(err);
+      
+    }
+  }
+  useEffect(()=>{
+   getProductByIdData();
+  },[])
 
   useEffect(()=>{
      getCategoryHandler()
@@ -171,7 +217,7 @@ const CreateNewProduct = () => {
             }
           />
         </div>
-        <div className="product-form w-[1200px] mx-auto ">
+        <div className="product-form  xl:!w-[1024px] md:!w-[800px] sm:!w-[500px] !w-[400px]  mx-auto ">
           <div className="flex flex-col gap-[30px]">
             <div className="flex justify-center">
               <CustomText
@@ -180,13 +226,13 @@ const CreateNewProduct = () => {
               />
             </div>
             <Row gutter={[40, 40]}>
-              <Col span={12}>
+              <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
                    <CustomLabel required value={"Prodution Source"} />
                    <CustomSelect value={productInput?.productionSource} onchange={(e)=>{setProductInput({...productInput,productionSource:e})}} options={[{label:"Company Custom",value:"Company Custom"},{label:"Vendor Custom",value:"Vendor Custom"}]} className="!rounded-full" />
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Prodution Category"} />
                   <CustomSelect value={productInput?.category} onchange={(e)=>{setProductInput({...productInput,category:e})}} options={categoryData} className="!rounded-full" />

@@ -40,13 +40,13 @@ const Inventary=()=>{
         <div className="flex flex-col gap-5 p-5">
           <InventaryTopButton totalVendor={inventaryDashboard?.vendor?.totalVendors}/>
           <Row gutter={[20,20]}>
-            <Col span={12}>
-            <div className="w-[700px]">
+            <Col span={12} >
+            <div className=" !w-auto">
           <UnitSoldChart unitSold={inventaryDashboard?.charts?.unitSold}/>
           </div>
             </Col>
             <Col span={12}>
-            <div className="w-[700px]">
+            <div className=" !w-auto">
           <UnitSoldByCategary unitSoldByCategory={inventaryDashboard?.charts?.unitSoldByCategory}/>
           </div>
             </Col>

@@ -1,14 +1,17 @@
+import { useState } from "react";
 import CustomTable from "../common/CustomTable";
 import CustomText from "../common/CustomText";
 import SignatureUi from "./SignatureUi";
 import UiCollection from "./UiCollection";
 
 const CollectionTable=()=>{
+    const [collectionId,setCollectionId]=useState("");
+
     const dataSource = [
   {
     key: '1',
-    name: <UiCollection/>,
-    age: <SignatureUi/>,
+    name: "",
+    age: "",
   },
   
 ];
@@ -20,14 +23,20 @@ const columns = [
 ,
     dataIndex: 'name',
     key: 'name',
-    width:600,
+    width:700,
+    align:"start",
+    justify:"start",
+    render:()=>{return <UiCollection collectionId={collectionId} setCollectionId={setCollectionId}/>}
   },
   {
     title:  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Signature"}/>,
     dataIndex: 'age',
     key: 'age',
-    width:600,
+    width:700,
+    render:()=>{return <SignatureUi collectionId={collectionId} />}
 
+    
+ 
   }
 ];
     return(

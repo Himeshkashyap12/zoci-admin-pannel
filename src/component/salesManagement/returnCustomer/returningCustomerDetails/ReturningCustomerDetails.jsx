@@ -45,13 +45,13 @@ const ReturningCustomerDetails=({id})=>{
               </div>
               <CustomText
                 className={"!text-[#214344] !text-[20px]"}
-                value={"Sales Reports → Returning Customers→ Meher Bose"}
+                value={`Sales Reports → Returning Customers→ ${returningCustomerDetails?.data?.CustomerName}`}
               />
             </div>
            
            
             <div>
-              <ReturningCustomerDetailsTable/>
+              <ReturningCustomerDetailsTable />
             </div>
           </div>
         </>

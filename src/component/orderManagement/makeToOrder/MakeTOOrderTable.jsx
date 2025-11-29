@@ -65,7 +65,7 @@ const MakeToOrderTablePage=()=>{
                 key: "orderId",
                 align:"center",
                 width: 250,
-                render: (text) =>  <CustomText value={text}/>
+                render: (_,text) => <div className="cursor-pointer" onClick={()=>{navigate("/admin/make-order-details",{state:text})}}> <CustomText value={text?.orderId}/></div>
               },
               {
                 title: (

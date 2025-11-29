@@ -5,8 +5,8 @@ import CustomText from "../common/CustomText";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
 import TextArea from "antd/es/input/TextArea";
-import { useState } from "react";
-import { createCollectionAsync } from "../../feature/uiManagement/UiManagementSlice";
+import { useEffect, useState } from "react";
+import { createCollectionAsync, getCollectionAsync, updateColllectionAsync } from "../../feature/uiManagement/UiManagementSlice";
 import Loader from "../loader/Loader";
 import CustomImageUpload from "../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
@@ -14,20 +14,66 @@ import blogUpload from "../../assets/icons/blogUpload.png"
 import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import ImageLoader from "../loader/ImageLoader";
-const AddNewCollection = ({ setOpen }) => {
+import { useNavigate } from "react-router-dom";
+import { compareNewAndOldObject } from "../../constants/constants";
+const AddNewCollection = ({ setOpen,setAddCollection,editItem }) => {
   const dispatch = useDispatch();
   const token = Cookies.get("token");
+  const navigate=useNavigate();
   const {isMediaLoading}=useSelector(state=>state?.media)
   const [collection, setCollection] = useState({
-    name: "",
-    description: "",
-    thumbnail: "",
+              name: "",
+              description: "",
+              thumbnail: ""
   });
   const {isLoading}=useSelector(state=>state?.ui)
   const collectionHandler = (e) => {
-    const { name, value, files, type } = e.target;
-
+    const {name,value}=e.target;
+   setCollection({...collection,[name]:value})
   };
+
+  const createCollectionHandler=async()=>{
+     try {
+      if(!editItem){
+         const data={...collection}
+      const res=await dispatch(createCollectionAsync({token,data})).unwrap();
+      if(res.success){
+        toast.success(res.message);
+        setOpen(false);
+        dispatch(getCollectionAsync())
+        setAddCollection(true);
+        setCollection({
+           name: "",
+            description: "",
+            thumbnail: "",
+        })
+      }
+
+      }else{
+         
+    const updatedData=compareNewAndOldObject({oldObj:editItem,newObj:collection})
+         const data={...updatedData}
+      const res=await dispatch(updateColllectionAsync({token,data,id:editItem?._id})).unwrap();
+      if(res.success){
+        toast.success(res.message);
+        setOpen(false);
+        dispatch(getCollectionAsync())
+        setAddCollection(true);
+        setCollection({
+           name: "",
+            description: "",
+            thumbnail: "",
+        })
+      }
+      }
+     
+    } catch (error) {
+      console.log(error);
+      setOpen(false);
+      toast.error("Something went wrong")
+      
+    }
+  }
 const handleUpload = async (e) => {
     const file = e.target.files[0];
       if (!file) return;
@@ -38,15 +84,26 @@ const handleUpload = async (e) => {
             if(res.message){
                 toast.success(res?.message)
                 setCollection({...collection,thumbnail:res?.images[0]});
+                
                
             }
             } catch (err) {
             console.error(err);
           }
     };
+        useEffect(()=>{
+          if(editItem){
+            setCollection(
+              {
+                name: editItem?.name,
+                description:editItem?.description,
+                thumbnail: editItem?.thumbnail,
+              }
+            )
 
+          }
+        },[])
 
-   if(isLoading) return <Loader/>
 
   return (
     <div>
@@ -109,9 +166,9 @@ const handleUpload = async (e) => {
 
         <div className="flex justify-center gap-4 pt-10">
           <CustomButton
-          onclick={()=>{createNewCollectionHandler()}}
+          onclick={()=>{createCollectionHandler()}}
             className={"!text-[#fff] !bg-[#214344] w-[180px]"}
-            value={"Yes, Add New Vendor"}
+            value={isLoading?"Loading...":"Yes, Add New Collection"}
           />
           <Button
             onClick={() => {

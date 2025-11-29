@@ -1,11 +1,110 @@
 
-import { Button, Col, Row } from "antd";
+
+import { Button, Col, Image, Row } from "antd";
+import { useState } from "react";
+import TextArea from "antd/es/input/TextArea";
+import { isoTODate } from "../../../../../zoci-frontend/src/components/constants/constants";
+import CustomImageUpload from "../common/CustomImageUpload";
+import { UploadOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getImageUrlAsync } from "../../feature/media/mediaSlice";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom";
 import CustomText from "../common/CustomText";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
-
-
+import CustomDate from "../common/CustomDate";
+import CustomSelect from "../common/CustomSelect";
+import { CreateNewPromotionAsync, getAllPromotionAsync } from "../../feature/marketing/marketingSlice";
+import Loader from "../loader/Loader";
 const CreateNewPromotion=({setOpen})=>{
+  const dispatch=useDispatch();
+  const token=Cookies.get("token");
+  const navigate=useNavigate();
+  const {isMediaLoading}=useSelector(state=>state?.media)
+  const {isLoading}=useSelector(state=>state?.marketing)
+    const [promotion, setPromotion] = useState({   
+          code: "",
+          type: "",
+          value: "" ,
+          minOrderValue:"" ,
+          maxOrderValue:"" ,
+          category: "",
+          expiryDate: "2025-12-31",
+          usageLimit: "",
+          banner: ""
+    });
+
+    const promotionHandler=(e,status)=>{
+      console.log(status);
+      
+      if(status){
+       setPromotion({...promotion,[status]:e})
+      }else{
+      const {name,value}=e.target;
+
+      setPromotion({...promotion,[name]:value})
+
+      }
+      
+    }
+    const dateHandler=(date)=>{
+      setPromotion({...promotion,expiryDate:isoTODate(date.toISOString())});
+      
+    }
+
+    const categoryOption=[
+       {label:"Custom",value:"Custom"},
+       {label:"Customer",value:"Customer"},
+       {label:"Birthday",value:"Birthday"},
+       {label:"Anniversary",value:"Anniversary"},
+    ]
+
+
+const typeOption=[
+  {label:"flat",value:"Flat"},
+  {label:"percentage",value:"Percentage"},
+
+]
+  
+// admin/total-expenditure
+    const handleUpload = async (e) => {
+        const file = e.target.files[0];
+          if (!file) return;
+                try {
+                const formData = new FormData();
+                formData.append("productImages", file);
+                const res=await dispatch(getImageUrlAsync({token,formData})).unwrap();
+                if(res.message){
+                    toast.success(res?.message)
+                    setPromotion({...promotion,banner:res?.images[0]});
+                   
+                }
+                } catch (err) {
+                console.error(err);
+              }
+        };
+    
+
+        const addpromotionHandler=async()=>{
+          
+            try {
+              const data={...promotion}
+              const res=await dispatch(CreateNewPromotionAsync({token,data})).unwrap();              
+              if(res.status){
+                toast.success(res.message);
+                setOpen(false);
+                dispatch(getAllPromotionAsync({token}));
+              }
+              
+              
+            } catch (error) {
+               console.log(error); 
+                toast.error("Something went wrong!")
+            }
+        }
+        if(isMediaLoading || isLoading ) return <Loader/>
     return(
         <div >
             <div className="flex justify-center">
@@ -15,50 +114,89 @@ const CreateNewPromotion=({setOpen})=>{
                 <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Company Name"}/>
-                       <CustomInput className={"h-[46px]"}/>
+                      <CustomText className={"text-[16px] "} value={"Promo code"}/>
+                       <CustomInput name={"code"}  onchange={(e)=>{promotionHandler(e)}} value={promotion?.code} className={"h-[46px]"}/>
                        
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"GST"}/>
-                       <CustomInput className={"h-[46px]"}/>
+                      <CustomText className={"text-[16px] "} value={"Expiry  Date"}/>
+                      <CustomDate  onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
                        
                       </div></Col>
                 </Row>
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Vendor Name"}/>
-                       <CustomInput className={"h-[46px]"}/>
-                       
+                      <CustomText className={"text-[16px] "} value={"Type"}/>
+                        <CustomSelect className="!h-[46px]"  name={"type"} onchange={(e)=>{promotionHandler(e,"type")}}  value={promotion?.type}  options={typeOption} />
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Phone Number"}/>
-                       <CustomInput className={"h-[46px]"}/>
-                       
+                      <CustomText className={"text-[16px] "} value={"Value"}/>
+                       <CustomInput  name={"value"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.value} className={"h-[46px]"}/>
                       </div></Col>
                 </Row>
+               
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Address"}/>
-                       <CustomInput className={"h-[46px]"}/>
+                      <CustomText className={"text-[16px] "} value={"Usage Limit"}/>
+                       <CustomInput name={"usageLimit"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.usageLimit} className={"h-[46px]"}/>
                        
                       </div>
                     </Col>
-                    <Col span={12}>
+                      <Col span={12}>
                      <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Purchase invoice"}/>
-                       <CustomInput className={"h-[46px]"}/>
-                       
-                      </div></Col>
+                      <CustomText className={"text-[16px] "} value={"Product  SKU"}/>
+                       <CustomInput name={"productSKU"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.productSKU} className={"h-[46px]"}/>
+                      </div>
+                      </Col>
                 </Row>
+              
+              <Row gutter={[20,20]}>
+                  <Col span={12}>
+                  <div className="flex flex-col gap-3">
+                  <CustomText value={"Category"}/>
+                  <CustomSelect className="!h-[46px]" name="category" onchange={(e)=>{promotionHandler(e,"category")}} value={promotion?.category} placeholder="Category" options={categoryOption} /> 
+                    </div>
+                  </Col>
+                   <Col span={12}>
+                  <div className="flex flex-col gap-3">
+                   
+                    <CustomText value={"Range"}/>
+                     <div className="flex gap-3">
+                    <CustomInput  className={"h-[46px]"} name={"minOrderValue"} value={promotion?.minOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Min Value"}/>
+                    <CustomInput  className={"h-[46px]"} name={"maxOrderValue"} value={promotion?.maxOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Max Value"}/>
+                   </div>
+                    </div>
+                  </Col>
+                </Row>
+                 <Row gutter={[20,20]}>
+                  <Col span={12}>
+                  <div className="flex flex-col gap-3">
+                  <CustomText value={"Banner (If Any) "}/>
+                     <CustomImageUpload imageUploadHandler={(e)=>{handleUpload(e)}}  label={
+                     <div className="flex gap-2 items-center  h-[46px] p-[20px]  bg-[#fff]">
+                        {!promotion?.banner && (<UploadOutlined style={{fontSize:"24px" }} />)}
+                      <CustomText className={"!text-[16px]"} value={(isMediaLoading&& "Loading...")|| promotion?.banner?"File Uploaded":"Upload attachement"}/>
+                      </div>}
+              />
+                    </div>
+                  </Col>
+                   <Col span={12}>
+                  <div className="flex flex-col gap-3">
+                  <CustomText value={"Mobile Number"}/>
+                    <CustomInput  className={"h-[46px]"} name={"customerMobile"} value={promotion?.customerMobile} onchange={(e)=>{promotionHandler(e)}} placeholder={"Enter Customer Mobile"}/>
+                    </div>
+                  </Col>
+                </Row>
+                
+
                 <div className="flex justify-center gap-4 pt-10">
-                    <CustomButton className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={"Create New Promotion"}/>
+                    <CustomButton onclick={()=>{addpromotionHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={"Yes, Add New Expense"}/>
                     <Button onClick={()=>{setOpen(false)}} className="!border-[2px] !border-[#214344] rounded-full  w-[180px] text-[14px]">No, Cancel</Button>
 
                 </div>

@@ -9,7 +9,7 @@ const ActivePromotion=()=>{
     const navigate=useNavigate();
      
     return(
-        <div className="flex flex-col gap-5 p-[24px]">
+           <div className="flex flex-col gap-5 p-[24px]">
             <div className="flex gap-2 items-center">
                 <div className="cursor-pointer" onClick={()=>{navigate("/admin/marketing")}}>
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={<LeftOutlined />}/>

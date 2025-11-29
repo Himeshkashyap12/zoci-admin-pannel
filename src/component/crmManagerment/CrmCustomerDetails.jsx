@@ -1,7 +1,17 @@
 import { Col, Image, Row } from "antd";
 import profile from "../../assets/crm/customerDetail.png"
 import CustomText from "../common/CustomText";
-const CrmCustomerDetails=()=>{
+import Loader from "../loader/Loader";
+import { useSelector } from "react-redux";
+import { isoToDDMMYYYY, isoToIST, isoToISTTime } from "../../constants/constants";
+const CrmCustomerDetails=({item})=>{
+    const {isLoading} =useSelector(state=>state?.crm)
+console.log(item);
+
+
+
+     if(isLoading) return <Loader/>
+
     return(
         <Row gutter={20}>
             <Col span={6}>
@@ -10,8 +20,8 @@ const CrmCustomerDetails=()=>{
                     <Image className="h-full w-full object-cover rounded-full" preview={false} src={profile}/>
                 </div>
                 <div className="flex flex-col gap-1 ps-[10px]">
-                    <CustomText className={"!text-[24px] !text-[#214344] font-bold"} value={"Meher Bose"}/>
-                    <CustomText className={"!text-[18px] !text-[#000] font-[300] "} value={`Customer ID : 123456`}/>
+                    <CustomText className={"!text-[24px] !text-[#214344] font-bold"} value={item?.name}/>
+                    <CustomText className={"!text-[18px] !text-[#000] font-[300] "} value={`Customer ID : ${item?.customerId}`}/>
                 </div>
 
                </div>
@@ -23,11 +33,27 @@ const CrmCustomerDetails=()=>{
                 <div className="flex gap-10 ">
                 <div className="flex flex-col gap-2">
                     <CustomText className={"!text-[#000] !text-[18px] "}  value={"Email"}/>
-                    <CustomText className={"!text-[#214344] !text-[18px] w-[] "}  value={"Meher Bose@email.com"}/>
+                    <CustomText className={"!text-[#214344] !text-[18px] w-[] "}  value={item?.email}/>
                </div>
                 <div className="flex flex-col gap-2">
                     <CustomText className={"!text-[#000] !text-[18px] "}  value={"Phone"}/>
-                    <CustomText className={"!text-[#214344] !text-[18px] "}  value={"(555) 123-4567"}/>
+                    <CustomText className={"!text-[#214344] !text-[18px] "}  value={item?.mobile}/>
+               </div>
+               </div>
+            </div>
+            
+            </Col>
+             <Col span={8}>
+            <div className="flex flex-col gap-5">
+                <div><CustomText className={"!text-[#214344] !text-[18px] font-semibold"}  value={"Important Dates"}/></div>
+                <div className="flex gap-10 ">
+                <div className="flex flex-col gap-2">
+                    <CustomText className={"!text-[#000] !text-[18px] "}  value={"Birthday"}/>
+                    <CustomText className={"!text-[#214344] !text-[18px] w-[] "}  value={isoToDDMMYYYY(item?.birthday)}/>
+               </div>
+                <div className="flex flex-col gap-2">
+                    <CustomText className={"!text-[#000] !text-[18px] "}  value={"Anniversary"}/>
+                    <CustomText className={"!text-[#214344] !text-[18px] "}  value={isoToDDMMYYYY(item?.anniversary)}/>
                </div>
                </div>
             </div>

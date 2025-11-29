@@ -27,7 +27,7 @@ const Blog = () => {
    getBlogData();
   },[])
 
-  if(isMediaLoading) return <Loader/>
+  if(isMediaLoading || isLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -45,7 +45,7 @@ const Blog = () => {
             {blog?.blogs?.map((item)=>{
                 return(
                     <>
-                    <Col span={6}>
+                    <Col xxl={6} xl={8} md={8} sm={12} xs={24}>
                            <BlogCard item={item}/>
 
                     </Col>
