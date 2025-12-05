@@ -51,7 +51,6 @@ import AddNewBlogPage from "./pages/blogPage/AddNewBlogPage";
 import ReturningCustomerDetailsPage from "./pages/salesPage/ReturningCustomerDetailsPage";
 import CreateNewProductPage from "./pages/inventaryPage/CreateNewProduct";
 import VendorPerformanceAnalysisDetailsPage from "./pages/inventaryPage/VendorPerformanceAnalysisDetailsPage";
-import MakeToOrderDetails from "./component/orderManagement/makeToOrder/makeToOrderDetails.jsx/MakeToOrderDetails";
 function App() {
 
 
@@ -79,7 +78,6 @@ function App() {
              <Route  path="order" element={ <AdminProtectedRoute>  <OrderManagementPage />  </AdminProtectedRoute> }/>
              <Route  path="order-online" element={ <AdminProtectedRoute>  <MakeOnlineOrderPage />  </AdminProtectedRoute> }/>
              <Route  path="make-order" element={ <AdminProtectedRoute>  <MakeToOrderPage />  </AdminProtectedRoute> }/>
-             <Route  path="make-order-details" element={ <AdminProtectedRoute>  <MakeToOrderDetails />  </AdminProtectedRoute> }/>
              <Route  path="product-exchange" element={ <AdminProtectedRoute>  <ProductExchangePage />  </AdminProtectedRoute> }/>
              <Route  path="product-returned" element={ <AdminProtectedRoute>  <ProductReturnedPage />  </AdminProtectedRoute> }/>
              <Route  path="generate-invoice" element={ <AdminProtectedRoute>  <GenerateInvoicePage />  </AdminProtectedRoute> }/>

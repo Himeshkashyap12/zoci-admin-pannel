@@ -1,45 +1,22 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Loader from "../../loader/Loader";
-import Cookies from "js-cookie";
-import { getManageOnlineOrderAsync } from "../../../feature/order/orderSlice";
 import { CopyOutlined } from "@ant-design/icons";
 import { Image } from "antd";
 import { toast } from "react-toastify";
-import CustomSelect from "../../common/CustomSelect";
-const MakeToOrderTablePage=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const [orderStatus,setOrderStatus]=useState("")
-      const navigate=useNavigate();
-       const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+import CustomPagination from "../../common/CustomPagination.jsx"
+const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
       const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);
-            console.log(makeOnlineOrders,"makeOnlineOrders");
-            
-
-            const orderStatusOption=[
-            { label:<CustomText className={"!text-[orange]"} value={"Ordered"}/>,value:"Ordered"},
-            { label:<CustomText className={"!text-[#FFDB58]"} value={"Pending"}/>,value:"Pending"},
-            { label:<CustomText className={"!text-[green]"} value={"Delivered"}/>,value:"Delivered"},
-            { label:<CustomText className={"!text-[red]"} value={"Cancelled"}/>,value:"Cancelled"}
-            ]
-            const orderChangeHandler=(e)=>{
-              console.log(e,"dsfbdh");
-              
-            }
-        const getMakeToOnlineOrder=async()=>{
-          try {
-          const res=await dispatch(getManageOnlineOrderAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getMakeToOnlineOrder();
-        },[])
+      const makeOnlineOrderData=makeOnlineOrders?.orders?.map((item)=>{
+        return ( {...item,key:item?.orderId})
+      });
+      console.log(makeOnlineOrderData,"make");
+      
+     
+      
+        console.log(selectedRowKeys,"dhvjhvj");
         
          const copyTextHandler=async(text)=>{
                   try {
@@ -59,7 +36,8 @@ const MakeToOrderTablePage=()=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                align:"center",
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -89,9 +67,7 @@ const MakeToOrderTablePage=()=>{
                 align:"center",
                 width: 200,
                 render: (text) =>   <CustomText value={text}/>
-
-              },
-              
+              }, 
               {
                 title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>,
                 dataIndex: "size",
@@ -123,33 +99,44 @@ const MakeToOrderTablePage=()=>{
                 dataIndex: "address",
                 key: "address",
                 width: 350,
-                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
+                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.length<=20?text:text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
 
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>),
                 dataIndex: "price",
                 key: "price",
-                width: 250,
+                width: 300,
                 align: "center",
                 render: (text) => <CustomText value={`Rs. ${text}`}/>
               },
               {
-                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
-                dataIndex: "date",
-                key: "date",
-                width: 200,
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Ordered Status"}/>),
+                dataIndex: "status",
+                key: "status",
+                width: 250,
                 align: "center",
                 render: (_,text) => {
-                  console.log(text,"text");
-                  
-                  return(
-                           
-                           
-                           <div className="flex flex-col justify-center "><CustomText value={text?.date}/>
-                                <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{orderChangeHandler(e)}} options={orderStatusOption} />
-                              </div>
-                  )
+                  return(  <CustomText 
+                     className={`font-semibold
+                      ${text?.status=="Ordered" && "!text-[#214344]" }
+                      ${text?.status=="Pending" && "!text-[#FFB23E]" }
+                      ${text?.status=="Delivered" && "!text-[#5AA53C]" }
+                      ${text?.status=="Cancelled" && "!text-[#f44336]" }
+                      ${text?.status=="Confirmed" && "!text-[#5AA53C]" }
+                     `}
+                    value={text?.status}/>  )
+                
+                  }
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Ordered Date"}/>),
+                dataIndex: "date",
+                key: "date",
+                width: 300,
+                align: "center",
+                render: (_,text) => {
+                  return(  <CustomText value={text?.date}/>  )
                 
                       }
               }
@@ -167,7 +154,8 @@ const MakeToOrderTablePage=()=>{
 
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={makeOnlineOrders?.orders} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={makeOnlineOrderData} columns={columns}/>
+         <CustomPagination pageNumber={page} total={makeOnlineOrders?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

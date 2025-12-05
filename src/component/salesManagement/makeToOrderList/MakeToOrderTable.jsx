@@ -8,24 +8,12 @@ import Cookies from "js-cookie";
 import { getMakeToOrderAsync } from "../../../feature/sales/salesSlice";
 import { Image } from "antd";
 import { isoToIST } from "../../../constants/constants";
-const MakeToOrderTable=()=>{
+import CustomPagination from "../../common/CustomPagination";
+const MakeToOrderTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
       const {makeToOrder,isLoading}=useSelector(state=>state?.sales);
-            console.log(makeToOrder,"makeToOrder");
-            
-        const getMakeToOrdeHandler=async()=>{
-          try {
-          const res=await dispatch(getMakeToOrderAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-          getMakeToOrdeHandler();
-        },[])
+
+      
      const columns = [
                   {
                 title: (
@@ -125,15 +113,7 @@ const MakeToOrderTable=()=>{
 
 
 
-      
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
+
  const onSelectChange = newSelectedRowKeys => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -146,7 +126,12 @@ const data = [
     return(
         <>
               <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={makeToOrder?.data} columns={columns}/>
-
+               <CustomPagination
+              total={makeToOrder?.pagination?.total}
+              pageNumber={page}
+              onchange={(e)=>{setPage(e)}}
+                
+            />
         </>
     )
 }

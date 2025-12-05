@@ -9,17 +9,32 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { getNetProfitAsync } from "../../../feature/sales/salesSlice";
 import Loader from "../../loader/Loader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../../hooks/UseDebounce";
 const NetProfit = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
+   const [search,setSearch]=useState("");
+     const debounce=useDebounce(search,500);
+   const [sort,setSort]=useState([])    
+   const [page,setPage]=useState(1)       
   const dispatch = useDispatch();
   const { netProfit, isLoading } = useSelector((state) => state?.sales);
   console.log(netProfit,"netProfit");
   
   const getNetProfitHanler = async () => {
-    try {
-      const res = await dispatch(getNetProfitAsync({ token })).unwrap();
+      const trimSearch=search.trim();
+                const data={
+                  limit:10,
+                  page:page,
+                  ...(search && {search:trimSearch} ),
+                  ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+
+                }
+              try {
+                if(search && !trimSearch) return;
+
+      const res = await dispatch(getNetProfitAsync({ token,data })).unwrap();
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +55,7 @@ const NetProfit = () => {
   ];
   useEffect(() => {
     getNetProfitHanler();
-  }, []);
+  }, [debounce,sort,page]);
 
   if (isLoading) return <Loader />;
   return (
@@ -74,10 +89,10 @@ const NetProfit = () => {
         </Row>
       </div>
       <div>
-        <NetProfitFilter />
+        <NetProfitFilter   search={search} setSort={setSort} setSearch={setSearch} />
       </div>
       <div>
-        <NetProfitTable item={netProfit} />
+        <NetProfitTable  page={page} setPage={setPage} item={netProfit} />
       </div>
     </div>
   );

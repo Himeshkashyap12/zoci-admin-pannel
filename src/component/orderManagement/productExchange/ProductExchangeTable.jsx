@@ -11,27 +11,11 @@ import CustomSelect from "../../common/CustomSelect";
 import {toast} from "react-toastify";
 import { isoToIST } from "../../../constants/constants";
 import Loader from "../../loader/Loader";
-const ProuctExchangeTable=()=>{
-  const [orderStatus,setOrderStatus]=useState("")
-        const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+import CustomPagination from "../../common/CustomPagination";
+const ProuctExchangeTable=({setPage,page})=>{
       const {productReturnedAndExchange,isLoading}=useSelector(state=>state?.order);
-            console.log(productReturnedAndExchange,"productexchange");
-            
-        const getProductExchangeHandler=async()=>{
-          try {
-            const data={orderStatus:"Exchanges"}
-          const res=await dispatch(getOrderProductReturnedAdnExchange({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getProductExchangeHandler();
-        },[])
-        
+        const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+     
          const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
@@ -39,10 +23,8 @@ const ProuctExchangeTable=()=>{
                     } catch (err) {
                       console.error('Failed to copy text: ', err);
                     }
-                  
                 }
-     
-              const columns = [
+            const columns = [
                   {
                 title: (
                   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
@@ -50,7 +32,7 @@ const ProuctExchangeTable=()=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -82,8 +64,6 @@ const ProuctExchangeTable=()=>{
                 render: (text) =>   <CustomText value={text}/>
 
               },
-              
-              
               {
                 title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Customer Name"}/>),
                 dataIndex: "customerName",
@@ -92,15 +72,13 @@ const ProuctExchangeTable=()=>{
                 align: "start",
                 render: (text) =>  <CustomText className={"!text-[14px] font-bold"} value={text}/>
               },
-            
-              
               {
                 title: (
                 <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Address"}/> ),
                 dataIndex: "address",
                 key: "address",
                 width: 350,
-                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
+                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text<=20?text:text?.slice(0,20)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
 
               },
                 {
@@ -111,10 +89,6 @@ const ProuctExchangeTable=()=>{
                 align: "start",
                 render: (text) => <CustomText value={text}/>
               },
-              
-
-
-
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>),
                 dataIndex: "price",
@@ -132,32 +106,38 @@ const ProuctExchangeTable=()=>{
                 render: (text) => <CustomText value={text?text:"NA"}/>
               },
               {
-                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Returned Date"}/>),
                 dataIndex: "date",
                 key: "date",
+                width: 300,
+                align: "center",
+                render: (_,text) => <CustomText value={isoToIST(text?.date)}/>
+                                   
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
+                dataIndex: "orderStatus",
+                key: "orderStatus",
                 width: 200,
                 align: "center",
-                render: (_,text) => <div className="flex flex-col justify-center "><CustomText value={isoToIST(text?.date)}/>
-                                      <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{setOrderStatus(e)}} options={[{label:<CustomText className={"!text-[red]"} value={"Ordered"}/>,value:""}]} />
-                                    </div>
-              }
+                render: (_,text) => <CustomText   className={"!text-[#5AA53C]"} value={text?.orderStatus}/> }
             ];
       
  
 
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+          const onSelectChange = newSelectedRowKeys => {
+              setSelectedRowKeys(newSelectedRowKeys);
+            };
+          const rowSelection = {
+              selectedRowKeys,
+              onChange: onSelectChange,
+            };
     if(isLoading) return <Loader/>
   
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange} columns={columns}/>
+              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange?.data} columns={columns}/>
+              <CustomPagination pageNumber={page} total={productReturnedAndExchange?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

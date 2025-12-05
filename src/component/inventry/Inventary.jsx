@@ -13,10 +13,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {  getInventaryDashbordAsync } from "../../feature/inventaryManagement/inventarySlice.js";
 import { useEffect, useState } from "react";
 import Loader from "../loader/Loader.jsx";
+import { dataExportInExcelHandler } from "./constants.jsx";
 
 const Inventary=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
   const {inventaryDashboard,isDashboardLoading}=useSelector(state=>state?.inventary);
@@ -29,7 +29,10 @@ const Inventary=()=>{
     }
   }
 
-
+const exportProductHandler = async () => {
+    const data = { productIds: selectedRowKeys };
+    dataExportInExcelHandler({dispatch,token,data})
+};
 
 
   useEffect(()=>{
@@ -52,7 +55,7 @@ const Inventary=()=>{
             </Col>
           </Row>
           <InventaryCountCards cardData={inventaryDashboard?.cards}/>
-          <ProductList selectedRowKeys={selectedRowKeys}/>
+          <ProductList exportProductHandler={exportProductHandler}/>
           <InventaryTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>
           
         </div>

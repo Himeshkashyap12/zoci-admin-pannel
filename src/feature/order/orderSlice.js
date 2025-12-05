@@ -28,12 +28,15 @@ export const getOrderManagementDashboardAsync = createAsyncThunk(
 );
 export const getManageOnlineOrderAsync = createAsyncThunk(
   "order/orderManageAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/onlineOrders`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -44,36 +47,24 @@ export const getManageOnlineOrderAsync = createAsyncThunk(
 );
 export const getMakeToOrderAsync = createAsyncThunk(
   "order/maketoOrderAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/make-to-orders`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
-      return res?.data?.data; // No need for `await res.data`
+      return res?.data; // No need for `await res.data`
     } catch (error) {
       throw error;
     }
   }
 );
-// export const getOrderGenerateInvoiceInstants = createAsyncThunk(
-//   "order/orderGenerateAsync",
-//  async ({token}) => {
-//         try {
-//       const res = await api.get(`/user/getDashboardAnalytics`,{
-//         headers: {
-//           "Content-Type": "application/json",
-//           "Authorization": `Bearer ${token}`,
-//         }
-//       });
-//       return res?.data?.data; // No need for `await res.data`
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
+
 export const getOrderProductReturnedAdnExchange = createAsyncThunk(
   "order/orderReturnedAsync",
  async ({token,data}) => {
@@ -87,7 +78,7 @@ export const getOrderProductReturnedAdnExchange = createAsyncThunk(
           ...data
         }
       });
-      return res?.data?.data; // No need for `await res.data`
+      return res?.data; // No need for `await res.data`
     } catch (error) {
       throw error;
     }
@@ -110,7 +101,27 @@ export const updateOrderStatus = createAsyncThunk(
     }
   }
 );
-
+export const orderExportInExcelAsync = createAsyncThunk(
+  "order/orderExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/make-to-orders/export/csv`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+        
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const orderSlice = createSlice({
   name: "order",
@@ -152,17 +163,6 @@ export const orderSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
-        //  builder.addCase(getOrderGenerateInvoiceInstants.pending, (state) => {
-        //   state.isLoading = true;
-        // });
-        // builder.addCase(getOrderGenerateInvoiceInstants.fulfilled, (state, action) => {                
-        //   state.isLoading = false;
-        //   state.generateInvoiceInstants = action.payload;
-        // });
-        // builder.addCase(getOrderGenerateInvoiceInstants.rejected, (state, action) => {
-        //   state.isLoading = false;
-        //   state.error = action;
-        // });
          builder.addCase(getOrderProductReturnedAdnExchange.pending, (state) => {
           state.isLoading = true;
         });
@@ -184,6 +184,17 @@ export const orderSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+         builder.addCase(orderExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(orderExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(orderExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
        
         
   },

@@ -11,13 +11,14 @@ import Cookies from "js-cookie";
 import CrmDetailsButton from "./CrmDetailsButton";
 import OrderHistoryTable from "./OrderHistoryTable";
 import BagWishListTable from "./BagWishListTable";
+import Loader from "../../../loader/Loader";
 const CustomerListDetails = () => {
   const [orderHistory,setOrderHistory]=useState(false);
   const [customerDetails,setCustomerDetails]=useState({})
   const {id}=useParams();
   const dispatch=useDispatch()
   const token=Cookies.get("token");
-  const {wishListAndBag}=useSelector(state=>state?.crm);
+  const {wishListAndBag,isLoading}=useSelector(state=>state?.crm);
   console.log(wishListAndBag,"customerDetails");
   const navigate = useNavigate();
   console.log(wishListAndBag);
@@ -37,7 +38,6 @@ const CustomerListDetails = () => {
   },[])
   
  console.log(customerDetails,"customerDetails");
- 
   return (
     <div className="flex flex-col gap-10 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -61,7 +61,7 @@ const CustomerListDetails = () => {
       
       <div>
         <div>
-        <CrmCustomerDetails item={customerDetails}/>
+        <CrmCustomerDetails visitors item={customerDetails}/>
       </div>
         <CrmDetailsButton setOrderHistory={setOrderHistory} orderHistory={orderHistory}/>
       </div>

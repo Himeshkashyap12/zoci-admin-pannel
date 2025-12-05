@@ -4,10 +4,52 @@ const initialState = {
   category:{}, 
   collection:[],
   signatureItem:[],
+  menCategory:[],
+  womenCategory:[],
+  homeVideos:[],
   isLoading: false,
   error: null,
 };
 
+
+
+
+export const getHomeVideosAsync = createAsyncThunk(
+  "category/homeVideos",
+ async ({token}) => {
+        try {
+      const res = await api.get(`ui/getAllVideos`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const updateHomeVideoAsync = createAsyncThunk(
+  "category/updateVideo",
+ async ({token,id,formData}) => {
+  console.log(formData,"formdata");
+  
+        try {
+      const res = await api.put(`/ui/updateVideo/${id}`,formData,{
+        headers: {
+          "Content-Type": "multipart/form-data" ,
+          "Authorization": `Bearer ${token}`,
+        }
+
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 export const getCategoryAsync = createAsyncThunk(
   "category/categoryAsync",
  async ({token}) => {
@@ -48,13 +90,16 @@ export const createCollectionAsync = createAsyncThunk(
 
 export const getCollectionAsync = createAsyncThunk(
   "collection/getCollection",
- async ({token}) => {
+ async ({token,data}) => {
   
         try {
       const res = await api.get(`/ui/collections`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; 
@@ -135,10 +180,104 @@ export const updateColllectionAsync = createAsyncThunk(
     }
   }
 );
+
+
+
+export const getMenCategoryHandlerAsync = createAsyncThunk(
+  "collection/menCategoryAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/category/getallCategory`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const getWomenCategoryHandlerAsync = createAsyncThunk(
+  "collection/womenCategoryAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/category/getallCategory`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const createCategoryAsync = createAsyncThunk(
+  "collection/createCategoryAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/category/create-category`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const deleteCategoryAsync = createAsyncThunk(
+  "collection/dleteCategoryAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.delete(`/category/delete-category/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const editCategoryAsync = createAsyncThunk(
+  "collection/editCategoryAsync",
+ async ({token,id,updatedData}) => {
+        try {
+      const res = await api.put(`/category/update-category/${id}`,updatedData,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 export const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
+    collectionDataHandler:(state,action)=>{
+       state.collection=[];
+    }
    
   },
   extraReducers: (builder) => {
@@ -168,7 +307,9 @@ export const categorySlice = createSlice({
         });
         builder.addCase(getCollectionAsync.fulfilled, (state, action) => {                
           state.isLoading = false;
-          state.collection=action.payload
+          console.log(action.payload);
+          
+          state.collection=[...state.collection,...action.payload?.collections]
         });
         builder.addCase(getCollectionAsync.rejected, (state, action) => {
           state.isLoading = false;
@@ -216,6 +357,82 @@ export const categorySlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+         builder.addCase(getMenCategoryHandlerAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getMenCategoryHandlerAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.menCategory=action.payload;
+        });
+        builder.addCase(getMenCategoryHandlerAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(getWomenCategoryHandlerAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getWomenCategoryHandlerAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.womenCategory=action.payload;
+        });
+        builder.addCase(getWomenCategoryHandlerAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(createCategoryAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(createCategoryAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(createCategoryAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(deleteCategoryAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(deleteCategoryAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(deleteCategoryAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(editCategoryAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(editCategoryAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(editCategoryAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(getHomeVideosAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getHomeVideosAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.homeVideos=action.payload;
+        });
+        builder.addCase(getHomeVideosAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+          builder.addCase(updateHomeVideoAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(updateHomeVideoAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(updateHomeVideoAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
+        
+        
         
         
         
@@ -223,4 +440,7 @@ export const categorySlice = createSlice({
         
   },
 });
+
+
+export const {collectionDataHandler}=categorySlice.actions;
 export default categorySlice.reducer;

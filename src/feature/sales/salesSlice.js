@@ -13,6 +13,7 @@ const initialState = {
   returningCustomerDetails:[],
   salesTime:[],
   isLoading: false,
+  isDashboardLoading:false,
   error: null,
 };
 
@@ -34,12 +35,15 @@ export const getSalesDashboardAsync = createAsyncThunk(
 );
 export const getOnlineSalesList = createAsyncThunk(
   "sales/onlineAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/getOnlineSales/all`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -50,12 +54,15 @@ export const getOnlineSalesList = createAsyncThunk(
 );
 export const getMakeToOrderAsync = createAsyncThunk(
   "sales/maketoOrderAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/listMakeToOrder/all`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -67,12 +74,15 @@ export const getMakeToOrderAsync = createAsyncThunk(
 
 export const getOfflineListAsync = createAsyncThunk(
   "sales/offlineAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/offlineorder/offline-orders`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -83,12 +93,15 @@ export const getOfflineListAsync = createAsyncThunk(
 );
 export const getTotalExpenditureAsync = createAsyncThunk(
   "sales/totalExpenditure",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/expense/get-expenses`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -100,12 +113,15 @@ export const getTotalExpenditureAsync = createAsyncThunk(
 
 export const getNetProfitAsync = createAsyncThunk(
   "sales/profitAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/getSalesDashboard/get-netprofit`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -117,12 +133,15 @@ export const getNetProfitAsync = createAsyncThunk(
 
 export const getTotalOrderAsync = createAsyncThunk(
   "sales/totalOrderAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/offlineorder/total-orders/report`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -134,12 +153,15 @@ export const getTotalOrderAsync = createAsyncThunk(
 
  export const getReturningCustomerAsync = createAsyncThunk(
   "sales/returningAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/getReturningCustomersList/all`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -151,12 +173,15 @@ export const getTotalOrderAsync = createAsyncThunk(
 
 export const getTotalSalesAsync = createAsyncThunk(
   "sales/totalSalesAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/getSalesReport/all`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -169,12 +194,15 @@ export const getTotalSalesAsync = createAsyncThunk(
 
 export const getReturningCustomerDetailsAsync = createAsyncThunk(
   "sales/returningCustomerAsync",
- async ({token,id}) => {
+ async ({token,id,data}) => {
         try {
       const res = await api.get(`/user/getCustomerHistory/${id}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -233,14 +261,14 @@ export const salesSlice = createSlice({
   },
   extraReducers: (builder) => {
         builder.addCase(getSalesDashboardAsync.pending, (state) => {
-          state.isLoading = true;
+          state.isDashboardLoading = true;
         });
         builder.addCase(getSalesDashboardAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;
+          state.isDashboardLoading = false;
           state.slaesDashboard = action.payload;
         });
         builder.addCase(getSalesDashboardAsync.rejected, (state, action) => {
-          state.isLoading = false;
+          state.isDashboardLoading = false;
           state.error = action;
         });   
          builder.addCase(getOnlineSalesList.pending, (state) => {

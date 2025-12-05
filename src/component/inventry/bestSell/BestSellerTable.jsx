@@ -7,27 +7,12 @@ import { bestSellingProducts } from "../../../feature/inventaryManagement/invent
 import Cookies from "js-cookie"
 import { Image } from "antd";
 import Loader from "../../loader/Loader";
-const BestSellerTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+import CustomPagination from "../../common/CustomPagination";
+const BestSellerTable=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
       const {bestSeller,isLoading}=useSelector(state=>state?.inventary);
-      console.log(bestSeller,"bestSeller");
-  
-  const getBestSeller=async()=>{
-    try {
-    const res=await dispatch(bestSellingProducts({token})).unwrap();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
-
-  useEffect(()=>{
-   getBestSeller();
-  },[])
+      const bestSellerData=bestSeller?.data?.map((item)=>{
+        return {...item,key:item?.productId}
+      })
  const columns = [
          {
       title: (
@@ -36,7 +21,7 @@ const BestSellerTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 100,
-      render: (text) =>  <CustomText className={  " "} value={1}/>
+      render: (_,text,idx) =>  <CustomText  value={idx+1}/>
     },
     
     {
@@ -116,9 +101,9 @@ const BestSellerTable=()=>{
      
   ];
 
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
+ const onSelectChange = productsId => {
+    console.log('selectedRowKeys changed: ', productsId);
+    setSelectedRowKeys(productsId);
   };
  const rowSelection = {
     selectedRowKeys,
@@ -127,7 +112,8 @@ const BestSellerTable=()=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={bestSeller?.data} columns={columns}/>
+              <CustomTable rowSelection={rowSelection}  dataSource={bestSellerData} columns={columns}/>
+              <CustomPagination pageNumber={page} total={bestSeller?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

@@ -38,7 +38,7 @@ const BirthdayReminderDetails = () => {
       </div>
      
       <div>
-        <CrmCustomerDetails/>
+        <CrmCustomerDetails visitors/>
       </div>
       <div className="pt-10">
         <BirthdayRemindersDetailsTable/>

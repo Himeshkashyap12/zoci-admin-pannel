@@ -34,7 +34,7 @@ const BirthdayReminder = () => {
       </div>
      
       <div>
-        <BirthdayReminderFilter />
+        <BirthdayReminderFilter type={"birthday"} />
       </div>
       <div>
         <BirthdayReminderTable />

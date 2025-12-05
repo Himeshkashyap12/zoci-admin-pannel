@@ -7,22 +7,13 @@ import { vendorPerformanceAnalysis } from "../../../feature/inventaryManagement/
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import Loader from "../../loader/Loader";
-const VendorPerformanceTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const token=Cookies.get("token"); 
-      const navigate=useNavigate(); 
-      const dispatch=useDispatch();
+import CustomPagination from "../../common/CustomPagination";
+const VendorPerformanceTable=({page,setPage})=>{
+  const navigate=useNavigate();
       const {vendorPerformance,isLoading}=useSelector(state=>state?.inventary);            
-        const getVendorPerformance=async()=>{
-          try {
-          const res=await dispatch(vendorPerformanceAnalysis({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getVendorPerformance();
-        },[])
+      const vendorData=vendorPerformance?.data?.map((item)=>{
+    return {...item,key:item?.vendorId}
+  })
     const columns = [
          {
       title: (
@@ -31,7 +22,8 @@ const VendorPerformanceTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 100,
-      render: (text) =>  <CustomText className={  " "} value={1}/>
+      align:"center",
+      render: (_,text,idx) =>  <CustomText  value={idx+1}/>
     },
    
       {
@@ -99,18 +91,18 @@ const VendorPerformanceTable=()=>{
   
      
   ];
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+//   const selectTableRowHandler = productKey => {
+//     setSelectedRowKeys(productKey);
+//   };
+//  const rowSelection = {
+//     selectedRowKeys,
+//     onChange: selectTableRowHandler,
+//   };
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={vendorPerformance?.data} columns={columns}/>
+              <CustomTable  dataSource={vendorData} columns={columns}/>
+              <CustomPagination pageNumber={page} total={vendorPerformance?.totalVendors} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

@@ -3,12 +3,11 @@ import { useState } from "react";
 import CustomTable from "../../../common/CustomTable";
 import CustomText from "../../../common/CustomText";
 import { useNavigate } from "react-router-dom";
-import CustomInput from "../../../common/CustomInput";
 import { Image } from "antd";
 import { isoToIST } from "../../../../constants/constants";
+import CustomPagination from "../../../common/CustomPagination";
 
-const AllVisitorsDetailsTable=({item})=>{
-  console.log(item,"gyfy");
+const AllVisitorsDetailsTable=({item,setPage})=>{
   
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
@@ -27,7 +26,7 @@ const AllVisitorsDetailsTable=({item})=>{
     key: "productImage",
     width: 200,
     align:"center",
-    render: (text) => <div className="flex justify-center"><Image src={text } alt="product" className="w-[40px] h-[40px] object-cover" /></div>
+    render: (text) => <div className="flex justify-center"><Image src={text } alt="product" className="!w-[40px] !h-[40px] object-cover" /></div>
   },
 
   {
@@ -90,9 +89,8 @@ const AllVisitorsDetailsTable=({item})=>{
   };
     return(
         <div className="flex flex-col gap-5">
-                   <CustomInput className={"!w-[300px]"} placeholder={"Search your orders"} />
               <CustomTable  scroll={{x:1300}} rowSelection={rowSelection}  dataSource={item} columns={columns}/>
-
+             <CustomPagination onchange={(e)=>{setPage(e)}} setPage={setPage}/>
         </div>
     )
 }

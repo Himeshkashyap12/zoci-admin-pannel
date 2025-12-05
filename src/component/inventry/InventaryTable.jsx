@@ -12,14 +12,18 @@ import ConfirmationPopup from "../common/ConfirmationPopup";
 import { toast } from "react-toastify";
 import Loader from "../loader/Loader";
 import { useNavigate } from "react-router-dom";
+import CustomPagination from "../common/CustomPagination";
 
 const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   const [deleteConfirm,setDeleteConfirm]=useState();
   const [deleteId,setDeleteId]=useState(null);
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
-  const navigate=useNavigate()
+  const navigate=useNavigate();
+  const [page,setPage]=useState(1);
   const {products,isLoading}=useSelector(state=>state?.inventary);
+  console.log(products);
+  
   const productData=products?.products?.map((item)=>{
     return {...item,key:item?._id}
   })
@@ -29,7 +33,8 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   
   const getAllProducts=async()=>{
     try {
-    const res=await dispatch(getAllProductAsync({token})).unwrap();
+      const data={page:page,limit:10}
+    const res=await dispatch(getAllProductAsync({token,data})).unwrap();
     console.log(res);
     
     } catch (error) {
@@ -71,7 +76,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
  
   useEffect(()=>{
    getAllProducts();
-  },[])
+  },[page])
 
 
   
@@ -92,7 +97,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "images",
       key: "images",
-      width: 200,
+      width: 150,
       render: (text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
     },
       {
@@ -102,7 +107,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 250,
+      width: 350,
       render: (text) =>  <CustomText value={text}/>
     },
     {
@@ -204,7 +209,8 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+        <CustomTable   scroll={{x:2500}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+         <CustomPagination pageNumber={page} total={products?.totalProducts} onchange={(e)=>{setPage(e)}}/>
             <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         
         </>

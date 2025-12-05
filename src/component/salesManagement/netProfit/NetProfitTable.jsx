@@ -3,8 +3,9 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { isoToIST } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 
-const NetProfitTable=({item})=>{
+const NetProfitTable=({item,setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
    const columns = [
@@ -104,6 +105,7 @@ const data = [
     return(
         <>
               <CustomTable rowSelection={rowSelection}  dataSource={item?.data} columns={columns}/>
+              <CustomPagination  total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

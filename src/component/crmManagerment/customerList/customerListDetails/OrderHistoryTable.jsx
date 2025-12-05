@@ -8,22 +8,31 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { CustomerOrderHistoryAsync } from "../../../../feature/crm/crmSlice";
 import { isoToIST } from "../../../../constants/constants";
+import { useDebounce } from "../../../../hooks/UseDebounce";
+import CustomPagination from "../../../common/CustomPagination";
+import Loader from "../../../loader/Loader";
 const OrderHistoryTable=({id,setCustomerDetails})=>{
+      const [search,setSearch]=useState("");
+      const [page,setPage]=useState(1)
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
       const {orderHistory,isLoading}=useSelector(state=>state?.crm);
-      console.log(orderHistory,"fbdfdhb");
-      
+      const debouncing=useDebounce(search,500); 
       setCustomerDetails(orderHistory?.customer)
-
-
-
-    
         const getOrderHistory=async()=>{
+            const trimSearch=search.trim();
+
+          const data={
+            limit:10,
+            page:page,
+            ...(search && {search:trimSearch})
+          }
+
+          if(search && !trimSearch) return;
           try {
-          const res=await dispatch(CustomerOrderHistoryAsync({token,id})).unwrap();
+          const res=await dispatch(CustomerOrderHistoryAsync({token,id,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
@@ -31,7 +40,7 @@ const OrderHistoryTable=({id,setCustomerDetails})=>{
 
         useEffect(()=>{
          getOrderHistory();
-        },[])
+        },[debouncing])
    
  const columns = [
   {
@@ -122,11 +131,12 @@ const OrderHistoryTable=({id,setCustomerDetails})=>{
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if(isLoading) return <Loader/>
     return(
         <div className="flex flex-col gap-5">
-                   <CustomInput className={"!w-[300px]"} placeholder={"Search your orders"} />
+                   <CustomInput value={search} name={"search"} onchange={(e)=>{setSearch(e.target.value)}} className={"!w-[300px]"} placeholder={"Search your orders"} />
               <CustomTable rowSelection={rowSelection}  dataSource={orderHistory?.data} columns={columns}/>
-
+              <CustomPagination onchange={(e)=>{setPage(e)}} total={orderHistory?.total} />
         </div>
     )
 }

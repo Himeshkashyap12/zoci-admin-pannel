@@ -4,9 +4,12 @@ import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { Image } from "antd";
 import { isoToIST } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
+import { useSelector } from "react-redux";
+import Loader from "../../loader/Loader";
 
-const TotalOrderTable=({item})=>{
-  console.log(item);
+const TotalOrderTable=({item,page,setPage})=>{
+    const {isLoading}=useSelector(state=>state?.sales)
   
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
@@ -148,9 +151,11 @@ const TotalOrderTable=({item})=>{
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if(isLoading) return <Loader/>
     return(
         <>
               <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={item?.data} columns={columns}/>
+              <CustomPagination total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

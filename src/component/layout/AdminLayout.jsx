@@ -1,13 +1,13 @@
 import {   Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import {  Outlet } from "react-router";
-import { logOutApi } from "../../feature/auth/authApi";
-import { logout } from "../../feature/auth/authSlice";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import CustomSidebar from "./SibeBar";
+import { useState } from "react";
+import Loader from "../loader/Loader";
 const AdminLayout = () => {
-  const dispatch = useDispatch();
+  const [loading,setLoding]=useState(false)
+
+
   const contentStyle = {
     color: "#d5c294",
     backgroundColor: "#efe6dc",
@@ -18,12 +18,13 @@ const AdminLayout = () => {
   };
 
   
+  if(loading) return <div className="absolute to-0% bottom-0 left-0 right-0 fle justify-center items-center"><Loader/></div>
 
 
   return (
     <>
       <Layout style={layoutStyle}>
-        <CustomSidebar />
+        <CustomSidebar  setLoding={setLoding}/>
           <Content style={contentStyle}>
             <div className="overflow-y-auto h-full">
               <Outlet />

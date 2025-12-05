@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getReturningCustomerDetailsAsync } from "../../../../feature/sales/salesSlice";
 import Loader from "../../../loader/Loader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ReturningCustomerDetailsTable from "./ReturningCustomerDetailsTable";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { LeftOutlined } from "@ant-design/icons";
 import CustomText from "../../../common/CustomText";
 const ReturningCustomerDetails=({id})=>{
     const navigate=useNavigate();
-    
+    const [page,setPage]=useState(1)
     const token=Cookies.get("token");
     const dispatch=useDispatch();
     const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);      
@@ -17,7 +17,11 @@ const ReturningCustomerDetails=({id})=>{
     
             const returningCustomerDetailsHandler=async()=>{
               try {
-              const res=await dispatch(getReturningCustomerDetailsAsync({token,id})).unwrap();
+                const data={
+                  page:page,
+                  limit:10
+                }
+              const res=await dispatch(getReturningCustomerDetailsAsync({token,id,data})).unwrap();
               } catch (error) {
                 console.log(error);
               }
@@ -25,9 +29,8 @@ const ReturningCustomerDetails=({id})=>{
     
             useEffect(()=>{
                   returningCustomerDetailsHandler();
-           },[]);            
+           },[page]);            
               
-    if(isLoading) return <Loader/>
     return(
         <>
           <div className="flex flex-col gap-5 p-[24px]">
@@ -45,13 +48,13 @@ const ReturningCustomerDetails=({id})=>{
               </div>
               <CustomText
                 className={"!text-[#214344] !text-[20px]"}
-                value={`Sales Reports → Returning Customers→ ${returningCustomerDetails?.data?.CustomerName}`}
+                value={`Sales Reports → Returning Customers→ ${returningCustomerDetails?.data?.customerName}`}
               />
             </div>
            
            
             <div>
-              <ReturningCustomerDetailsTable />
+              <ReturningCustomerDetailsTable  setPage={setPage} page={page}/>
             </div>
           </div>
         </>

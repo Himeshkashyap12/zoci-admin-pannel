@@ -49,6 +49,7 @@ const AddNewBlog=()=>{
 
 
     const createBlogHandler=async()=>{
+        if(!newBlogInput?.title || !newBlogInput?.description || !newBlogInput?.image) return toast.error("Please fill all field")
         try {
             const data={
                 ...newBlogInput

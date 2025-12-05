@@ -2,7 +2,7 @@
 import { Avatar, Col, DatePicker, Empty, Row, Select, Table, Typography } from "antd";
 import "./admin.css"
 import { Button, Checkbox, Form, Input } from 'antd';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateInvoice, getSkuSearch, previewPdfHandler } from "../../feature/admin/adminApi";
 import { addSku } from "../../feature/admin/adminSlice";
@@ -15,11 +15,9 @@ import CustomText from "../common/CustomText";
 import Loader from "../loader/Loader";
 const GenerateInvoiceForm = () => {
   const dispatch=useDispatch();
-  const navigate=useNavigate();
   const {skuData}=useSelector(state=>state?.admin);
   const skuFilteredData=skuData.filter((item)=>item.stock>0);
-  const [isLoading,setIsLoading]=useState(false)
-  
+  const [isLoading,setIsLoading]=useState(false);
   const [invoiceInputHandler,setInvoiceInputHandler]=useState({
     name: "",
     mobile: "",
@@ -29,7 +27,10 @@ const GenerateInvoiceForm = () => {
     date: dayjs().format("YYYY-MM-DD"),
     discount: "",
     paymentMethod: "cash",
-    invoiceData:[]
+    invoiceData:[{
+      sku: '', quantity: 1
+    }],
+   
   })
   const subTotal = invoiceInputHandler?.invoiceData?.reduce((accumulator, currentValue) =>{
     return accumulator+(currentValue?.price*currentValue?.quantity);
@@ -56,16 +57,17 @@ const invoiceInputDataHandler=(e,item)=>{
 }
 
 const quantityHandler=(record,item)=>{
-  if((record?.quantity==0 && item === "minus") || (record?.quantity>=record.stock && item === "plus") ){
- return ;
+  console.log(record);
+  
+  if(((record?.quantity==record?.stock) || (record?.quantity==1)  && item === "minus") || (record?.quantity>=record.stock && item === "plus") ){
+    return ;
   }else{
-const data=[...invoiceInputHandler?.invoiceData];
+  const data=[...invoiceInputHandler?.invoiceData];
   const index=data.findIndex(item=>item?.id==record.id);
-  data.splice(index,1,{...data[index],quantity:item=="plus"?record.quantity+1:record.quantity-1});
-  console.log(data);
+  data.splice(index,1,{...data[index],quantity:(item=="plus"?data[index]?.quantity+1:data[index]?.quantity>1 && data[index]?.quantity-1)});
   setInvoiceInputHandler({...invoiceInputHandler,invoiceData:data})
   }
-  
+  console.log(item);
 }
 
 
@@ -89,12 +91,12 @@ const skuSearchHandler=async(e)=>{
 }
   
 const previewPdf=async()=>{
-      setIsLoading(true)
-
   try {
-    const item=invoiceInputHandler?.invoiceData?.map((item)=>{
+    const item=invoiceInputHandler?.invoiceData?.map((item)=>{      
       return {sku:item?.sku,quantity:item?.quantity}
     })
+    console.log(item,"ghvh");
+    
     
     const data={ 
       name:  invoiceInputHandler?.name,
@@ -117,10 +119,8 @@ const previewPdf=async()=>{
   }
 }
 
-const addSkuHandler=(item)=>{
-   
+const addSkuHandler=(item)=>{ 
   const data={...item,quantity:1}
- 
   if(invoiceInputHandler.invoiceData.some(product=>product?.sku==item?.sku)){
     return toast.error("Item already exist")
   }else{
@@ -131,9 +131,7 @@ const addSkuHandler=(item)=>{
   
 }
 const generateInvoiceHandler=async()=>{
-
-  console.log(invoiceInputHandler);
-  
+    setIsLoading(true);  
   if(invoiceInputHandler?.name=="" || 
      invoiceInputHandler?.mobile=="" ||
       invoiceInputHandler?.address=="" || 
@@ -144,17 +142,14 @@ const generateInvoiceHandler=async()=>{
       invoiceInputHandler?.invoiceData?.length==0 
     
     ){
-       toast.error("please Enter all required field")
+       toast.error("please Enter all required field");
+       setIsLoading(false)
     } 
   try {
-      
-
       const item=invoiceInputHandler?.invoiceData?.map((item)=>{
-      return {sku:item?.sku,quantity:item?.stock}
+      return {sku:item?.sku,quantity:item?.quantity};
     })
-    setIsLoading(true)
     const data={ 
-      
       name:  invoiceInputHandler?.name,
     mobile: invoiceInputHandler?.mobile,
     address:  invoiceInputHandler?.address,
@@ -163,19 +158,16 @@ const generateInvoiceHandler=async()=>{
     date:invoiceInputHandler?.date,
     discount: invoiceInputHandler?.discount,
     paymentMethod:invoiceInputHandler?.paymentMethod
-    ,items:item}
+    ,items:item};
+    console.log(data,"data");
+    
     const res=await generateInvoice(data);
-    console.log(res);
     if(res.success){
       toast.success(res?.message)
       setIsLoading(false)
-
     }
-    
-    
   } catch (error) {
     toast.error(error?.response?.data?.message);
-    
       setIsLoading(false)
     
   }
@@ -186,11 +178,8 @@ const removeproductHandler=(item)=>{
   const data=[...invoiceInputHandler?.invoiceData];
   const index=data.findIndex(product=>product?.id==item.id);
   console.log(index);
-  data.splice(index,1)
-  setInvoiceInputHandler({...invoiceInputHandler,invoiceData:data})
-  
-  
-
+  data.splice(index,1);
+  setInvoiceInputHandler({...invoiceInputHandler,invoiceData:data});
 }
 const cancelInvoiceHandler=()=>{
   setInvoiceInputHandler({
@@ -261,11 +250,13 @@ const cancelInvoiceHandler=()=>{
       width: 160,
       align: "center",
       render: (_,record) => {
+        console.log(record);
+        
         return(
           <>
            <div className="flex justify-between px-[20px]">
          <Typography.Text onClick={()=>{quantityHandler(record,"minus")}} className="!text-[16px] cursor-pointer">-</Typography.Text>
-           <Typography.Text>{record.quantity}</Typography.Text>
+           <Typography.Text>{record?.quantity}</Typography.Text>
          <Typography.Text onClick={()=>{quantityHandler(record,"plus")}} className="!text-[16px] cursor-pointer">+</Typography.Text>
 
       </div>
@@ -309,6 +300,11 @@ const cancelInvoiceHandler=()=>{
     
    
   ];
+
+
+  useEffect(()=>{
+    setInvoiceInputHandler({...invoiceInputHandler,invoiceData:[]})
+  },[])
 if(isLoading) return <Loader/>
   return (
    <>
@@ -475,12 +471,12 @@ if(isLoading) return <Loader/>
       <CustomTable
             pagination={false}
             columns={columns}
-            dataSource={invoiceInputHandler?.invoiceData}
+            dataSource={ invoiceInputHandler?.invoiceData}
           />
           </Col>
          
     </Row>
-    {invoiceInputHandler?.invoiceData?.length>0 &&  <div className="flex flex-col gap-3 bg-[#fff] px-20 w-[96%] py-5">
+    {invoiceInputHandler?.invoiceData?.length>0 &&  <div className="flex flex-col gap-3 bg-[#fff] px-20 w-[100%] py-5">
             <Row justify={"end"}>
               <Col  span={12}><Typography.Text className="text-[16px] font-[500] text-[#214344]">Sub Total</Typography.Text></Col>
               <Col span={12}><Typography.Text className="!text-end">Rs. {subTotal}</Typography.Text></Col>
@@ -496,21 +492,21 @@ if(isLoading) return <Loader/>
            
 
           </div>}
-   <Form.Item label={null}>
-    <div className="flex justify-center gap-3 py-5">
-      <Button onClick={()=>{previewPdf()}} className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 " htmlType="submit">
-        Preview and Print
-      </Button>
-       <Button onClick={()=>{cancelInvoiceHandler()}} className=" !text-[#214344] !border-[#214344] !rounded-full !w-[250px] !text-[16px] py-3" >
-        Cancel
-      </Button>
-     
-      </div>
-       <div className="flex justify-center gap-3 py-5">
-       <Button onClick={()=>{generateInvoiceHandler()}} className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 " htmlType="submit">
-       Save
-      </Button>
-      
+               <Form.Item label={null}>
+              <div className="flex justify-center gap-3 py-5">
+                <Button onClick={()=>{previewPdf()}} className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 " htmlType="submit">
+                  Preview and Print
+                </Button>
+                <Button onClick={()=>{cancelInvoiceHandler()}} className=" !text-[#214344] !border-[#214344] !rounded-full !w-[250px] !text-[16px] py-3" >
+                  Cancel
+                </Button>
+              
+                </div>
+                <div className="flex justify-center gap-3 py-5">
+                <Button onClick={()=>{generateInvoiceHandler()}} className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 " htmlType="submit">
+                Save
+                </Button>
+                
       </div>
     </Form.Item>
     </Form>

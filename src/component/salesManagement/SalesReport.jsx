@@ -1,6 +1,6 @@
 
 
-import { Col, Row } from "antd";
+import { Col, Empty, Row } from "antd";
 import CustomText from "../common/CustomText";
 import ProductSalesChart from "./ProductSalesChart";
 import MonthlySalesChart from "./MonthLySalesChart";
@@ -21,7 +21,7 @@ const SalesReport=()=>{
   const navigate=useNavigate();
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
-  const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
+  const {slaesDashboard,isLoading,isDashboardLoading}=useSelector(state=>state?.sales);
             console.log(slaesDashboard,"lmknjn");
             
         const getSalesDashboard=async()=>{
@@ -32,7 +32,7 @@ const SalesReport=()=>{
           }
         }
        
-          const getSalesRevenue=async()=>{
+ const getSalesRevenue=async()=>{
     try {
       const res=await dispatch(getSalesTimeAsync({token}))
       console.log(res);
@@ -94,19 +94,19 @@ const SalesReport=()=>{
       }
     ];
 
-if(isLoading) return <Loader/>
+if(isLoading | isDashboardLoading) return <Loader/>
     return(
        <div className="flex flex-col gap-5 p-5">
         <CustomText value={"Sales Reports"}/>
            <Row gutter={[20,20]}>
             <Col span={12}>
             <div className="w-auto">
-                <MonthlySalesChart />
+                <MonthlySalesChart  item={slaesDashboard?.monthlySales}/>
           </div>
             </Col>
             <Col span={12}>
             <div className="w-auto">
-          <ProductSalesChart  item={slaesDashboard?.categories} />
+          <ProductSalesChart  item={slaesDashboard?.productSoldByCategory} />
           </div>
             </Col>
           </Row>
@@ -134,7 +134,7 @@ if(isLoading) return <Loader/>
           </Row>
           <Row>
             <Col span={24}>
-             <EventSales item={slaesDashboard?.events}/>
+           <EventSales item={slaesDashboard?.events}/>
              </Col>
           </Row>
          <div className="flex justify-between">

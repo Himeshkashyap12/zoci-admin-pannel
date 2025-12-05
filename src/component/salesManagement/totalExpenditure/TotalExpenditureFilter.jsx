@@ -5,33 +5,36 @@ import exports from "../../../assets/inventary/export.png"
 import CustomText from "../../common/CustomText";
 import CustomButton from "../../common/CustomButton";
 import CustomInput from "../../common/CustomInput";
-const TotalExpenditureFilter=()=>{
+import CustomMultipleFilter from "../../common/CustumMultipleFilter";
+import "../sales.css"
+import { totalSaleFilter, totalSaleSort } from "./totalExpenditureData";
+const OnlineSalesFilter=({setSearch,setFilter,setSort,search})=>{
     return(
-        <>
+        <div className="sales">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput placeholder={"Search your orders"} />
+                   <CustomInput value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Sales"} />
                    </div>
                  </Col>
                  
                  <Col span={16}>
-                 <div className="flex gap-5 justify-end"> 
-                     
+                 <div className="flex gap-5 justify-end">    
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
-                    <CustomText className={"!text-[#fff]"} value={"Filter"}/>
+                   <CustomMultipleFilter  placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={totalSaleSort}/>
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomText className={"!text-[#fff]"} value={"Custom"}/>
+                    <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={totalSaleFilter}/>
+
 
                   </div>}/>
                  
                   </div>
               </Col>
             </Row>
-        </>
+        </div>
     )
 }
-export default TotalExpenditureFilter;
+export default OnlineSalesFilter;

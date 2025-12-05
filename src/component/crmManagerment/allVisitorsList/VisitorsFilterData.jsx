@@ -1,0 +1,61 @@
+
+
+  export const allVisitorsFiltorData = [
+  {
+    label:"Sort By Order",
+    value:"sortOrder",
+  
+    children: [
+      {
+        value: 'asc',
+        label: 'Low To High',
+      
+      },
+      {
+        value: 'desc',
+        label: 'High To Low',
+      }
+      
+    ],
+  },
+
+   {
+    label:"Sort By",
+    value:"sortBy",
+    children: [
+      {
+        value: 'name',
+        label: 'Name',
+      
+      },
+      {
+        value: 'mobile',
+        label: 'mobile',
+      
+      },
+      {
+        value: 'createdAt',
+        label: 'Date',
+      
+      },
+      {
+        value: 'bag',
+        label: 'Bag',
+      
+      },
+      {
+        value: 'wishlist',
+        label: 'Wishlist',
+      
+      }
+     
+      
+    ],
+  
+  
+      
+    
+  }
+  
+];
+

@@ -16,7 +16,7 @@ const ProductSalesChart=({item})=>{
       zoom: { enabled: false },
     },
     xaxis: {
-      categories: item?.map((item)=>item?.category),
+      categories: item?.categories?.map((item)=>item?.category),
     },
 
     // color for the series
@@ -53,7 +53,7 @@ const ProductSalesChart=({item})=>{
   const series = [
     {
       name: "series-1",
-      data: item?.map((item)=>item?.qty),
+      data: item?.categories?.map((item)=>item?.qty),
     },
   ];
 
@@ -64,14 +64,14 @@ const ProductSalesChart=({item})=>{
        <CustomText className={"!text-[20px] text-[#0D141C] font-[500]"} value={"Product Sold By Categories"}/>
        <CustomButton value={<div className="flex gap-2 items-center">
         <Image preview={false} className="!size-[16px] object-cover"  src={calender}/>
-        <CustomText className={"!text-[#fff]"} value={"Last 7 days"}/>
+        {/* <CustomText className={"!text-[#fff]"} value={"Last 7 days"}/> */}
         </div>}/>
     </div>
     <div className="flex flex-col gap-4">
-       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={"+10%"}/>
+       <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={item?.last30DaysQty}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
-       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={"+10%"}/>
+       <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={`+ ${item?.last30DaysQty}`}/>
        </div>
     </div>
     <div>

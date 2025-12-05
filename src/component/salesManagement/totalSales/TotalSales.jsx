@@ -8,17 +8,35 @@ import { Col, Row } from "antd";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../loader/Loader";
+import { useDebounce } from "../../../hooks/UseDebounce";
 const TotalSales = () => {
   const navigate = useNavigate();
-     const token=Cookies.get("token");  
+     const token=Cookies.get("token"); 
+       const [search,setSearch]=useState("");
+             const debounce=useDebounce(search,500);
+             const [filter,setFilter]=useState([])
+             const [sort,setSort]=useState([]) 
+      const [page,setPage]=useState(1)
+
       const dispatch=useDispatch();
       const {totalSales,isLoading}=useSelector(state=>state?.sales);
             
             const getTotalSalesHandler=async()=>{
+                const trimSearch=search.trim();
+                const data={
+                  limit:10,
+                  page:page,
+                  ...(search && {search:trimSearch} ),
+                  ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                  ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+
+                }
               try {
-              const res=await dispatch(getTotalSalesAsync({token})).unwrap();
+                if(search && !trimSearch) return;
+
+              const res=await dispatch(getTotalSalesAsync({token,data})).unwrap();
               } catch (error) {
                 console.log(error);
               }
@@ -39,8 +57,7 @@ const TotalSales = () => {
             ]
             useEffect(()=>{
               getTotalSalesHandler();
-            },[])
-  if(isLoading) return <Loader/>
+            },[debounce,page,filter,sort])
    return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -74,10 +91,10 @@ const TotalSales = () => {
         </Row>
       </div>
       <div>
-        <ToTalSalesFilter  />
+        <ToTalSalesFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
       </div>
       <div>
-        <TotalSalesTable  totalSales={totalSales?.data}/>
+        <TotalSalesTable page={page} setPage={setPage}  totalSales={totalSales}/>
       </div>
     </div>
   );

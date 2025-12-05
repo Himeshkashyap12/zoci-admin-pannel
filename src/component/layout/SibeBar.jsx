@@ -1,5 +1,5 @@
 import Sider from "antd/es/layout/Sider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/header.png";
 import { Menu, Typography } from "antd";
 import Cookies from "js-cookie";
@@ -9,8 +9,10 @@ import { logOutApi } from "../../feature/auth/authApi";
 import { logout } from "../../feature/auth/authSlice";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-const CustomSidebar = () => {
-  const [selectKey, setSelectKey] = useState(0);
+import Loader from "../loader/Loader";
+const CustomSidebar = ({setLoding}) => {
+  const key=Number(Cookies.get("key")); 
+  const [selectKey, setSelectKey] = useState(key);
   const dispatch=useDispatch();
   const siderStyle = {
     color: "#fff",
@@ -168,6 +170,8 @@ const CustomSidebar = () => {
     },
   ];
   const handleSidebar = (e) => {
+    console.log(e.key);
+    
     setSelectKey(e.key);
     Cookies.set("key", e.key);
     const selectedItem = sidebarItems.find((item) => item.key === e.key);
@@ -176,15 +180,24 @@ const CustomSidebar = () => {
     }
   };
 const logoutHandler = async () => {
+  setLoding(true)
     try {
       const res = await logOutApi();
       dispatch(logout());
       toast.success(res.message);
+      Cookies.set("key",null);
+      setLoding(false);
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+      setLoding(false);
     }
   };
+
+  useEffect(()=>{
+    setSelectKey(key)
+
+  },[]);
   return (
     <>
       <Sider width="18%" style={siderStyle}>
@@ -198,7 +211,6 @@ const logoutHandler = async () => {
               onClick={(e) => {
                 handleSidebar(e);
               }}
-              defaultSelectedKeys={["0"]}
               items={sidebarItems}
               className="!bg-[#214344]"
               mode="inline"

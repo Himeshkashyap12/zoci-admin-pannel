@@ -3,9 +3,50 @@ import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import MakeTOOrderFilter from "./MakeToOrderFilter";
 import MakeToOrderTablePage from "./MakeTOOrderTable";
-
+import { useDispatch } from "react-redux";
+import { getManageOnlineOrderAsync } from "../../../feature/order/orderSlice";
+import Cookies from "js-cookie"
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../../hooks/UseDebounce";
+import { orderExportInExcelHandler } from "../constants";
 const MakeToOnline=()=>{
-    const navigate=useNavigate()
+            const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+            const [date,setDate]=useState([]); 
+            console.log(date);
+                             
+            const navigate=useNavigate();
+            const token=Cookies.get("token");  
+            const dispatch=useDispatch();
+            const [page,setPage]=useState(1);
+            const [search,setSearch]=useState("");
+            const debounce=useDebounce(search,500);
+            const [filter,setFilter]=useState([])
+            const [sort,setSort]=useState([]) 
+            const getMakeToOnlineOrder=async()=>{
+            const trimSearch=search.trim();
+                const data={
+                  limit:10,
+                  page:page,
+                  ...(search && {search:trimSearch} ),
+                  ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                  ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:[date[0]],endDate:date[1]} ),
+                }
+              try {
+          if(search && !trimSearch) return;
+          const res=await dispatch(getManageOnlineOrderAsync({token,data})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+         }
+         const exportOrderHandler = async () => {
+          const data={startDate:[date[0]],endDate:date[1]}
+                   orderExportInExcelHandler({dispatch,token,data})
+               };
+          useEffect(()=>{
+          getMakeToOnlineOrder();
+          },[page,filter,sort,debounce,date])
+        
     return(
         <div className="flex flex-col gap-5 p-[24px]">
             <div className="flex gap-2 items-center">
@@ -15,11 +56,11 @@ const MakeToOnline=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Order Management → Manage Online Orders"}/>
             </div>
             <div>
-                <MakeTOOrderFilter/>
+                <MakeTOOrderFilter date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
             </div>
             
               <div>
-               <MakeToOrderTablePage/>
+               <MakeToOrderTablePage setSelectedRowKeys={setSelectedRowKeys} selectedRowKeys={selectedRowKeys} setPage={setPage} page={page}/>
               </div>
         </div>
     )

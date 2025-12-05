@@ -6,23 +6,9 @@ import Cookies from "js-cookie"
 import { notifyMeAsync } from "../../../feature/inventaryManagement/inventarySlice";
 import { Image } from "antd";
 import Loader from "../../loader/Loader";
-const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys})=>{
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const {notfyMe,isLoading}=useSelector(state=>state?.inventary);      
-      const notifyMeData=notfyMe?.data?.map((item)=>{
-        return {...item,key:item?.productId}
-      });         
-        const getNotifyMe=async()=>{
-          try {
-          const res=await dispatch(notifyMeAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-          getNotifyMe();
-        },[])
+import CustomPagination from "../../common/CustomPagination";
+const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page,setPage})=>{
+     const {isLoading}=useSelector(state=>state?.inventary)
     const columns = [
          {
       title: (
@@ -103,19 +89,19 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys})=>{
     },
      
   ];
- const notifyMeSelectHandler = productId => {
-    console.log('selectedRowKeys changed: ', productId);
-    setSelectedRowKeys(productId);
+  const selectTableRowHandler = productKey => {
+    setSelectedRowKeys(productKey);
   };
  const rowSelection = {
     selectedRowKeys,
-    onChange: notifyMeSelectHandler,
+    onChange: selectTableRowHandler,
   };
   if(isLoading) return <Loader/>
 
     return(
         <>
               <CustomTable rowSelection={rowSelection}  dataSource={notifyMeData} columns={columns}/>
+              <CustomPagination pageNumber={page} total={total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

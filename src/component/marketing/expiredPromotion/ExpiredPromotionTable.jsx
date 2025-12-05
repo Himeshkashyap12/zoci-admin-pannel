@@ -1,21 +1,30 @@
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import {useDispatch, useSelector} from "react-redux"
-import { getAllPromotionAsync } from "../../../feature/marketing/marketingSlice";
+import { deleteNewPromotionAsync, getAllPromotionAsync } from "../../../feature/marketing/marketingSlice";
 import Cookies from "js-cookie";
 import { isoToIST } from "../../../constants/constants";
 import { Image, Space } from "antd";
 import deleteIcon from ".././../../assets/icons/deleteIcon.png"
 import { EditOutlined } from "@ant-design/icons";
 import Loader from "../../loader/Loader";
+import CustomPagination from "../../common/CustomPagination";
+import CustomModal from "../../common/CustomModal";
+import ConfirmationPopup from "../../common/ConfirmationPopup";
+import CreateNewPromotion from "../CreateNewPromotion";
 
 const ExpiredPromotionTable=()=>{
    const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {promotion,isLoading}=useSelector(state=>state?.marketing);
+       const [seletedId,setDeletedId]=useState("");
+            const [edit,setEdit]=useState(false);
+            const [page,setPage]=useState(1);
+            const [promotionModel ,setPromotionModel]=useState(false);
+            const {promotion,isLoading}=useSelector(state=>state?.marketing);
+            const [edititem,setEditItem]=useState(null)
             console.log(promotion,"promotion");
             
         const getActivePromotion=async()=>{
@@ -26,7 +35,23 @@ const ExpiredPromotionTable=()=>{
             console.log(error);
           }
         }
+ const confirmationPopUpHandler=async()=>{
+           try {
+            const res=await dispatch(deleteNewPromotionAsync({token,id:seletedId})).unwrap();
+            console.log(res);
+            if(res.status){
+            toast.success(res.message);
+            setPromotionModel(false);
+            getActivePromotion();
+          }
+            
+           } catch (error) {
+            console.log(error);
+            setPromotionModel(false);
 
+            
+           }
+         }
 
 
         useEffect(()=>{
@@ -131,20 +156,21 @@ const ExpiredPromotionTable=()=>{
       width: 130,
       render: (_, record) => (
         <Space size="middle">
-          <div
-            className="h-[20px] w-[20px] cursor-pointer"
-            // onClick={() => {
-            //   setDeleteConfirm(true),setDeleteId(record?._id);
-            // }}
-          >
-            <img src={deleteIcon} alt="deleteIcon"/>
-          </div>
-          <div
-            className="h-[20px] w-[20px] cursor-pointer"
-          >
-            <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
-          </div>
-        </Space>
+                 <div
+                   className="h-[20px] w-[20px] cursor-pointer"
+                   onClick={() => {
+                    setEdit(false), setPromotionModel(true),setDeletedId(record?._id);
+                   }}
+                 >
+                   <img src={deleteIcon} alt="deleteIcon"/>
+                 </div>
+                 <div
+                    onClick={()=>{setEdit(true),setEditItem(record),setPromotionModel(true)}}
+                   className="h-[20px] w-[20px] cursor-pointer"
+                 >
+                   <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
+                 </div>
+               </Space>
       ),
      
      
@@ -155,6 +181,10 @@ const ExpiredPromotionTable=()=>{
     return(
         <>
         <CustomTable scroll={{x:1700}}  dataSource={promotion?.promos} columns={columns}/>
+        <CustomPagination pageNumber={page} total={promotion?.total} onchange={(e)=>{setPage(e)}}/>
+     
+       <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setOpen={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
+
         </>
     )
 }

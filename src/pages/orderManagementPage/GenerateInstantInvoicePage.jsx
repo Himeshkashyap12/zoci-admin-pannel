@@ -1,4 +1,4 @@
-import GenerateInvoiceInstant from "../../component/orderManagement/GenerateInvoiceInstant"
+import GenerateInvoiceInstant from "../../component/orderManagement/generateInvoiceInstant/GenerateInvoiceInstant"
 
 const GenerateInvoicePage=()=>{
     return(

@@ -7,16 +7,50 @@ import CustomButton from "../common/CustomButton";
 import CustomInput from "../common/CustomInput";
 import CustomMultipleFilter from "../common/CustumMultipleFilter";
 import CustomText from "../common/CustomText";
+import { useEffect, useState } from "react";
+import { collectionDataHandler, getCollectionAsync } from "../../feature/uiManagement/UiManagementSlice";
+import { useDebounce } from "../../hooks/UseDebounce";
+import Cookies from "js-cookie"
+import { useDispatch } from "react-redux";
+import { uiFilterData } from "./uiFilterData";
 const UiManagementFilter=({})=>{
-  
+   const [search,setSearch]=useState("");
+   const debouncedText = useDebounce(search, 500);
+   const token=Cookies.get("token");
+   const [sortFilter,setSortFilter]=useState([]);
+   console.log(sortFilter,"hvhv");
+   
+   const dispatch=useDispatch();
+      const getCollection=async()=>{ 
+                try {
+             const trimSearch=search.trim();
+            const data={
+                ...(trimSearch && { search:trimSearch }),
+                ...(sortFilter.length>0 && { [sortFilter[0]]:sortFilter[1] }),
+                  page:1,
+                  limit:10
+              }
+
+      if (search && !trimSearch) {
+        return; 
+      }
+      dispatch(collectionDataHandler())
+            const res=await dispatch(getCollectionAsync({token,data})).unwrap();
+            } catch (error) {
+               console.log(error);   
+            } 
+            }
 
 
+             useEffect(()=>{
+                     getCollection();
+                },[debouncedText,sortFilter]);
     return(
         <div className="inventary">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search={true} placeholder={"Search your orders"} />
+                   <CustomInput onchange={(e)=>{setSearch(e.target.value)}} name={"search"} value={search} search={true} placeholder={"Search Collection"} />
                    </div>
                  </Col>
                  
@@ -25,15 +59,11 @@ const UiManagementFilter=({})=>{
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                     {/* <CustomText className={"!text-[#fff]"} value={"Filter"}/> */}
-                   <CustomMultipleFilter placeholder={"Filter"} />
+                  <CustomMultipleFilter placeholder={"Sort"} onchange={(value)=>{setSortFilter(value)}} option={uiFilterData}/>
+
 
                        </div>}/>
-                  <CustomButton value={<div className="flex items-center gap-2">
-                    <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter placeholder={"Sort"}/>
-
-
-                  </div>}/>
+                
                  
                   </div>
                   </Col>

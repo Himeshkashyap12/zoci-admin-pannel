@@ -8,14 +8,17 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import CustomModal from "../../common/CustomModal";
 import AddNewVendor from "./AddNewVendor";
-const VendorFilter=()=>{
+import CustomMultipleFilter from "../../common/CustumMultipleFilter";
+import { vendorSort } from "./vendorFilterData";
+import "../inventary.css"
+const VendorFilter=({setSearch,setSort,search,exportProductHandler})=>{
   const [addVendorModel,setAddVendorModel]=useState(false);
     return(
-        <>
+        <div className="inventary">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput placeholder={"Search your orders"} />
+                   <CustomInput name={"search"} value={search} onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search Vendors"} />
                    </div>
                  </Col>
                  
@@ -26,24 +29,26 @@ const VendorFilter=()=>{
                     <CustomText className={"!text-[#fff]"} value={"Add New vendor"}/>
 
                   </div>}/>
-                  <CustomButton value={<div className="flex items-center gap-2">
+                  {/* <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                     <CustomText className={"!text-[#fff]"} value={"Filter"}/>
-                       </div>}/>
+                       </div>}/> */}
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomText className={"!text-[#fff]"} value={"Sort"}/>
+                    {/* <CustomText className={"!text-[#fff]"} value={"Sort"}/> */}
+                    <CustomMultipleFilter placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={ vendorSort}/>
+
 
                   </div>}/>
-                  <CustomButton value={<div className="flex items-center gap-2">
+                  {/* <CustomButton onclick={()=>{exportProductHandler()}} value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
                     <CustomText className={"!text-[#fff]"} value={"Export in Excel"}/>
-                  </div>}/>
+                  </div>}/> */}
                   </div>
                   </Col>
             </Row>
             <CustomModal  footer={false} setOpen={setAddVendorModel} open={addVendorModel} modalBody={<AddNewVendor setOpen={setAddVendorModel}/>} width={"1052px"}/>
-        </>
+        </div>
     )
 }
 export default VendorFilter;

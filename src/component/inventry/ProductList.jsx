@@ -1,7 +1,6 @@
 import { Col, Image, Row } from "antd";
 import CustomInput from "../common/CustomInput";
 import CustomText from "../common/CustomText";
-import { SearchOutlined } from "@ant-design/icons";
 import CustomButton from "../common/CustomButton"
 import filter from "../../assets/inventary/filter.png"
 import sort from "../../assets/inventary/sort.png"
@@ -10,14 +9,14 @@ import { useDebounce } from "../../hooks/UseDebounce";
 import { dataExportInExcel, getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import CustomSelect from "../common/CustomSelect";
 import "./inventary.css"
 import CustomMultipleFilter from "../common/CustumMultipleFilter";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../common/CustomModal";
 import CreateBulkProduct from "./CreateBulkProduct";
-const ProductList=({selectedRowKeys})=>{
+import { dataExportInExcelHandler } from "./constants";
+const ProductList=({exportProductHandler})=>{
   const [search,setSearch]=useState("");
   const [productListBulkModel,setproductListBulkModel]=useState(false)
   const [filterKey,setFilter]=useState([])
@@ -112,43 +111,16 @@ const ProductList=({selectedRowKeys})=>{
   
 ];
 
-const dataExportInExcelHandler = async () => {
-  try {
-    const data = { productIds: selectedRowKeys };
-    const actionResult = await dispatch(dataExportInExcel({ token, data }));
-    const { payload } = actionResult;
-
-    // If payload is undefined or not blob, bail out
-    if (!payload || !payload.blob) {
-      toast.error("No file data returned");
-      return;
-    }
-
-    const blob = payload.blob;
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = payload.headers?.["content-disposition"]
-      ? (payload.headers["content-disposition"].match(/filename="?(.+)"?/)?.[1] || "products.xlsx")
-      : "products.xlsx";
-
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Download error:", error);
-  }
-};
 
  const getAllProducts=async()=>{
+  const trimSearch=search.trim();
   const data={
-       ...(search && { search }),
+       ...(trimSearch && { search:trimSearch }),
        ...(sortKey?.length>0 && { sort:sortKey[0] }),
        ...(filterKey?.length>0 && { [filterKey[0]]:filterKey[1] }),
+  }
+  if (search && !trimSearch) {
+    return; // stops searching on space
   }
     try {
     const res=await dispatch(getAllProductAsync({token,data})).unwrap();
@@ -192,7 +164,7 @@ const dataExportInExcelHandler = async () => {
                    <CustomMultipleFilter placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={sortOption}/>
 
                   </div>}/>
-                  <CustomButton onclick={()=>{dataExportInExcelHandler()}} value={<div className="flex items-center gap-1">
+                  <CustomButton onclick={()=>{exportProductHandler()}} value={<div className="flex items-center gap-1">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
                     <CustomText className={"!text-[#fff]"} value={"Export in Excel"}/>
                   </div>}/>

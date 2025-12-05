@@ -8,12 +8,15 @@ const initialState = {
 
 export const getBlogAsync = createAsyncThunk(
   "blog/blogAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/blog/getAllBlogs`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
 
       });
@@ -46,7 +49,9 @@ export const blogSlice = createSlice({
   name: "blog",
   initialState,
   reducers: {
-   
+     filteredDataHandler:(state,action)=>{
+      state.blog=[];
+     }
   },
   extraReducers: (builder) => {
        builder.addCase(getBlogAsync.pending, (state) => {
@@ -54,7 +59,9 @@ export const blogSlice = createSlice({
         });
         builder.addCase(getBlogAsync.fulfilled, (state, action) => {                
           state.isLoading = false;
-          state.blog = action.payload;
+          console.log(action?.payload,"kfsufb");
+          
+          state.blog = [...state?.blog,...action.payload.blogs];
         });
         builder.addCase(getBlogAsync.rejected, (state, action) => {
           state.isLoading = false;
@@ -74,4 +81,5 @@ export const blogSlice = createSlice({
         
   },
 });
+ export const {filteredDataHandler}=blogSlice.actions;
 export default blogSlice.reducer;

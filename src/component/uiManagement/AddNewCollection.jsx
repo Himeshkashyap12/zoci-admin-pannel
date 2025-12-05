@@ -38,6 +38,7 @@ const AddNewCollection = ({ setOpen,setAddCollection,editItem }) => {
          const data={...collection}
       const res=await dispatch(createCollectionAsync({token,data})).unwrap();
       if(res.success){
+        dispatch(getCollectionAsync({token}))
         toast.success(res.message);
         setOpen(false);
         dispatch(getCollectionAsync())
@@ -46,7 +47,8 @@ const AddNewCollection = ({ setOpen,setAddCollection,editItem }) => {
            name: "",
             description: "",
             thumbnail: "",
-        })
+        });
+
       }
 
       }else{
@@ -55,9 +57,9 @@ const AddNewCollection = ({ setOpen,setAddCollection,editItem }) => {
          const data={...updatedData}
       const res=await dispatch(updateColllectionAsync({token,data,id:editItem?._id})).unwrap();
       if(res.success){
+        dispatch(getCollectionAsync({token}))
         toast.success(res.message);
         setOpen(false);
-        dispatch(getCollectionAsync())
         setAddCollection(true);
         setCollection({
            name: "",
@@ -102,7 +104,7 @@ const handleUpload = async (e) => {
             )
 
           }
-        },[])
+        },[editItem])
 
 
   return (
@@ -168,7 +170,7 @@ const handleUpload = async (e) => {
           <CustomButton
           onclick={()=>{createCollectionHandler()}}
             className={"!text-[#fff] !bg-[#214344] w-[180px]"}
-            value={isLoading?"Loading...":"Yes, Add New Collection"}
+            value={isLoading?"Loading...":`Yes, ${editItem?"Edit":"Add"} New Collection`}
           />
           <Button
             onClick={() => {

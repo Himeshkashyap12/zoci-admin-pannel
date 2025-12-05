@@ -4,7 +4,7 @@ import CustomText from "../common/CustomText";
 import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
 import { isoToDDMMYYYY, isoToIST, isoToISTTime } from "../../constants/constants";
-const CrmCustomerDetails=({item})=>{
+const CrmCustomerDetails=({item,visitors})=>{
     const {isLoading} =useSelector(state=>state?.crm)
 console.log(item);
 
@@ -44,7 +44,7 @@ console.log(item);
             
             </Col>
              <Col span={8}>
-            <div className="flex flex-col gap-5">
+           {visitors && <div className="flex flex-col gap-5">
                 <div><CustomText className={"!text-[#214344] !text-[18px] font-semibold"}  value={"Important Dates"}/></div>
                 <div className="flex gap-10 ">
                 <div className="flex flex-col gap-2">
@@ -56,7 +56,7 @@ console.log(item);
                     <CustomText className={"!text-[#214344] !text-[18px] "}  value={isoToDDMMYYYY(item?.anniversary)}/>
                </div>
                </div>
-            </div>
+            </div>}
             
             </Col>
         

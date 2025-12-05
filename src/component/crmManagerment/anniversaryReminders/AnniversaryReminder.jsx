@@ -3,6 +3,7 @@ import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
 import AnniversaryReminderFilter from "./AnniversaryReminderFilter";
 import AnniversaryRemindertable from "./AnniversaryReminderTable";
+import BirthdayReminderFilter from "../birthdayReminder/BirthdayReminderFilter";
 
 const AnniversaryReminder = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const AnniversaryReminder = () => {
       </div>
      
       <div>
-        <AnniversaryReminderFilter />
+        <BirthdayReminderFilter type={"anniversary"} />
       </div>
       <div>
         <AnniversaryRemindertable />

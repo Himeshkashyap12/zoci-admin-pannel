@@ -1,0 +1,72 @@
+.sales .ant-select-selector {
+  background: #214344 !important;
+  color: #fff !important;
+}
+.sales .ant-select-selector {
+  background-color: #214344 !important;   /* background */
+  color: white !important;             /* text color */
+  /* border-radius: 6px !important; */
+  border: none!important;
+  outline: none!important;
+}
+
+.sales .ant-select-selection-item {
+  color: white !important; /* selected value text color */
+}
+
+.sales .ant-select-selection-placeholder {
+  color: #fff !important; /* placeholder color */
+}
+.sales .ant-select-dropdown {
+  background-color: #fff!important;   /* dropdown background */
+}
+
+
+/* Dropdown background white */
+.sales .ant-select-dropdown {
+  background: white !important;
+  border: none !important;
+}
+
+/* Dropdown item normal style */
+.sales .ant-select-item {
+  background: white !important;
+  color: black !important;
+}
+
+/* Remove hover background */
+.sales .ant-select-item-option-active {
+  background: transparent !important;
+  color: black !important;
+}
+
+/* Remove selected background */
+.sales .ant-select-item-option-selected {
+  background: transparent !important;
+  color: black !important;
+}
+
+/* Remove border from select box on focus */
+.sales .ant-select-selector {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove border when clicking */
+.sales.ant-select-focused .ant-select-selector {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sales .ant-select-arrow {
+  color: white !important;
+}
+
+/* For SVG icons inside */
+.sales .ant-select-arrow svg {
+  fill: white !important;
+}
+
+.product-form .ant-select-selector{
+  border-radius: 20px;
+}

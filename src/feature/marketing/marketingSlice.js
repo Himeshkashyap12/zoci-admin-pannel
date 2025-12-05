@@ -94,6 +94,38 @@ export const CreateNewPromotionAsync = createAsyncThunk(
       });
       return res.data; // No need for `await res.data`
     } catch (error) {
+      return error;
+    }
+  }
+);
+export const deleteNewPromotionAsync = createAsyncThunk(
+  "marketing/deletePromotionAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.delete(`promotions/deletePromotion/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const updateNewPromotionAsync = createAsyncThunk(
+  "marketing/editNewPromotionAsync",
+ async ({token,id,data}) => {
+        try {
+      const res = await api.patch(`/promotions/updatePromotion/${id}`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res.data; // No need for `await res.data`
+    } catch (error) {
       throw error;
     }
   }
@@ -160,6 +192,28 @@ export const marketingSlice = createSlice({
           state.isLoading = false;          
           state.error = action;
         });
+        builder.addCase(deleteNewPromotionAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(deleteNewPromotionAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(deleteNewPromotionAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+         builder.addCase(updateNewPromotionAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(updateNewPromotionAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(updateNewPromotionAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+        
+        
         
         
   },

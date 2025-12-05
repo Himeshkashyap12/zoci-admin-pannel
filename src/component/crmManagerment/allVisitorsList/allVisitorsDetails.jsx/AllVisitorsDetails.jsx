@@ -12,19 +12,30 @@ import CrmCustomerDetails from "../../CrmCustomerDetails";
 import AllVisitorsDetailsTable from "./AllvisiterDetailsTable";
 import { useDispatch, useSelector } from "react-redux";
 import { allVisitorsDetailsAsync } from "../../../../feature/crm/crmSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie"
+import CustomInput from "../../../common/CustomInput";
+import { useDebounce } from "../../../../hooks/UseDebounce";
+import Loader from "../../../loader/Loader";
 const AllVisitorsDetails = () => {
+  const [search,setSearch]=useState("");
+  const [page,setPage]=useState(1);
+  const debouncingText=useDebounce(search,500)
   const {id}=useParams();
   const dispatch=useDispatch()
   const token=Cookies.get("token");
-  const {visitorsDetails}=useSelector(state=>state?.crm);
+  const {visitorsDetails,isLoading}=useSelector(state=>state?.crm);
   const navigate = useNavigate();
   console.log(visitorsDetails);
   
   const getVisitorsDetails=async()=>{
     try {
-      const res=await dispatch(allVisitorsDetailsAsync({token,id})).unwrap();
+      const data={
+           page:page,
+           limit:10,
+          ...(search &&  {search:search})
+      }
+      const res=await dispatch(allVisitorsDetailsAsync({token,id,data})).unwrap();
       console.log(res);
       
     } catch (error) {
@@ -34,10 +45,10 @@ const AllVisitorsDetails = () => {
 
   useEffect(()=>{
     getVisitorsDetails();
-  },[])
+  },[debouncingText,page])
   
+if(isLoading) return <Loader/>
 
- 
   return (
     <div className="flex flex-col gap-10 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -59,10 +70,11 @@ const AllVisitorsDetails = () => {
       </div>
      
       <div>
-        <CrmCustomerDetails item={visitorsDetails?.user}/>
+        <CrmCustomerDetails visitors={false} item={visitorsDetails?.user}/>
       </div>
-      <div className="pt-10">
-        <AllVisitorsDetailsTable item={visitorsDetails?.data}/>
+      <div className="pt-5 flex flex-col gap-3">
+          <CustomInput name={"search"} value={search} onchange={(e)=>{setSearch(e.target.value)}} className={"!w-[300px]"} placeholder={"Search your Products"} />
+        <AllVisitorsDetailsTable setPage={setPage} item={visitorsDetails?.data}/>
       </div>
     </div>
   );

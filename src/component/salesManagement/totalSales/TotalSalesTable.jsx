@@ -6,8 +6,11 @@ import Cookies from "js-cookie"
 import {useDispatch, useSelector} from "react-redux";
 import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
 import { Image } from "antd";
-const TotalSalesTable=({totalSales})=>{
+import CustomPagination from "../../common/CustomPagination";
+import Loader from "../../loader/Loader";
+const TotalSalesTable=({totalSales,page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+      const {isLoading}=useSelector(state=>state?.sales)
       const navigate=useNavigate();
     
           const columns = [
@@ -99,9 +102,11 @@ const TotalSalesTable=({totalSales})=>{
                 selectedRowKeys,
                 onChange: onSelectChange,
               };
+              if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={totalSales} columns={columns}/>
+              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={totalSales?.data} columns={columns}/>
+              <CustomPagination total={totalSales?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

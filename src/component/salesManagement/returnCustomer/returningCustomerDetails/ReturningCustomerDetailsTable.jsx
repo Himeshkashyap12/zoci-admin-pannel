@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { Image } from "antd";
+import CustomPagination from "../../../common/CustomPagination";
+import Loader from "../../../loader/Loader";
 
-const ReturningCustomerDetailsTable=()=>{
+const ReturningCustomerDetailsTable=({page,setPage})=>{
     const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);      
      console.log(returningCustomerDetails,"fjbdhfdhb");
      
@@ -37,7 +39,7 @@ const ReturningCustomerDetailsTable=()=>{
                   ),
                   dataIndex: "productImage",
                   key: "productImage",
-                  width: 120,
+                  width: 150,
                   render: (img) =>
                     img ? (
                       <Image
@@ -59,7 +61,7 @@ const ReturningCustomerDetailsTable=()=>{
                   ),
                   dataIndex: "orderId",
                   key: "orderId",
-                  width: 150,
+                  width: 180,
                   render: (text) => <CustomText value={text || "-"} />,
                 },
 
@@ -154,9 +156,11 @@ const ReturningCustomerDetailsTable=()=>{
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if(isLoading) return <Loader/>
     return(
         <>
               <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={returningCustomerDetails?.data?.rows} columns={columns}/>
+              <CustomPagination total={returningCustomerDetails?.data?.totalRecords} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

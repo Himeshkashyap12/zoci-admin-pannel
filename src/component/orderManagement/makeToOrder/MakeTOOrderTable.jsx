@@ -8,25 +8,11 @@ import Cookies from "js-cookie"
 import { Image } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
 import CustomSelect from "../../common/CustomSelect";
-const MakeToOrderTablePage=()=>{
+import Loader from "../../loader/Loader";
+import CustomPagination from "../../common/CustomPagination";
+const MakeToOrderTablePage=({setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-       const token=Cookies.get("token");  
-      const dispatch=useDispatch();
       const {makeToOrder,isLoading}=useSelector(state=>state?.order);
-            console.log(makeToOrder,"makeToOrder");
-            
-        const getMakeToOrder=async()=>{
-          try {
-          const res=await dispatch(getMakeToOrderAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getMakeToOrder();
-        },[])
-        
          const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
@@ -40,12 +26,11 @@ const MakeToOrderTablePage=()=>{
               const columns = [
                   {
                 title: (
-                  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
-                ),
+                  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>),
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -65,7 +50,7 @@ const MakeToOrderTablePage=()=>{
                 key: "orderId",
                 align:"center",
                 width: 250,
-                render: (_,text) => <div className="cursor-pointer" onClick={()=>{navigate("/admin/make-order-details",{state:text})}}> <CustomText value={text?.orderId}/></div>
+                render: (_,text) =>  <CustomText value={text?.orderId}/>
               },
               {
                 title: (
@@ -150,13 +135,23 @@ const MakeToOrderTablePage=()=>{
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
-                dataIndex: "date",
-                key: "date",
+                dataIndex: "orderStatus",
+                key: "orderStatus",
                 width: 200,
                 align: "center",
-                render: (_,text) => <div className="flex flex-col justify-center "><CustomText value={text?.date}/>
-                                <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{setOrderStatus(e)}} options={[{label:<CustomText className={"!text-[red]"} value={"Ordered"}/>,value:""}]} />
-                                </div>
+                render: (_,text) =>  (<CustomText 
+                     className={`font-semibold
+                      ${text?.orderStatus=="Ordered" && "!text-[#214344]" }
+                      ${text?.orderStatus=="Processing" && "!text-[#FFB23E]" }
+                      ${text?.orderStatus=="Delivered" && "!text-[#5AA53C]" }
+                      ${text?.orderStatus=="Cancelled" && "!text-[#f44336]" }
+                      ${text?.orderStatus=="Exchanged" && "!text-[#5AA53C]" }
+                      ${text?.orderStatus=="Returned" && "!text-[#f44336]" }
+                      ${text?.orderStatus=="WIP Delivery" && "!text-[#5AA53C]" }
+                     
+                     
+                     `}
+                    value={text?.orderStatus}/> )
               }
             ];
           const onSelectChange = newSelectedRowKeys => {
@@ -167,9 +162,11 @@ const MakeToOrderTablePage=()=>{
               selectedRowKeys,
               onChange: onSelectChange,
             };
+            if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:2500}} rowSelection={rowSelection}  dataSource={makeToOrder} columns={columns}/>
+              <CustomTable scroll={{x:2500}} rowSelection={rowSelection}  dataSource={makeToOrder?.data} columns={columns}/>
+              <CustomPagination pageNumber={page} total={makeToOrder?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )
