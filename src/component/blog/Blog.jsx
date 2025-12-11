@@ -10,7 +10,7 @@ import { filteredDataHandler, getBlogAsync } from "../../feature/blog/blogSlice"
 import Loader from "../loader/Loader";
 import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 import ImageLoader from "../loader/ImageLoader";
-import PaginationLoader from "../loader/paginationLoader";
+import PaginationLoader from "../loader/PaginationLoader";
 const Blog = () => {
       const token=Cookies.get("token");  
       const dispatch=useDispatch();

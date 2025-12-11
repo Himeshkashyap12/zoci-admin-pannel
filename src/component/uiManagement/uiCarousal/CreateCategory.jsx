@@ -61,7 +61,7 @@ const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {
        } catch (error) {
         console.log(error);
         setOpen(false);
-        toast.error("Something Went Wrongx`!")
+        toast.error("Something Went Wrongx`!") 
        }
  }
  
