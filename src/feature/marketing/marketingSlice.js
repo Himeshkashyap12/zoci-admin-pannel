@@ -169,6 +169,7 @@ export const marketingSlice = createSlice({
         builder.addCase(getAllBirthdayPromotion.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
+          state.birthday=[];
         });
         builder.addCase(getAllAnniversaryAsync.pending, (state) => {
           state.isLoading = true;
@@ -180,6 +181,7 @@ export const marketingSlice = createSlice({
         builder.addCase(getAllAnniversaryAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
+          state.anniversary=[];
         });
          builder.addCase(CreateNewPromotionAsync.pending, (state) => {
           state.isLoading = true;

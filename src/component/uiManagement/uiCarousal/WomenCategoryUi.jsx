@@ -36,12 +36,15 @@ const WoMenCategory=()=>{
  const deleteCategoryHandler=async()=>{
         try {
             const res=await dispatch(deleteCategoryAsync({token,id:deleteId})).unwrap();
+            if(res.success){
+
             
              toast.success("Category deleted succefully");
              getCategory();
              setCategoryModel(false)
+             setDeleteId(null)
 
-            
+            } 
         } catch (error) {
             console.log(error);
             

@@ -88,9 +88,20 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       dataIndex: "title",
       key: "title",
       width: 100,
-      render: (_,record,idx) =>  <CustomText className={  " "} value={idx+1}/>
+      fixed:true,
+      render: (_,record,idx) =>  <CustomText  value={idx+1}/>
     },
-    
+     {
+      title: (
+       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
+
+      ),
+      dataIndex: "sku",
+      key: "sku",
+      width: 150,
+      fixed:true,
+      render: (text) =>  <CustomText value={text}/>
+    },
     {
       title: (
         <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Image"}/>
@@ -98,8 +109,10 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       dataIndex: "images",
       key: "images",
       width: 150,
+      fixed:true,
       render: (text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
     },
+    
       {
       title: (
         <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Product Name"}/>
@@ -110,16 +123,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       width: 350,
       render: (text) =>  <CustomText value={text}/>
     },
-    {
-      title: (
-       <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/>
-
-      ),
-      dataIndex: "sku",
-      key: "sku",
-      width: 150,
-      render: (text) =>  <CustomText value={text}/>
-    },
+   
     {
       title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>,
       dataIndex: "size",
@@ -209,9 +213,9 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:2500}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+        <CustomTable   scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
          <CustomPagination pageNumber={page} total={products?.totalProducts} onchange={(e)=>{setPage(e)}}/>
-            <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
+         <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         
         </>
     )

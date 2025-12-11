@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import CustomText from "../../common/CustomText";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
+import TextArea from "antd/es/input/TextArea";
 import CustomImageUpload from "../../common/CustomImageUpload";
 import blogUpload from "../../../assets/icons/blogUpload.png"
 import { getImageUrlAsync } from "../../../feature/media/mediaSlice";
@@ -16,7 +17,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createCategoryAsync, editCategoryAsync, getMenCategoryHandlerAsync, getWomenCategoryHandlerAsync } from "../../../feature/uiManagement/UiManagementSlice";
 import { compareNewAndOldObject } from "../../../constants/constants";
-const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {    
+const CreateEssance = ({ setOpen,madeFor,editData,setEditData}) => {
+    console.log(editData,"editData");
+    
   const dispatch = useDispatch();
   const token = Cookies.get("token");
   const navigate=useNavigate();
@@ -45,7 +48,7 @@ const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {
         }else{
         const updatedData=compareNewAndOldObject({oldObj:editData,newObj:category})
          const res=await dispatch(editCategoryAsync({token,updatedData,id:editData?._id})).unwrap();
-         if(res.success){
+         if(res._id){
             setOpen(false);
             setEditData(null);
             toast.success(res.message);
@@ -60,8 +63,7 @@ const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {
       
        } catch (error) {
         console.log(error);
-        setOpen(false);
-        toast.error("Something Went Wrongx`!")
+        
        }
  }
  
@@ -162,4 +164,4 @@ const handleUpload = async (e) => {
     </div>
   );
 };
-export default CreateCategory;
+export default CreateEssance;

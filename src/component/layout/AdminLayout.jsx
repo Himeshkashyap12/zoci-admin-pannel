@@ -4,8 +4,9 @@ import {  Outlet } from "react-router";
 import CustomSidebar from "./SibeBar";
 import { useState } from "react";
 import Loader from "../loader/Loader";
+import { useSelector } from "react-redux";
 const AdminLayout = () => {
-  const [loading,setLoding]=useState(false)
+  const {isLoading}=useSelector(state=>state?.auth)
 
 
   const contentStyle = {
@@ -18,13 +19,13 @@ const AdminLayout = () => {
   };
 
   
-  if(loading) return <div className="absolute to-0% bottom-0 left-0 right-0 fle justify-center items-center"><Loader/></div>
+  if(isLoading) return <Loader/>
 
 
   return (
     <>
       <Layout style={layoutStyle}>
-        <CustomSidebar  setLoding={setLoding}/>
+        <CustomSidebar  />
           <Content style={contentStyle}>
             <div className="overflow-y-auto h-full">
               <Outlet />

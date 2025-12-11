@@ -24,6 +24,7 @@ const TotalOrderTable=({item,page,setPage})=>{
     dataIndex: "sno",
     key: "sno",
     width: 80,
+    align:"center",
     render: (_, __, index) => <CustomText value={index + 1} />,
   },
 
@@ -154,7 +155,7 @@ const TotalOrderTable=({item,page,setPage})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={item?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={item?.data} columns={columns}/>
               <CustomPagination total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>

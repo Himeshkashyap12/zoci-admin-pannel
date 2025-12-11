@@ -5,15 +5,16 @@ import { Menu, Typography } from "antd";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import CustomText from "../common/CustomText";
-import { logOutApi } from "../../feature/auth/authApi";
-import { logout } from "../../feature/auth/authSlice";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../loader/Loader";
-const CustomSidebar = ({setLoding}) => {
+import { logOutHandler } from "../../feature/auth/authSlice";
+import { toast } from "react-toastify";
+const CustomSidebar = () => {
   const key=Number(Cookies.get("key")); 
   const [selectKey, setSelectKey] = useState(key);
   const dispatch=useDispatch();
+  const token=Cookies.get("token");
+  const userId=Cookies.get("id");
   const siderStyle = {
     color: "#fff",
     backgroundColor: "#214344",
@@ -30,7 +31,7 @@ const CustomSidebar = ({setLoding}) => {
       },
       label: (
         <Link to={"/admin/inventary"}>
-          <div>
+          <div >
             <Typography.Text
               className={`${
                 selectKey == 0 ? "!text-[#214344]" : "!text-[#fff]"
@@ -180,17 +181,19 @@ const CustomSidebar = ({setLoding}) => {
     }
   };
 const logoutHandler = async () => {
-  setLoding(true)
+  
     try {
-      const res = await logOutApi();
-      dispatch(logout());
+
+      const res=await  dispatch(logOutHandler({token,userId:userId})).unwrap();
+      console.log(res);
+      if(res?.statusCode==200 && res.status=="success"){
       toast.success(res.message);
-      Cookies.set("key",null);
-      setLoding(false);
+
+      }
+      
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-      setLoding(false);
     }
   };
 

@@ -24,7 +24,7 @@ const AllVisitorsDetails = () => {
   const {id}=useParams();
   const dispatch=useDispatch()
   const token=Cookies.get("token");
-  const {visitorsDetails,isLoading}=useSelector(state=>state?.crm);
+  const {visitorsDetails}=useSelector(state=>state?.crm);
   const navigate = useNavigate();
   console.log(visitorsDetails);
   
@@ -47,7 +47,6 @@ const AllVisitorsDetails = () => {
     getVisitorsDetails();
   },[debouncingText,page])
   
-if(isLoading) return <Loader/>
 
   return (
     <div className="flex flex-col gap-10 p-[24px]">

@@ -13,6 +13,7 @@ const NetProfitTable=({item,setPage,page})=>{
     title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="SNo." />,
     dataIndex: "sno",
     key: "sno",
+    align:"center",
     width: 80,
     render: (_, __, index) => <CustomText value={index + 1} />,
   },
@@ -104,7 +105,7 @@ const data = [
   };
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={item?.data} columns={columns}/>
+              <CustomTable  dataSource={item?.data} columns={columns}/>
               <CustomPagination  total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>

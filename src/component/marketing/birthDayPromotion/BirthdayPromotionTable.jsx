@@ -9,22 +9,9 @@ import Loader from "../../loader/Loader";
 import { CopyOutlined } from "@ant-design/icons";
 import {toast} from "react-toastify"
 import { isoToIST } from "../../../constants/constants";
-const BirthdayPromotionTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+import CustomPagination from "../../common/CustomPagination";
+const BirthdayPromotionTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})=>{
       const {birthday,isLoading}=useSelector(state=>state?.marketing);
-            console.log(birthday,"promotion");
-            
-        const getBirthdayPromotion=async()=>{
-          try {
-            
-          const res=await dispatch(getAllBirthdayPromotion({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
         const copyTextHandler=async(text)=>{
           try {
               await navigator.clipboard.writeText(text);
@@ -36,9 +23,7 @@ const BirthdayPromotionTable=()=>{
         }
 
 
-        useEffect(()=>{
-        getBirthdayPromotion();
-        },[])
+      
             const columns = [
                 {
               title: (
@@ -106,7 +91,9 @@ const BirthdayPromotionTable=()=>{
   
     return(
         <>
-        <CustomTable rowSelection={rowSelection} scroll={{x:600}}  dataSource={birthday?.users} columns={columns}/>
+        <CustomTable   scroll={{x:600}}  dataSource={birthday?.users} columns={columns}/>
+        <CustomPagination pageNumber={page} total={birthday?.total} onchange={(e)=>{setPage(e)}}/>
+
         </>
     )
 }

@@ -50,7 +50,8 @@ const BirthdayReminderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 50,
-      render: (text) =>  <CustomText  value={1}/>
+      align:"center",
+      render: (_,item,idx) =>  <CustomText  value={idx+1}/>
     },
     
     {
@@ -104,7 +105,7 @@ const BirthdayReminderTable=()=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
+              <CustomTable   dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
         <CustomPagination pageNumber={page} total={birthdayAnniversaryReminder?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

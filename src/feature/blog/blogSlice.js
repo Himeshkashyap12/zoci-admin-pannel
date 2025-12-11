@@ -38,7 +38,7 @@ export const createBlogAsync = createAsyncThunk(
         }
 
       });
-      return res?.data?.data; 
+      return res?.data; 
     } catch (error) {
       throw error;
     }

@@ -6,7 +6,7 @@ import UiManagementFilter from "./UiManagementFilter.jsx";
 import CollectionTable from "./CollectionTable.jsx";
 import CarousalUi from "./uiCarousal/CarousalUi.jsx";
 const UiManagement=()=>{
-    const [collection,setCollection]=useState(false)
+    const [collection,setCollection]=useState(true)
     return(
         <>
       <div className="flex flex-col gap-5 p-[24px]">

@@ -38,7 +38,7 @@ const AllVisitorsTable=()=>{
           dataIndex: "title",
           key: "title",
           width: 100,
-          render: (text) => <CustomText  value={1}/>
+          render: (_,text,idx) => <CustomText  value={idx+1}/>
         },
         
         {
@@ -106,7 +106,7 @@ const AllVisitorsTable=()=>{
   
     return(
         <>
-              <CustomTable scroll={{x:1500}} rowSelection={rowSelection}  dataSource={allvisitors?.data} columns={columns}/>
+              <CustomTable scroll={{x:1500}} dataSource={allvisitors?.data} columns={columns}/>
         <CustomPagination pageNumber={page} total={allvisitors?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

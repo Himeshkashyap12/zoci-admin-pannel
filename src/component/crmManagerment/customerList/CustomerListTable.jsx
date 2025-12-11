@@ -48,7 +48,7 @@ const CustomerListTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 100,
-      render: (text) => <CustomText  value={1}/>
+      render: (_,text,idx) => <CustomText  value={idx+1}/>
     },
     
     {
@@ -129,7 +129,7 @@ const CustomerListTable=()=>{
    if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={customerList?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={customerList?.data} columns={columns}/>
         <CustomPagination pageNumber={page} total={customerList?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

@@ -17,7 +17,8 @@ const OnlineSalesTable=({onlineSales,setPage,page})=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                align:"center",
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -99,7 +100,7 @@ const OnlineSalesTable=({onlineSales,setPage,page})=>{
 
     return(
         <>
-              <CustomTable scroll={{x:1200}} rowSelection={rowSelection}   dataSource={onlineSales?.data} columns={columns}/>
+              <CustomTable scroll={{x:1200}}    dataSource={onlineSales?.data} columns={columns}/>
               <CustomPagination total={onlineSales?.pagination?.total} pageNumber={page}   onchange={(e)=>{setPage(e)}}/>
               
         </>

@@ -6,10 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { Image } from "antd";
 import { isoToIST } from "../../../../constants/constants";
 import CustomPagination from "../../../common/CustomPagination";
+import Loader from "../../../loader/Loader";
+import { useSelector } from "react-redux";
 
 const AllVisitorsDetailsTable=({item,setPage})=>{
   
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const {isLoading}=useSelector(state=>state?.crm);
+
       const navigate=useNavigate();
    const columns = [
   {
@@ -87,9 +91,11 @@ const AllVisitorsDetailsTable=({item,setPage})=>{
     selectedRowKeys,
     onChange: onSelectChange,
   };
+if(isLoading) return <Loader/>
+
     return(
         <div className="flex flex-col gap-5">
-              <CustomTable  scroll={{x:1300}} rowSelection={rowSelection}  dataSource={item} columns={columns}/>
+              <CustomTable  scroll={{x:1300}}   dataSource={item} columns={columns}/>
              <CustomPagination onchange={(e)=>{setPage(e)}} setPage={setPage}/>
         </div>
     )

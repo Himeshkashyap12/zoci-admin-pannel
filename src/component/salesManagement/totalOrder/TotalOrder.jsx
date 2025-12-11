@@ -18,10 +18,10 @@ const TotalOrder = () => {
    const token=Cookies.get("token");
     const dispatch=useDispatch();
          const [search,setSearch]=useState("");
-                 const debounce=useDebounce(search,500);
-                 const [filter,setFilter]=useState([])
-                 const [sort,setSort]=useState([]) 
-          const [page,setPage]=useState(1)
+         const debounce=useDebounce(search,500);
+         const [filter,setFilter]=useState([])
+         const [sort,setSort]=useState([])       
+         const [page,setPage]=useState(1)
     
     const {totalOrders,isLoading}=useSelector(state=>state?.sales);  
             const totalOrderHandler=async()=>{

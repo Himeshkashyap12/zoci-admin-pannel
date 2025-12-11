@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 
 const TotalExpenditureTable=({item,setPage ,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
        const {isLoading}=useSelector(state=>state?.sales);            
 
      const columns = [
@@ -18,6 +17,7 @@ const TotalExpenditureTable=({item,setPage ,page})=>{
     dataIndex: "sno",
     key: "sno",
     width: 80,
+    align:"center",
     render: (_, __, index) => <CustomText value={index + 1} />,
   },
 
@@ -89,7 +89,7 @@ const TotalExpenditureTable=({item,setPage ,page})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1200}} rowSelection={rowSelection}  dataSource={item?.data} columns={columns}/>
+              <CustomTable scroll={{x:1200}}   dataSource={item?.data} columns={columns}/>
               <CustomPagination total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>

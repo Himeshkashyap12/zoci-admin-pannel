@@ -20,9 +20,10 @@ const MakeToOrderTable=({page,setPage})=>{
                   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"S No."}/>
                 ),
                 dataIndex: "title",
+                align:"center",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                render: (_,text_,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -125,7 +126,7 @@ const MakeToOrderTable=({page,setPage})=>{
     if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={makeToOrder?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={makeToOrder?.data} columns={columns}/>
                <CustomPagination
               total={makeToOrder?.pagination?.total}
               pageNumber={page}

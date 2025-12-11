@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getHomeVideosAsync } from "../../../feature/uiManagement/UiManagementSlice.js";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import EssanceVideo from "./EssanceVideo.jsx";
 const CarousalUi=()=>{
     const dispatch=useDispatch();
     const token=Cookies.get("token");
@@ -33,6 +34,7 @@ const CarousalUi=()=>{
         <>
        <div className="flex flex-col gap-5 p-[24px]">
         <HomeVideo homeVideos={homeVideos}/>
+        <EssanceVideo/>
         <MenCategory/>
         <WoMenCategory/>
 

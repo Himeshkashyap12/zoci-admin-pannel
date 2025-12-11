@@ -159,7 +159,7 @@ const ReturningCustomerDetailsTable=({page,setPage})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={returningCustomerDetails?.data?.rows} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={returningCustomerDetails?.data?.rows} columns={columns}/>
               <CustomPagination total={returningCustomerDetails?.data?.totalRecords} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>

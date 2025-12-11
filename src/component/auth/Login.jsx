@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import {  Button, ConfigProvider, Image, Input } from "antd";
 import {  useNavigate } from "react-router";
-import { loginWithNumberAndPassword } from "../../feature/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../feature/auth/authSlice";
+import {  loginWithNumberAndPassword } from "../../feature/auth/authSlice";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import Loader from "../loader/Loader";
@@ -16,7 +15,7 @@ const Login = ({ setSingnin }) => {
     mobile: "",
     password: "",
   });
-const [isLoading,setIsLoading]=useState(false);
+const {isLoading}=useSelector(state=>state?.auth);
   const inputHandler = (e) => {
       if(e.target.name==="mobile" && isNaN(e.target.value)){
         return;
@@ -28,34 +27,15 @@ const [isLoading,setIsLoading]=useState(false);
   };
 
   const signInHandler = async () => {
-    setIsLoading(true)
-    // setIsLoading(true)
-    // if (input.mobile.length < 10 || input.mobile == "")
-    //   return toast.error("Please enter valid mobile number");
-    // setIsLoading(false)
-    // if (input.password == "" || input.password.length < 6)
-    //   return toast.error("Please enter valid password");
-    // setIsLoading(false)
     try {
-      const res = await loginWithNumberAndPassword(input);
-      if (res.status) {
-       if(res?.data?.role=="admin"){
-
-        dispatch(loginSuccess({ token: res.data.token, users: res.data }));
-        
-           toast.success(res.message);
+      const data={...input}
+      const res=await dispatch(loginWithNumberAndPassword({data})).unwrap();      
+      if(res?.status_code==200){
+         toast.success(res?.message);
           navigate("/admin/inventary");
-          setIsLoading(false)
-          Cookies.set("key",0)
-          setIsLoading(false)
-       
       }
-       }
-
     } catch (error) {
       console.log(error);
-          setIsLoading(false)
-
       toast.error(error.response.data.message);
      
 

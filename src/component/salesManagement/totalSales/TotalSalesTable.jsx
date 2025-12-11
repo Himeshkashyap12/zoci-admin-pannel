@@ -12,13 +12,13 @@ const TotalSalesTable=({totalSales,page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {isLoading}=useSelector(state=>state?.sales)
       const navigate=useNavigate();
-    
           const columns = [
                               {
                                 title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="S No." />,
                                 dataIndex: "sno",
                                 key: "sno",
                                 width: 80,
+                                align:"center",
                                 render: (_, __, index) => <CustomText value={index + 1} />,
                               },
 
@@ -105,7 +105,7 @@ const TotalSalesTable=({totalSales,page,setPage})=>{
               if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={totalSales?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={totalSales?.data} columns={columns}/>
               <CustomPagination total={totalSales?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>

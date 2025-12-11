@@ -31,6 +31,40 @@ export const getHomeVideosAsync = createAsyncThunk(
     }
   }
 );
+export const deleteHomeVideoAsync = createAsyncThunk(
+  "category/deleteVideos",
+ async ({token,id}) => {
+        try {
+      const res = await api.delete(`/ui/deleteVideo/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const addEssanceVideoAsync = createAsyncThunk(
+  "category/addEssanceVideo",
+ async ({token,formData}) => {
+        try {
+      const res = await api.post(`ui/uploadVideo`,formData,{
+        headers: {
+          "Content-Type": "multipart/form-data" ,
+          "Authorization": `Bearer ${token}`,
+        }
+
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 export const updateHomeVideoAsync = createAsyncThunk(
   "category/updateVideo",
  async ({token,id,formData}) => {
@@ -367,6 +401,8 @@ export const categorySlice = createSlice({
         builder.addCase(getMenCategoryHandlerAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
+          state.menCategory=[];
+
         });
          builder.addCase(getWomenCategoryHandlerAsync.pending, (state) => {
           state.isLoading = true;
@@ -378,6 +414,8 @@ export const categorySlice = createSlice({
         builder.addCase(getWomenCategoryHandlerAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
+          state.womenCategory=[];
+
         });
         builder.addCase(createCategoryAsync.pending, (state) => {
           state.isLoading = true;
@@ -430,6 +468,27 @@ export const categorySlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+          builder.addCase(deleteHomeVideoAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(deleteHomeVideoAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(deleteHomeVideoAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(addEssanceVideoAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(addEssanceVideoAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(addEssanceVideoAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
         
         
         

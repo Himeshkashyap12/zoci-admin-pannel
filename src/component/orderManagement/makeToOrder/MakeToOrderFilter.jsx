@@ -26,8 +26,7 @@ const MakeTOOrderFilter=({search,setSearch,setFilter,setSort,exportOrderHandler,
                     <CustomText className={"!text-[#fff]"} value={"Add New Order"}/>
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
-                    <Image preview={false} className="!size-[16px]" src={filter}/>
-                  
+                    <Image preview={false} className="!size-[16px]" src={filter}/> 
                    <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={makeToOrderSort}/>
                        </div>}/>
                         

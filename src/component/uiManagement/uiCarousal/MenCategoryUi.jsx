@@ -34,10 +34,14 @@ const MenCategory=()=>{
     const deleteCategoryHandler=async()=>{
            try {
                const res=await dispatch(deleteCategoryAsync({token,id:deleteId})).unwrap();
-               
+               if(res.success){
                 toast.success("Category deleted succefully");
                 getCategory();
-                setCategoryModel(false)
+                setCategoryModel(false);
+                getCategory();
+                setDeleteId(null)
+               }
+               
    
                
            } catch (error) {
@@ -94,14 +98,11 @@ const MenCategory=()=>{
 
                     </>
                 )
-              })
-                
+              }) 
               }
               </Row>
             </div>
             <CustomModal closeIcon  footer={false} setOpen={setCategoryModel} open={categoryModel} modalBody={deleteId?<ConfirmationPopup setDeleteId={setDeleteId} setDeleteConfirm={setCategoryModel} confirmationPopUpHandler={deleteCategoryHandler}/>:<CreateCategory setEditData={setEditData} editData={editData} setOpen={setCategoryModel}  madeFor={"Men"}/>} width={"800px"}  align={"center"}/>
-
-
         </div>
     )
 }

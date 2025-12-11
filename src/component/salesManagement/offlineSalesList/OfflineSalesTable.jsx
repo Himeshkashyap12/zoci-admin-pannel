@@ -21,7 +21,8 @@ const OfflineSalesTable=({page,setPage})=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                align:"center",
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -120,7 +121,7 @@ const OfflineSalesTable=({page,setPage})=>{
 if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={offlineOrder?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={offlineOrder?.data} columns={columns}/>
               <CustomPagination total={offlineOrder?.pagination?.total} pageNumber={page}   onchange={(e)=>{setPage(e)}}/>
 
         </>

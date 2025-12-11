@@ -56,9 +56,12 @@ const AddNewBlog=()=>{
             }
             const res=await dispatch(createBlogAsync({token,data})).unwrap();
             console.log(res);
-            
+            if(res.status=="success"){
             toast.success("Blog created successfully");
             navigate("/admin/blog")
+            }
+            
+          
             
             
         } catch (error) {

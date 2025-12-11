@@ -138,10 +138,10 @@ if(isLoading | isDashboardLoading) return <Loader/>
              </Col>
           </Row>
          <div className="flex justify-between">
-          <CustomButton onclick={()=>{navigate("/admin/online-sales")}}  className={"!text-[#fff] !w-[250px] !h-[60px]"} value={"Online Sales List"}/>
-          <CustomButton onclick={()=>{navigate("/admin/make-order-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Make to order list "}/>
-          <CustomButton onclick={()=>{navigate("/admin/offline-sales-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"offline sales list"}/>
-          <CustomButton onclick={()=>{setAddExpenseModel(true)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Expenses"}/>
+            <CustomButton onclick={()=>{navigate("/admin/online-sales")}}  className={"!text-[#fff] !w-[250px] !h-[60px]"} value={"Online Sales List"}/>
+            <CustomButton onclick={()=>{navigate("/admin/make-order-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Make To Order List "}/>
+            <CustomButton onclick={()=>{navigate("/admin/offline-sales-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Offline Sales List"}/>
+            <CustomButton onclick={()=>{setAddExpenseModel(true)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Expenses"}/>
          </div>
          <div>
             <SalesReportTable  />

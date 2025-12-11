@@ -10,12 +10,15 @@ import { getImageUrlAsync } from "../../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import ImageLoader from "../../loader/ImageLoader";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { getHomeVideosAsync, updateHomeVideoAsync } from "../../../feature/uiManagement/UiManagementSlice";
-const AddVideoModel = ({ setOpen,bannerVideo}) => {
+import { useEffect, useState } from "react";
+import { addEssanceVideoAsync, getHomeVideosAsync, updateHomeVideoAsync } from "../../../feature/uiManagement/UiManagementSlice";
+const AddVideoModel = ({ setOpen,bannerVideo,essance,setDeleteId,setDeleted,editData,edit,setEdit}) => {
+  console.log(bannerVideo,"dshbvdshv");
+  
   const dispatch = useDispatch();
   const token = Cookies.get("token");
   const {isLoading}=useSelector(state=>state?.ui);
+  const [essanceTitle,setEssanceTitle]=useState("")
   const [uploadeFle,setUploadFile]=useState(null);
   const [previewfile,setPreviewFile]=useState(null);
 const handleUpload = async (e) => {
@@ -30,11 +33,14 @@ const handleUpload = async (e) => {
         console.log(uploadeFle);
         
         formData.append("video",uploadeFle);
+       {essance &&  formData.append("title",essanceTitle);}
         const res= await dispatch(updateHomeVideoAsync({token,id:bannerVideo?.[0]?._id,formData})).unwrap();
         if(res?.success){
           toast.success(res.message);
           dispatch(getHomeVideosAsync({token}))
           setOpen(false);
+          setEssanceTitle("");
+          setEdit(false)
           
         }
         console.log(res,"dsfbdshb");
@@ -45,17 +51,48 @@ const handleUpload = async (e) => {
       }
 
     }
-       
 
+    const addEssanceVideoHandler=async()=>{
+       try {
+         const formData=new FormData();
+        console.log(uploadeFle);
+        
+        formData.append("video",uploadeFle);
+        formData.append("title",essanceTitle);
+        const res=await dispatch(addEssanceVideoAsync({token,formData})).unwrap();
+        console.log(res);
+        if(res.success){
+         setDeleted(false);
+          toast.success(res.message);
+          setOpen(false);
+          setEssanceTitle("")
+          dispatch(getHomeVideosAsync({token}));
+        }
+        
+        
+       } catch (error) {
+          console.log(error);
+          
+       }
+    }
+       
+useEffect(()=>{
+   if(essance){
+    setEssanceTitle(bannerVideo[0]?.title)
+   }
+
+},[editData])
     
 
   return (
     <div>
       <div className="flex justify-center">
+        
         <CustomText
           className={"text-[14px] font-bold "}
-          value={`Add  New Carousel Item`}
+          value={`${essance?"Add New Essance":"Add  New Carousel Item"}`}
         />
+       
       </div>
       <div className="flex flex-col gap-5 pt-10">
         <Row gutter={[20, 20]}>
@@ -64,6 +101,7 @@ const handleUpload = async (e) => {
           </Col>
          
           <Col span={24}>
+           {essance && <div className="py-4"><CustomInput value={essanceTitle} onchange={(e)=>{setEssanceTitle(e.target.value)}} className={"h-[46px] "} placeholder={"Please Enter Title"}/></div>}
             <div className="flex flex-col gap-2">
               {/* <CustomText
                 className={"text-[16px] font-semibold !text-[#214344]"}
@@ -88,9 +126,9 @@ const handleUpload = async (e) => {
 
         <div className="flex justify-center gap-4 pt-10">
           <CustomButton
-          onclick={()=>{uploadVideoHandler()}}
+          onclick={()=>{essance && !edit?addEssanceVideoHandler():uploadVideoHandler()}}
             className={"!text-[#fff] !bg-[#214344] w-[180px]"}
-            value={isLoading?"Loading...":"Yes, Add New Collection"}
+            value={isLoading?"Loading...":essance?`Yes, ${bannerVideo?.length>0 ?"Edit":"Add"} New Essance`:"Yes, Add New Video"}
           />
           <Button
             onClick={() => {
