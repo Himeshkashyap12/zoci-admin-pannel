@@ -11,7 +11,7 @@ import CreateCategory from "./CreateCategory";
 import ConfirmationPopup from "../../common/ConfirmationPopup";
 import { toast } from "react-toastify";
 import AddVideoModel from "./AddVideoModel";
-import PaginationLoader from "../../loader/paginationLoader";
+import PaginationLoader from "../../loader/PaginationLoader";
 const EssanceVideo=()=>{
     const [essanceModel,setEssanceModel]=useState(false);
        const [videoLoading,setVideoLoading]=useState(false); 
