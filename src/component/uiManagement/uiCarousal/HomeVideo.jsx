@@ -5,7 +5,7 @@ import CustomModal from "../../common/CustomModal";
 import AddVideoModel from "./AddVideoModel";
 import { useState } from "react";
 import ImageLoader from "../../loader/ImageLoader";
-import PaginationLoader from "../../loader/paginationLoader";
+import PaginationLoader from "../../loader/PaginationLoader";
 
 const HomeVideo=({homeVideos})=>{
     const [videoLoading,setVideoLoading]=useState(true)
