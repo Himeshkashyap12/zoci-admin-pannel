@@ -3,9 +3,13 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined } from "@ant-design/icons";
+import CustomPagination from "../../common/CustomPagination";
+import { useSelector } from "react-redux";
+import Loader from "../../loader/Loader";
 
-const ReturningCustomerTable=({returningCustomers})=>{
+const ReturningCustomerTable=({returningCustomers,page,setPage})=>{
        const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+       const {isLoading} =useSelector(state=>state?.sales)
        const navigate=useNavigate();
                 const columns = [
                 {
@@ -18,6 +22,7 @@ const ReturningCustomerTable=({returningCustomers})=>{
                   dataIndex: "sNo",
                   key: "sNo",
                   width: 80,
+                  align:"center",
                   render: (_, __, index) => <CustomText value={index + 1} />,
                 },
 
@@ -150,9 +155,12 @@ const ReturningCustomerTable=({returningCustomers})=>{
     selectedRowKeys,
     onChange: onSelectChange,
   };
+       if(isLoading) return <Loader/>
+
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={returningCustomers?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={returningCustomers?.data} columns={columns}/>
+              <CustomPagination total={returningCustomers?.pagination?.totalRecords} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

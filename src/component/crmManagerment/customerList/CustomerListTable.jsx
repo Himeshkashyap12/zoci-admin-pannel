@@ -8,17 +8,19 @@ import Cookies from "js-cookie";
 import Loader from "../../loader/Loader";
 import {CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import {toast} from "react-toastify";
+import CustomPagination from "../../common/CustomPagination";
 const CustomerListTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
+      const [page,setPage]=useState(1)
       const {customerList,isLoading}=useSelector(state=>state?.crm);
-console.log(customerList,"knjb");
 
         const getAllCustomerListHandler=async()=>{
           try {
-          const res=await dispatch(getAllCustomerList({token})).unwrap();
+            const data={page:page,limit:10}
+          const res=await dispatch(getAllCustomerList({token,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
@@ -35,7 +37,7 @@ console.log(customerList,"knjb");
         }
          useEffect(()=>{
                 getAllCustomerListHandler();
-                },[])
+                },[page])
                
                 
       const columns = [
@@ -46,7 +48,7 @@ console.log(customerList,"knjb");
       dataIndex: "title",
       key: "title",
       width: 100,
-      render: (text) => <CustomText  value={1}/>
+      render: (_,text,idx) => <CustomText  value={idx+1}/>
     },
     
     {
@@ -56,7 +58,7 @@ console.log(customerList,"knjb");
       dataIndex: "name",
       key: "name",
       width: 200,
-      render: (_,text) =>  <div onClick={()=>{navigate(`/admin/crm-customer-list/${text?.id}`)}}><CustomText value={text?.name??"NA"}/></div>
+      render: (_,text) =>  <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-customer-list/${text?.id}`)}}><CustomText value={text?.name??"NA"}/></div>
     },
       {
       title: (
@@ -127,7 +129,8 @@ console.log(customerList,"knjb");
    if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={customerList?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={customerList?.data} columns={columns}/>
+        <CustomPagination pageNumber={page} total={customerList?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

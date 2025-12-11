@@ -6,8 +6,9 @@
 import { useNavigate } from "react-router-dom";
 import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
-import CustomerListFilter from "./AllvisitorsFilter";
+
 import CustomerListTable from "./CustomerListTable";
+import CustomerListFilter from "./CustomerListFilter";
 
 const CustomerList = () => {
   const navigate = useNavigate();

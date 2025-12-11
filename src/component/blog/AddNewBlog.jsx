@@ -49,15 +49,19 @@ const AddNewBlog=()=>{
 
 
     const createBlogHandler=async()=>{
+        if(!newBlogInput?.title || !newBlogInput?.description || !newBlogInput?.image) return toast.error("Please fill all field")
         try {
             const data={
                 ...newBlogInput
             }
             const res=await dispatch(createBlogAsync({token,data})).unwrap();
             console.log(res);
-            
+            if(res.status=="success"){
             toast.success("Blog created successfully");
             navigate("/admin/blog")
+            }
+            
+          
             
             
         } catch (error) {

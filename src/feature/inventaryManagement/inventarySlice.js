@@ -151,12 +151,15 @@ export const notifyMeAsync = createAsyncThunk(
 );
 export const vendorPerformanceAnalysis = createAsyncThunk(
   "inventary/vendorAnalysis",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/product/performance-summary`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });      
       return res?.data; // No need for `await res.data`
@@ -167,12 +170,15 @@ export const vendorPerformanceAnalysis = createAsyncThunk(
 );
 export const vendorPerformanceDetailsAnalysis = createAsyncThunk(
   "inventary/vendorPerformanceDetails",
- async ({token,id}) => {
+ async ({token,id,data}) => {
         try {
       const res = await api.get(`/product/performance/${id}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });      
       return res?.data; // No need for `await res.data`
@@ -185,12 +191,15 @@ export const vendorPerformanceDetailsAnalysis = createAsyncThunk(
 
 export const bestSellingProducts = createAsyncThunk(
   "inventary/bestSelling",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/product/best-selling-products`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });      
       return res?.data; // No need for `await res.data`
@@ -363,6 +372,7 @@ export const inventarySlice = createSlice({
         builder.addCase(vendorPerformanceDetailsAnalysis.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
+          state.vendorPerformanceAnalysisData=[]
         });
          builder.addCase(bestSellingProducts.pending, (state) => {
           state.isLoading = true;

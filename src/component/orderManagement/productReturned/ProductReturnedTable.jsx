@@ -12,27 +12,13 @@ import CustomSelect from "../../common/CustomSelect";
 import {toast} from "react-toastify";
 import { isoToIST } from "../../../constants/constants";
 import Loader from "../../loader/Loader";
-const ProductReturnedTable=()=>{
+import CustomPagination from "../../common/CustomPagination";
+const ProductReturnedTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-     const [orderStatus,setOrderStatus]=useState("")
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const {productReturnedAndExchange,isLoading}=useSelector(state=>state?.order);
-            console.log(productReturnedAndExchange,"productReturned");
-            
-        const getProductExchangeHandler=async()=>{
-          try {
-          const res=await dispatch(getOrderProductReturnedAdnExchange({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getProductExchangeHandler();
-        },[])
-        
-         const copyTextHandler=async(text)=>{
+      const {productReturnedAndExchange,isLoading}=useSelector(state=>state?.order)
+      console.log(productReturnedAndExchange);
+      
+      const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
                       toast.success("Address copied successfully");
@@ -50,7 +36,7 @@ const ProductReturnedTable=()=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -96,7 +82,7 @@ const ProductReturnedTable=()=>{
                 dataIndex: "address",
                 key: "address",
                 width: 350,
-                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
+                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text<=20?text:text?.slice(0,20)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
 
               },
                 {
@@ -124,15 +110,21 @@ const ProductReturnedTable=()=>{
                 render: (text) => <CustomText value={text?text:"NA"}/>
               },
               {
-                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Returned Date"}/>),
                 dataIndex: "date",
                 key: "date",
+                width: 300,
+                align: "center",
+                render: (_,text) => <CustomText value={isoToIST(text?.date)}/>
+                                   
+              },
+              {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
+                dataIndex: "orderStatus",
+                key: "orderStatus",
                 width: 200,
                 align: "center",
-                render: (_,text) => <div className="flex flex-col justify-center "><CustomText value={isoToIST(text?.date)}/>
-                                      <CustomSelect value={text?.status} placeholder="Set Order status" onchange={(e)=>{setOrderStatus(e)}} options={[{label:<CustomText className={"!text-[red]"} value={"Ordered"}/>,value:""}]} />
-                                    </div>
-              }
+                render: (_,text) => <CustomText   className={"!text-[#f44336]"} value={text?.orderStatus}/> }
             ];
       
  const onSelectChange = newSelectedRowKeys => {
@@ -146,7 +138,8 @@ const ProductReturnedTable=()=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange} columns={columns}/>
+              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange?.data} columns={columns}/>
+              <CustomPagination pageNumber={page} total={productReturnedAndExchange?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

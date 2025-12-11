@@ -3,27 +3,16 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getOfflineListAsync } from "../../../feature/sales/salesSlice";
-import Cookies from "js-cookie"
 import { Image } from "antd";
-const OfflineSalesTable=()=>{
+import Loader from "../../loader/Loader";
+import CustomPagination from "../../common/CustomPagination";
+const OfflineSalesTable=({page,setPage})=>{
      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
       const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
-            console.log(offlineOrder,"offlineOrder");
-            
-        const getOfflineSalesList=async()=>{
-          try {
-          const res=await dispatch(getOfflineListAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getOfflineSalesList();
-        },[])
+      const navigate=useNavigate();
+     
+
+
      const columns = [
                   {
                 title: (
@@ -32,7 +21,8 @@ const OfflineSalesTable=()=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                align:"center",
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -119,14 +109,7 @@ const OfflineSalesTable=()=>{
              
             ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
+
  const onSelectChange = newSelectedRowKeys => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -135,9 +118,11 @@ const data = [
     selectedRowKeys,
     onChange: onSelectChange,
   };
+if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={offlineOrder?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={offlineOrder?.data} columns={columns}/>
+              <CustomPagination total={offlineOrder?.pagination?.total} pageNumber={page}   onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

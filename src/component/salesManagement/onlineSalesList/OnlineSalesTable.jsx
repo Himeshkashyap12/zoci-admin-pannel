@@ -1,30 +1,14 @@
 import { useEffect, useState } from "react";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux"
-import Cookies from "js-cookie"
-import { getOnlineSalesList } from "../../../feature/sales/salesSlice";
 import Loader from "../../loader/Loader";
 import { Image } from "antd";
-const OnlineSalesTable=()=>{
+import { useSelector } from "react-redux";
+import CustomPagination from "../../common/CustomPagination";
+const OnlineSalesTable=({onlineSales,setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const {onlineSales,isLoading}=useSelector(state=>state?.sales);
-            console.log(onlineSales,"onlineSales");
-            
-        const getOnlineSalesListHandler=async()=>{
-          try {
-          const res=await dispatch(getOnlineSalesList({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        useEffect(()=>{
-        getOnlineSalesListHandler();
-        },[])
+      const {isLoading}=useSelector(state=>state?.sales);
+     
      const columns = [
                   {
                 title: (
@@ -33,7 +17,8 @@ const OnlineSalesTable=()=>{
                 dataIndex: "title",
                 key: "title",
                 width: 100,
-                render: (text) => <CustomText  value={1}/>
+                align:"center",
+                render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
               
               {
@@ -115,8 +100,9 @@ const OnlineSalesTable=()=>{
 
     return(
         <>
-              <CustomTable scroll={{x:1200}} rowSelection={rowSelection}  dataSource={onlineSales?.data} columns={columns}/>
-
+              <CustomTable scroll={{x:1200}}    dataSource={onlineSales?.data} columns={columns}/>
+              <CustomPagination total={onlineSales?.pagination?.total} pageNumber={page}   onchange={(e)=>{setPage(e)}}/>
+              
         </>
     )
 }

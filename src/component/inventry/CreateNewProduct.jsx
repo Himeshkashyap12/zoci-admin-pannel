@@ -138,7 +138,7 @@ console.log(productById?.product);
     if(!state){
     const data={...productInput}
        const res=await dispatch(createProductHandlerAsync({token,data})).unwrap();
-        if(res.status && res.status==200){
+        if(res.status && res.status_code==201){
       toast.success(res.message);
       navigate("/admin/inventary")
         }else{

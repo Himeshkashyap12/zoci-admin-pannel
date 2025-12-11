@@ -95,12 +95,15 @@ export const getBirthdayAnniversaryReminderAsync = createAsyncThunk(
 
 export const allVisitorsDetailsAsync = createAsyncThunk(
   "crm/visitorsDetailsAsync",
- async ({token,id}) => {
+ async ({token,id,data}) => {
         try {
       const res = await api.get(`/user/customersAdmin/interactions/${id}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -113,12 +116,15 @@ export const allVisitorsDetailsAsync = createAsyncThunk(
 
 export const customerWishListAndBagAsync = createAsyncThunk(
   "crm/wishListAsync",
- async ({token,id}) => {
+ async ({token,id,data}) => {
         try {
       const res = await api.get(`/user/customersAdmin/customers/${id}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`
@@ -130,12 +136,15 @@ export const customerWishListAndBagAsync = createAsyncThunk(
 
 export const CustomerOrderHistoryAsync = createAsyncThunk(
   "crm/orderHistoryAsync",
- async ({token,id}) => {
+ async ({token,id,data}) => {
         try {
       const res = await api.get(`/user/customersAdmin/orders/${id}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
         }
       });
       return res?.data; // No need for `await res.data`

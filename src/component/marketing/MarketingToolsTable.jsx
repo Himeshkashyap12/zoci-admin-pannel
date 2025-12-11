@@ -23,10 +23,10 @@ const MarketingToolsTable=({marketingDashboard})=>{
       title: (
         <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Active Promotion"}/>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "activePromotionsInRange",
+      key: "activePromotionsInRange",
       width: 200,
-      render: (text) =>  <CustomText value={"Product Name"}/>
+      render: (text) =>  <CustomText value={text}/>
     },
       {
       title: (

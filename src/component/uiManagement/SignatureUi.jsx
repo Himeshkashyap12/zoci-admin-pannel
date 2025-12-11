@@ -87,7 +87,6 @@ const SignatureUi=({collectionId})=>{
                              <div
                                     className="h-[20px] w-[20px] cursor-pointer"
                                     onClick={()=>{deleteSignatureHandler(item?._id)}}
-                                    
                                 >
                                     <Image preview={false} src={deleteIcon} alt="deleteIcon"/>
                                 </div>

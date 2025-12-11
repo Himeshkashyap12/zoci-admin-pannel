@@ -9,11 +9,13 @@ import { isoToIST } from "../../../constants/constants";
 import { CopyOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import Loader from "../../loader/Loader";
+import CustomPagination from "../../common/CustomPagination";
 const BirthdayReminderTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
        const token=Cookies.get("token");  
       const dispatch=useDispatch();
+      const [page,setPage]=useState(1)
       const {birthdayAnniversaryReminder,isLoading}=useSelector(state=>state?.crm);
       console.log(birthdayAnniversaryReminder,"hvhv");
       
@@ -28,7 +30,7 @@ const BirthdayReminderTable=()=>{
         }
         const getCrmBirthdayReminderHandler=async()=>{
           try {
-            const data={type:"birthday"}
+            const data={type:"birthday",limit:10,page:page}
           const res=await dispatch(getBirthdayAnniversaryReminderAsync({token,data})).unwrap();
           } catch (error) {
             console.log(error);
@@ -38,7 +40,7 @@ const BirthdayReminderTable=()=>{
         
          useEffect(()=>{
                 getCrmBirthdayReminderHandler();
-                },[])
+                },[page])
                
      const columns = [
          {
@@ -48,7 +50,8 @@ const BirthdayReminderTable=()=>{
       dataIndex: "title",
       key: "title",
       width: 50,
-      render: (text) =>  <CustomText  value={1}/>
+      align:"center",
+      render: (_,item,idx) =>  <CustomText  value={idx+1}/>
     },
     
     {
@@ -102,7 +105,8 @@ const BirthdayReminderTable=()=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
+              <CustomTable   dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
+        <CustomPagination pageNumber={page} total={birthdayAnniversaryReminder?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

@@ -13,20 +13,27 @@ import ConfirmationPopup from "../../../common/ConfirmationPopup";
 import { toast } from "react-toastify";
 import Loader from "../../../loader/Loader";
 import CustomTable from "../../../common/CustomTable";
+import { deleteProductAsync, vendorPerformanceDetailsAnalysis } from "../../../../feature/inventaryManagement/inventarySlice";
+import { useNavigate } from "react-router-dom";
+import CustomPagination from "../../../common/CustomPagination";
 
-const VendorPerformanceDetailTable=({setSelectedRowKeys,selectedRowKeys,item})=>{
-    console.log(item);
-    
+const VendorPerformanceDetailTable=({setSelectedRowKeys,selectedRowKeys,id,page,setPage})=>{
+  const {vendorPerformanceAnalysisData}=useSelector(state=>state?.inventary);
+  const navigate=useNavigate();
+    const token=Cookies.get("token");
+    const dispatch=useDispatch();
   const [deleteConfirm,setDeleteConfirm]=useState();
   const [deleteId,setDeleteId]=useState(null);
-const {isLoading}=useSelector(state=>state?.inventary)
-  
+  const {isLoading}=useSelector(state=>state?.inventary)
+  const vendorProductsData=vendorPerformanceAnalysisData?.data?.products?.map((item)=>{
+    return {...item,key:item?._id}
+  })
  
   const confirmationPopUpHandler=async()=>{
     try {
       const res=await dispatch(deleteProductAsync({token,id:deleteId})).unwrap();
       if(res?.success){
-        getAllProducts()
+       dispatch(vendorPerformanceDetailsAnalysis({token,id}))
       }
       debugger
       console.log(res);
@@ -167,7 +174,7 @@ const {isLoading}=useSelector(state=>state?.inventary)
           </div>
           <div
             className="h-[20px] w-[20px] cursor-pointer"
-            onClick={()=>{navigate("/admin/create-product",{state:record})}}
+            onClick={()=>{navigate("/admin/create-product",{state:record?._id})}}
           >
             <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
           </div>
@@ -187,7 +194,9 @@ const {isLoading}=useSelector(state=>state?.inventary)
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={item} columns={columns}/>
+        <CustomTable   scroll={{x:1700}} rowSelection={rowSelection}  dataSource={vendorProductsData} columns={columns}/>
+              <CustomPagination pageNumber={page} total={vendorPerformanceAnalysisData?.totalProducts} onchange={(e)=>{setPage(e)}}/>
+      
             <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         
         </>

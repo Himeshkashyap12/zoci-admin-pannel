@@ -48,7 +48,7 @@ const AnniversaryRemindertable=()=>{
       dataIndex: "title",
       key: "title",
       width: 50,
-      render: (text) =>  <CustomText  value={1}/>
+      render: (_,item,idx) =>  <CustomText  value={idx+1}/>
     },
     
     {
@@ -102,7 +102,7 @@ const AnniversaryRemindertable=()=>{
   
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
+              <CustomTable   dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>
 
         </>
     )

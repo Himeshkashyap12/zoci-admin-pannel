@@ -9,21 +9,13 @@ import Loader from "../../loader/Loader";
 import { CopyOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { isoToIST } from "../../../constants/constants";
-const AnniversaryPromotionalTable=()=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+import CustomPagination from "../../common/CustomPagination";
+const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})=>{
       const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+
       const {anniversary,isLoading}=useSelector(state=>state?.marketing);
-            console.log(anniversary,"anniversay");
-        const getAnniversayPromotion=async()=>{
-          try {
-            
-          const res=await dispatch(getAllAnniversaryAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
+          
+   
        const copyTextHandler=async(text)=>{
           try {
               await navigator.clipboard.writeText(text);
@@ -35,9 +27,7 @@ const AnniversaryPromotionalTable=()=>{
         }
 
 
-        useEffect(()=>{
-        getAnniversayPromotion();
-        },[])
+       
      const columns = [
                 {
               title: (
@@ -46,7 +36,7 @@ const AnniversaryPromotionalTable=()=>{
               dataIndex: "title",
               key: "title",
               width: 100,
-              render: (text) =>  <CustomText  value={1}/>
+              render: (_,item,idx) =>  <CustomText  value={idx+1}/>
             },
             
             {
@@ -102,19 +92,8 @@ const AnniversaryPromotionalTable=()=>{
               width: 250,
               align:"center",
               render: (_,text) =>   <CustomText value={text?.anniversary?.spouseNumber}/>
-            },
-            
-            
-          
+            }
           ];
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
  const onSelectChange = newSelectedRowKeys => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -126,7 +105,9 @@ const data = [
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable rowSelection={rowSelection} scroll={{x:1500}}  dataSource={anniversary?.users} columns={columns}/>
+        <CustomTable   scroll={{x:1500}}  dataSource={anniversary?.users} columns={columns}/>
+        <CustomPagination pageNumber={page} total={anniversary?.total} onchange={(e)=>{setPage(e)}}/>
+       
         </>
     )
 }

@@ -12,14 +12,18 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import {  customerWishListAndBagAsync } from "../../../../feature/crm/crmSlice";
 import { isoToIST } from "../../../../constants/constants";
+import { useDebounce } from "../../../../hooks/UseDebounce";
+import Loader from "../../../loader/Loader";
+import CustomPagination from "../../../common/CustomPagination";
 const BagWishListTable=({id,setCustomerDetails})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+      const [page,setPage]=useState(1);
+      const [search,setSearch]=useState("");
+      const debounce=useDebounce(search,500)
       const navigate=useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
       const {wishListAndBag,isLoading}=useSelector(state=>state?.crm);
-      console.log(wishListAndBag,"fbdfdhb");
-      
       setCustomerDetails(wishListAndBag?.customer)
 
 
@@ -27,7 +31,15 @@ const BagWishListTable=({id,setCustomerDetails})=>{
     
         const getBagAndWishListdata=async()=>{
           try {
-          const res=await dispatch(customerWishListAndBagAsync({token,id})).unwrap();
+            const trimSearch=search.trim();
+            const data={
+              limit:10,
+              page:page,
+              ...(search && {search:trimSearch})
+            }
+
+            if(search && !trimSearch) return;
+          const res=await dispatch(customerWishListAndBagAsync({token,id,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
@@ -36,7 +48,7 @@ const BagWishListTable=({id,setCustomerDetails})=>{
         
         useEffect(()=>{
          getBagAndWishListdata();
-        },[])
+        },[debounce,page])
    
  const columns = [
   {
@@ -116,8 +128,9 @@ const BagWishListTable=({id,setCustomerDetails})=>{
   };
     return(
         <div className="flex flex-col gap-5">
-                   <CustomInput className={"!w-[300px]"} placeholder={"Search your orders"} />
+                   <CustomInput name={"search"}  value={search} onchange={(e)=>{setSearch(e.target.value)}} className={"!w-[300px]"} placeholder={"Search your Products"} />
               <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={wishListAndBag?.data} columns={columns}/>
+              <CustomPagination onchange={(e)=>{setPage(e)}} total={wishListAndBag?.total} />
 
         </div>
     )

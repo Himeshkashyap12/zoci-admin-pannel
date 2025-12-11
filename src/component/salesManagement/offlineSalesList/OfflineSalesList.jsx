@@ -9,10 +9,43 @@ import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
 import OfflineSalesFilter from "./OfflineSalesFilter";
 import OfflineSalesTable from "./OfflineSalesTable";
-
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { getOfflineListAsync } from "../../../feature/sales/salesSlice";
+import { useEffect, useState } from "react";
+import CustomPagination from "../../common/CustomPagination";
+import { useDebounce } from "../../../hooks/UseDebounce";
 const OfflineSalesList = () => {
   const navigate = useNavigate();
- 
+  const token=Cookies.get("token");  
+      const dispatch=useDispatch();
+      const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
+       const [page,setPage]=useState(1);
+             const [search,setSearch]=useState("");
+             const debounce=useDebounce(search,500);
+             const [filter,setFilter]=useState([])
+             const [sort,setSort]=useState([])
+        const getOfflineSalesList=async()=>{
+           const trimSearch=search.trim();
+          const data={
+            limit:10,
+            page:page,
+            ...(search && {search:trimSearch} ),
+            ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+            ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+
+          }
+             if(search && !trimSearch) return ;
+
+          try {
+          const res=await dispatch(getOfflineListAsync({token,data})).unwrap();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        useEffect(()=>{
+        getOfflineSalesList();
+        },[debounce,filter,sort])
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -34,10 +67,11 @@ const OfflineSalesList = () => {
       </div>
      
       <div>
-        <OfflineSalesFilter />
+        <OfflineSalesFilter  setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
       </div>
       <div>
-        <OfflineSalesTable />
+        <OfflineSalesTable page={page} setPage={setPage} />
+       
       </div>
     </div>
   );

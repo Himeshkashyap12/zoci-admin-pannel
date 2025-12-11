@@ -10,15 +10,31 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../loader/Loader";
 import { getTotalExpenditureAsync } from "../../../feature/sales/salesSlice";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../../hooks/UseDebounce";
 const TotalExpenditure = () => {
-  const navigate = useNavigate();
-  const token=Cookies.get("token");
-    const dispatch=useDispatch();
-      const {totalExpenditure,isLoading}=useSelector(state=>state?.sales);            
-            const totalExpenditureHandler=async()=>{
+        const [page,setPage]=useState(1);
+        const [search,setSearch]=useState("");
+        const debounce=useDebounce(search,500);
+        const [filter,setFilter]=useState([])
+        const [sort,setSort]=useState([])
+        const navigate = useNavigate();
+        const token=Cookies.get("token");
+        const dispatch=useDispatch();
+        const {totalExpenditure,isLoading}=useSelector(state=>state?.sales);            
+                const totalExpenditureHandler=async()=>{
+                const trimSearch=search.trim();
+                const data={
+                  limit:10,
+                  page:page,
+                  ...(search && {search:trimSearch} ),
+                  ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                  ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+
+                }
+                if(search && !trimSearch) return;
               try {
-              const res=await dispatch(getTotalExpenditureAsync({token})).unwrap();
+              const res=await dispatch(getTotalExpenditureAsync({token,data})).unwrap();
               } catch (error) {
                 console.log(error);
               }
@@ -38,11 +54,10 @@ const TotalExpenditure = () => {
           },
           ]
 
-    useEffect(()=>{
+               useEffect(()=>{
                 totalExpenditureHandler();
-              },[]);
+              },[debounce,filter,sort]);
 
-    if(isLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -76,10 +91,10 @@ const TotalExpenditure = () => {
         </Row>
       </div>
       <div>
-        <TotalExpenditureFilter />
+        <TotalExpenditureFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
       </div>
       <div>
-        <TotalExpenditureTable item={totalExpenditure?.data} />
+        <TotalExpenditureTable item={totalExpenditure} setPage={setPage} page={page} />
       </div>
     </div>
   );

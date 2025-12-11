@@ -11,7 +11,7 @@ const AnniversaryReminderFilter=()=>{
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput placeholder={"Search your orders"} />
+                   <CustomInput placeholder={"Search your Customer"} />
                    </div>
                  </Col>
                  

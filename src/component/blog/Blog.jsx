@@ -1,33 +1,50 @@
-import { useNavigate } from "react-router-dom";
-import { LeftOutlined } from "@ant-design/icons";
+
 import CustomText from "../common/CustomText";
 import BlogFilter from "./BlogFilter";
 import BlogCard from "./BlogCard";
 import { Col, Row } from "antd";
 import Cookies from "js-cookie"
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getBlogAsync } from "../../feature/blog/blogSlice";
+import { useCallback, useEffect, useState } from "react";
+import { filteredDataHandler, getBlogAsync } from "../../feature/blog/blogSlice";
 import Loader from "../loader/Loader";
+import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
+import ImageLoader from "../loader/ImageLoader";
+import PaginationLoader from "../loader/paginationLoader";
 const Blog = () => {
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
+      const [page,setPage]=useState(1)
       const {blog,isLoading}=useSelector(state=>state?.blog);
-      const {isMediaLoading} =useSelector(state=>state?.media)
-      console.log(blog,"bestSeller");
-  
-  const getBlogData=async()=>{
+      const {isMediaLoading} =useSelector(state=>state?.media);
+      const [hasMore,setHasMore]=useState(true)
+
+ const getBlogData=async()=>{
     try {
-    const res=await dispatch(getBlogAsync({token})).unwrap();
+      const data={page:page,limit:12};
+    const res=await dispatch(getBlogAsync({token,data})).unwrap();    
+          const receivedCount = res?.blogs?.length ?? 0;
+        if (receivedCount < 12) setHasMore(false);
     } catch (error) {
       console.log(error);
     }
   }
-  useEffect(()=>{
-   getBlogData();
-  },[])
 
-  if(isMediaLoading || isLoading) return <Loader/>
+
+  useEffect(() => {
+    getBlogData()
+  }, [page]);
+
+
+  const loadMore = useCallback(() => {
+    if (isLoading || !hasMore) return;
+    setPage((p) => p + 1);
+  }, [isLoading, hasMore]);
+
+  // sentinel ref
+  const sentinelRef = useInfiniteScrollObserver(loadMore, { rootMargin: "50px" });
+
+
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -41,22 +58,24 @@ const Blog = () => {
         <BlogFilter/>
       </div>
       <div>
-        <Row gutter={[20,20]}>
-            {blog?.blogs?.map((item)=>{
+       <Row gutter={[20,20]}>
+            {blog?.map((item)=>{
                 return(
                     <>
                     <Col xxl={6} xl={8} md={8} sm={12} xs={24}>
                            <BlogCard item={item}/>
-
                     </Col>
 
                     </>
                 )
             })}
         </Row>
-        {/* <BirthdayReminderTable /> */}
-      </div>
+       {isLoading && <PaginationLoader/>}
+      <div ref={sentinelRef} style={{ height: 1 }} />
+
+    </div>
     </div>
   );
 };
 export default Blog;
+

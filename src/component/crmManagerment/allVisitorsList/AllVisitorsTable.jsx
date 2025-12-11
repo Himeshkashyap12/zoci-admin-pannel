@@ -8,24 +8,27 @@ import { getAllVisitorsAsync } from "../../../feature/crm/crmSlice";
 import {EyeOutlined } from "@ant-design/icons";
 import Loader from "../../loader/Loader";
 import { isoToIST } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 const AllVisitorsTable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const navigate=useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
+      const [page,setPage]=useState(1);
       const {allvisitors,isLoading}=useSelector(state=>state?.crm);
             console.log(allvisitors,"allvisitors");
     
         const getAllVisitors=async()=>{
           try {
-          const res=await dispatch(getAllVisitorsAsync({token})).unwrap();
+            const data={limit:10,page:page}
+          const res=await dispatch(getAllVisitorsAsync({token,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
         }
          useEffect(()=>{
                 getAllVisitors();
-                },[])
+                },[page])
         
         const columns = [
             {
@@ -35,7 +38,7 @@ const AllVisitorsTable=()=>{
           dataIndex: "title",
           key: "title",
           width: 100,
-          render: (text) => <CustomText  value={1}/>
+          render: (_,text,idx) => <CustomText  value={idx+1}/>
         },
         
         {
@@ -87,7 +90,7 @@ const AllVisitorsTable=()=>{
           key: "metalType",
           width: 200,
           align: "center",
-          render: (_,text) => <div onClick={()=>{navigate(`/admin/crm-all-visitors-list/${text?._id}`)}}><EyeOutlined style={{fontSize:"20px"}} /></div>
+          render: (_,text) => <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-all-visitors-list/${text?._id}`)}}><EyeOutlined style={{fontSize:"20px"}} /></div>
         }
       ];
 
@@ -103,7 +106,8 @@ const AllVisitorsTable=()=>{
   
     return(
         <>
-              <CustomTable scroll={{x:1500}} rowSelection={rowSelection}  dataSource={allvisitors?.data} columns={columns}/>
+              <CustomTable scroll={{x:1500}} dataSource={allvisitors?.data} columns={columns}/>
+        <CustomPagination pageNumber={page} total={allvisitors?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

@@ -1,13 +1,14 @@
 import {   Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import {  Outlet } from "react-router";
-import { logOutApi } from "../../feature/auth/authApi";
-import { logout } from "../../feature/auth/authSlice";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import CustomSidebar from "./SibeBar";
+import { useState } from "react";
+import Loader from "../loader/Loader";
+import { useSelector } from "react-redux";
 const AdminLayout = () => {
-  const dispatch = useDispatch();
+  const {isLoading}=useSelector(state=>state?.auth)
+
+
   const contentStyle = {
     color: "#d5c294",
     backgroundColor: "#efe6dc",
@@ -18,12 +19,13 @@ const AdminLayout = () => {
   };
 
   
+  if(isLoading) return <Loader/>
 
 
   return (
     <>
       <Layout style={layoutStyle}>
-        <CustomSidebar />
+        <CustomSidebar  />
           <Content style={contentStyle}>
             <div className="overflow-y-auto h-full">
               <Outlet />

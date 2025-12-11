@@ -6,28 +6,17 @@ import Cookies from "js-cookie"
 import { stockLevelAlertAsync } from "../../../feature/inventaryManagement/inventarySlice";
 import { Image } from "antd";
 import Loader from "../../loader/Loader";
-const StockAlertTable=({setSelectedRowKeys,selectedRowKeys})=>{
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const {stockLevelAlert,isLoading}=useSelector(state=>state?.inventary);
-       const stockAlertData=stockLevelAlert?.data?.map((item)=>{
-        return {...item,key:item?.productId}
-      }); 
+import CustomPagination from "../../common/CustomPagination";
+const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,page,setPage})=>{
+      const {isLoading}=useSelector(state=>state?.inventary);
+      
       
             
-        const getStockAlert=async()=>{
-          try {
-          const res=await dispatch(stockLevelAlertAsync({token})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
+        
 
 
 
-        useEffect(()=>{
-        getStockAlert();
-        },[])
+      
     const columns = [
          {
       title: (
@@ -116,19 +105,19 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys})=>{
      
   ];
 
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
+ const selectTableRowHandler = productKey => {
+    setSelectedRowKeys(productKey);
   };
  const rowSelection = {
     selectedRowKeys,
-    onChange: onSelectChange,
+    onChange: selectTableRowHandler,
   };
   if(isLoading) return <Loader/>
     return(
         <>
               <CustomTable rowSelection={rowSelection}  dataSource={stockAlertData} columns={columns} scroll={{x:1700}}/>
-
+              <CustomPagination pageNumber={page} total={total} onchange={(e)=>{setPage(e)}}/>
+ 
         </>
     )
 }

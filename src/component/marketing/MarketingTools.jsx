@@ -22,9 +22,6 @@ const MarketingTools=()=>{
             console.log(error);
           }
         }
-
-
-
         useEffect(()=>{
         getMarketingdashboard();
         },[])

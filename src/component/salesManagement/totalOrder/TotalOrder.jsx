@@ -7,19 +7,36 @@ import SalesCard from "../SalesCard";
 import { Col, Row } from "antd";
 import TotalOrderFilter from "./TotalOrderFilter";
 import TotalOrderTable from "./TotalOrderTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalOrderAsync } from "../../../feature/sales/salesSlice";
 import Cookies from "js-cookie";
+import { useDebounce } from "../../../hooks/UseDebounce";
 const TotalOrder = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
     const dispatch=useDispatch();
+         const [search,setSearch]=useState("");
+         const debounce=useDebounce(search,500);
+         const [filter,setFilter]=useState([])
+         const [sort,setSort]=useState([])       
+         const [page,setPage]=useState(1)
+    
     const {totalOrders,isLoading}=useSelector(state=>state?.sales);  
             const totalOrderHandler=async()=>{
+               const trimSearch=search.trim();
+                const data={
+                  limit:10,
+                  page:page,
+                  ...(search && {search:trimSearch} ),
+                  ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                  ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+
+                }
               try {
-              const res=await dispatch(getTotalOrderAsync({token})).unwrap();
+                if(search && !trimSearch) return;
+              const res=await dispatch(getTotalOrderAsync({token,data})).unwrap();
               } catch (error) {
                 console.log(error);
               }
@@ -40,9 +57,8 @@ const TotalOrder = () => {
             ]
               useEffect(()=>{
                 totalOrderHandler();
-              },[]);
+              },[page,filter,sort,debounce]);
 
-        if(isLoading) return <Loader/>
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -76,10 +92,10 @@ const TotalOrder = () => {
         </Row>
       </div>
       <div>
-        <TotalOrderFilter />
+        <TotalOrderFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
       </div>
       <div>
-        <TotalOrderTable item={totalOrders} />
+        <TotalOrderTable page={page} setPage={setPage}   item={totalOrders} />
       </div>
     </div>
   );
