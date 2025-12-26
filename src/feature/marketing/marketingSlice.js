@@ -130,6 +130,75 @@ export const updateNewPromotionAsync = createAsyncThunk(
     }
   }
 );
+
+
+
+
+
+export const birthdayExportInExcelAsync = createAsyncThunk(
+  "marketing/birthdayExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/promotions/exportBirthdaysExcel`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const anniversaryExportInExcelAsync = createAsyncThunk(
+  "marketing/anniversaryExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`promotions/exportAnniversaryExcel`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const promotionExportInExcelAsync = createAsyncThunk(
+  "marketing/promotionExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/promotions/exportPromotionsExcel`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+      });
+      console.log(res);
+      
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) { 
+      console.log(error);
+           
+      throw error;
+    }
+  }
+);
 export const marketingSlice = createSlice({
   name: "marketing",
   initialState,
@@ -211,6 +280,36 @@ export const marketingSlice = createSlice({
           state.isLoading = false;
         });
         builder.addCase(updateNewPromotionAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+         builder.addCase(birthdayExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(birthdayExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(birthdayExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+        builder.addCase(anniversaryExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(anniversaryExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(anniversaryExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;          
+          state.error = action;
+        });
+        builder.addCase(promotionExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(promotionExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(promotionExportInExcelAsync.rejected, (state, action) => {
           state.isLoading = false;          
           state.error = action;
         });

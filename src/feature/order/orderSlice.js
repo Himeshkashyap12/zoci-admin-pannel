@@ -6,6 +6,9 @@ const initialState = {
   makeToOrder:[],
   // generateInvoiceInstants:[],
   productReturnedAndExchange:[],
+  previosAddressData:[],
+  exhibitionPlace:[],
+  eventType:[],
   isLoading: false,
   error: null,
 };
@@ -122,6 +125,85 @@ export const orderExportInExcelAsync = createAsyncThunk(
     }
   }
 );
+export const getPreviousAddressAsync = createAsyncThunk(
+  "order/previousAddressAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/exhibition/invoice-prefill`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          type:"address",
+          ...data
+        }
+      });
+      return res?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const getPreviousBillingPlaceAsync = createAsyncThunk(
+  "order/prviousBillingPlace",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/exhibition/invoice-prefill`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          type:"exhibitionPlace",
+          ...data
+        }
+      });
+      return res?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const getEventTypeAsync = createAsyncThunk(
+  "order/eventTypeAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/exhibition/invoice-prefill`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          type:"eventType",
+          ...data
+        }
+      });
+      return res?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
+export const addNewOrderAsync = createAsyncThunk(
+  "order/addnewOrder",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/make-to-orders`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 
 export const orderSlice = createSlice({
   name: "order",
@@ -194,6 +276,51 @@ export const orderSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+         builder.addCase(getPreviousAddressAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getPreviousAddressAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.previosAddressData=action.payload;
+        });
+        builder.addCase(getPreviousAddressAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(getPreviousBillingPlaceAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getPreviousBillingPlaceAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.exhibitionPlace=action.payload;
+        });
+        builder.addCase(getPreviousBillingPlaceAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(getEventTypeAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getEventTypeAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.eventType=action.payload;
+        });
+        builder.addCase(getEventTypeAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        builder.addCase(addNewOrderAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(addNewOrderAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(addNewOrderAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
+        
         
        
         

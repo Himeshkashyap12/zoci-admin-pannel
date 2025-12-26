@@ -138,7 +138,7 @@ const ProductReturnedTable=({page,setPage})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}   dataSource={productReturnedAndExchange?.data} columns={columns}/>
               <CustomPagination pageNumber={page} total={productReturnedAndExchange?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

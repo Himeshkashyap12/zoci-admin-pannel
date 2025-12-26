@@ -1,13 +1,23 @@
 
 
-import React from "react";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
-import { Avatar, Image } from "antd";
-const ProductSalesChart=({item})=>{
-  console.log(item);
+import { Avatar, Image, Skeleton } from "antd";
+import CustomSelect from "../common/CustomSelect";
+import "./sales.css"
+import { useSelector } from "react-redux";
+const ProductSalesChart=({item,salesChartValue,handleSalesReport})=>{
+   const [salesChart,setSalesChart]=useState(false);
+   const {isDashboardLoading}=useSelector(state=>state?.sales);
+
+   const salesDateOption=[
+    {label:"Last one Year",value:"oneYear"},
+    {label:"Last six month",value:"sixMonth"},
+    {label:"Last three month",value:"threeMonth"}
+  ]
   
       const options = {
     chart: {
@@ -58,14 +68,14 @@ const ProductSalesChart=({item})=>{
   ];
 
     return(
-  <div className="bg-[#fff] rounded-md p-[24px] w-full">
+  <div className="bg-[#fff] rounded-md p-[24px] w-full sales">
     <div className="flex flex-col gap-[20px]">
     <div className="flex justify-between items-center">
        <CustomText className={"!text-[20px] text-[#0D141C] font-[500]"} value={"Product Sold By Categories"}/>
        <CustomButton value={<div className="flex gap-2 items-center">
-        <Image preview={false} className="!size-[16px] object-cover"  src={calender}/>
-        {/* <CustomText className={"!text-[#fff]"} value={"Last 7 days"}/> */}
-        </div>}/>
+       {salesChart &&  <CustomSelect  className="!w-[150px] !text-[#fff]" value={salesChartValue} options={salesDateOption} onchange={(e)=>{handleSalesReport(e)}} />}
+         <div className="flex justify-center items-center" onClick={()=>{setSalesChart(()=>salesChart?false:true)}}> <Image preview={false} className="!size-[16px] object-cover"  src={calender}/></div>
+               </div>}/>
     </div>
     <div className="flex flex-col gap-4">
        <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={item?.last30DaysQty}/>
@@ -75,7 +85,8 @@ const ProductSalesChart=({item})=>{
        </div>
     </div>
     <div>
-   <Chart height={200} options={options} series={series} type="bar"  />
+       {isDashboardLoading?
+<Skeleton.Node active style={{ width: 640,height:200 }} /> : <Chart height={200} options={options} series={series} type="bar"  />}
    </div>
    </div>
    </div>)

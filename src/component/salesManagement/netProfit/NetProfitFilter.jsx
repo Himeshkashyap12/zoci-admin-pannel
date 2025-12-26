@@ -1,5 +1,5 @@
 
-import { Col, Image, Row } from "antd";
+import { Col, DatePicker, Image, Row } from "antd";
 import filter from "../../../assets/inventary/filter.png"
 import sort from "../../../assets/inventary/sort.png"
 import exports from "../../../assets/inventary/export.png"
@@ -9,18 +9,25 @@ import CustomInput from "../../common/CustomInput";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
 import "../sales.css"
 import { netProfitSaleSort } from "./totalSalesData";
-const NetProfitFilter=({setSearch,setFilter,setSort,search})=>{
+const { RangePicker } = DatePicker;
+
+const NetProfitFilter=({setSearch,setFilter,setSort,search,setDate})=>{
     return(
         <div className="sales">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Sales"} />
+                   <CustomInput search value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Sales"} />
                    </div>
                  </Col>
                  
                  <Col span={16}>
-                 <div className="flex gap-5 justify-end">    
+                 <div className="flex gap-5 justify-end">  
+                   <RangePicker
+                   disabledDate={(current) => {
+                      return current && current > new Date().setHours(0, 0, 0, 0);
+                    }}
+                   onChange={(i,value)=>{setDate(value)}} />  
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                    <CustomMultipleFilter  placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={netProfitSaleSort}/>

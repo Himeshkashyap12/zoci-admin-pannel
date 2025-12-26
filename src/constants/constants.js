@@ -1,3 +1,8 @@
+
+
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
 export function isoToIST(isoString) {
   const date = new Date(isoString); // Convert ISO string to Date object
   return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
@@ -71,4 +76,12 @@ export const isoTODate = (isoDate) => {
   return new Date(isoDate).toISOString().slice(0, 10);
 };
 
+
+
+
+dayjs.extend(utc);
+
+export function isoToUTC(isoString) {
+  return dayjs(isoString).utc().format("YYYY-MM-DD HH:mm:ss");
+}
  

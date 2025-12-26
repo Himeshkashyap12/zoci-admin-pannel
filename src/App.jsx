@@ -51,6 +51,8 @@ import AddNewBlogPage from "./pages/blogPage/AddNewBlogPage";
 import ReturningCustomerDetailsPage from "./pages/salesPage/ReturningCustomerDetailsPage";
 import CreateNewProductPage from "./pages/inventaryPage/CreateNewProduct";
 import VendorPerformanceAnalysisDetailsPage from "./pages/inventaryPage/VendorPerformanceAnalysisDetailsPage";
+import FaqPage from "./pages/faqPage/FaqPage";
+import AddNewOrderPage from "./pages/orderManagementPage/AddNewOrderPage";
 function App() {
 
 
@@ -81,6 +83,7 @@ function App() {
              <Route  path="product-exchange" element={ <AdminProtectedRoute>  <ProductExchangePage />  </AdminProtectedRoute> }/>
              <Route  path="product-returned" element={ <AdminProtectedRoute>  <ProductReturnedPage />  </AdminProtectedRoute> }/>
              <Route  path="generate-invoice" element={ <AdminProtectedRoute>  <GenerateInvoicePage />  </AdminProtectedRoute> }/>
+             <Route  path="add-new-order" element={ <AdminProtectedRoute>  <AddNewOrderPage />  </AdminProtectedRoute> }/>
              {/* Order route */}
 
              {/* crm routes */}
@@ -112,13 +115,15 @@ function App() {
              <Route  path="expired-promotion" element={ <AdminProtectedRoute>  <ExpiredPromotionPage />  </AdminProtectedRoute> }/>
              <Route  path="birthday-promotion" element={ <AdminProtectedRoute>  <BirthdayPromotionPage />  </AdminProtectedRoute> }/>
            
-           {/* Blog section */}
+           {/* Blog section route*/}
              <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/>
              <Route  path="add-new-blog" element={ <AdminProtectedRoute>  <AddNewBlogPage />  </AdminProtectedRoute> }/>
 
-           
+           {/* ui management route */}
              <Route  path="ui-management" element={ <AdminProtectedRoute>  <UiManagementpage />  </AdminProtectedRoute> }/>
-           
+           {/* faq management route */}
+             <Route  path="faq" element={ <AdminProtectedRoute>  <FaqPage />  </AdminProtectedRoute> }/>
+
           </Route>
         </Routes>
       </Suspense>

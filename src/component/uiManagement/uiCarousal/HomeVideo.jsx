@@ -1,4 +1,4 @@
-import { Image } from "antd";
+import { Image, Skeleton } from "antd";
 import CustomText from "../../common/CustomText";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import CustomModal from "../../common/CustomModal";
@@ -19,7 +19,7 @@ const HomeVideo=({homeVideos})=>{
             <div className=" !h-[200px] !w-[100%] ">
                       {videoLoading && (
                         <div className="!bg-[#fff]">
-                            <PaginationLoader /> 
+                            <Skeleton.Node active={true} className="!w-[100%]  !h-[200px]" />
                             </div>  
                         )}
                         <video

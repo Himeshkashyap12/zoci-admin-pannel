@@ -124,7 +124,6 @@ const OrderHistoryTable=({id,setCustomerDetails})=>{
 ];
 
  const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
  const rowSelection = {

@@ -16,6 +16,7 @@ import CustomButton from "../common/CustomButton";
 import CustomModal from "../common/CustomModal";
 import BlogPreviewModel from "./BlogPreviewModel";
 import { createBlogAsync } from "../../feature/blog/blogSlice";
+import { specialChar } from "../../constants/regex";
 const AddNewBlog=()=>{
     const [previewModel,setPreviewModel]=useState(false)
     const [imageUrl, setImageUrl] = useState(null);
@@ -29,7 +30,13 @@ const AddNewBlog=()=>{
         description:"",
         image:""
     })
+    const newBlogInputField=newBlogInput?.title && newBlogInput?.description && newBlogInput?.image;
+  const newBlogInputHandler=(e)=>{
+    const {name,value}=e.target;
+     if(specialChar?.test(value)) return ;
+     setNewBlogInput({...newBlogInput,[name]:value})
 
+  }
     const handleUpload = async (e) => {
     const file = e.target.files[0];
       if (!file) return;
@@ -55,15 +62,10 @@ const AddNewBlog=()=>{
                 ...newBlogInput
             }
             const res=await dispatch(createBlogAsync({token,data})).unwrap();
-            console.log(res);
             if(res.status=="success"){
             toast.success("Blog created successfully");
             navigate("/admin/blog")
-            }
-            
-          
-            
-            
+            }   
         } catch (error) {
             
         }
@@ -82,13 +84,13 @@ const AddNewBlog=()=>{
            <div className="form flex flex-col gap-10 w-[90%] mx-auto pt-[90px]">
             <div className="flex flex-col gap-4">
                 <CustomText className={"!text-[#214344] !text-[16px] font-semibold"} value={"Blog Title"}/>
-                <CustomInput placeholder={"Blog Title"} name={"title"} value={newBlogInput?.title} onchange={(e)=>{setNewBlogInput({...newBlogInput,title:e.target.value})}}  className={"rounded-full "}/>
+                <CustomInput placeholder={"Blog Title"} name={"title"} value={newBlogInput?.title} onchange={(e)=>{newBlogInputHandler(e)}}  className={"rounded-full "}/>
             </div>
            <Row gutter={30}>
                 <Col span={12}>
                 <div className="flex flex-col gap-4 w-full">
                 <CustomText className={"!text-[#214344] !text-[16px] font-semibold"} value={"Description"}/>
-                <TextArea placeholder="Blog Description" className="!rounded-md !h-[500px] !w-full "  name={"description"} value={newBlogInput?.description} onChange={(e)=>{setNewBlogInput({...newBlogInput,description:e.target.value})}} />
+                <TextArea placeholder="Blog Description" className="!rounded-md !h-[500px] !w-full "  name={"description"} value={newBlogInput?.description} onChange={(e)=>{newBlogInputHandler(e)}} />
             </div>
                 </Col>
                 <Col span={12}>
@@ -113,7 +115,7 @@ const AddNewBlog=()=>{
 
            </div>
            <div className="flex justify-center gap-5 pt-10">
-            <CustomButton onclick={()=>{setPreviewModel(true)}} value={"Preview"} className={"!bg-[#214344] !text-[#fff] w-[250px]"}/>
+            <CustomButton onclick={()=>{newBlogInputField && setPreviewModel(true)}} value={"Preview"} className={"!bg-[#214344] !text-[#fff] w-[250px]"}/>
             <Button onClick={()=>{createBlogHandler()}} className="rounded-full w-[250px] border-[2px] !border-[#214344] !bg-[#EFE6DC]">Submit</Button>
            </div>
                 </div>

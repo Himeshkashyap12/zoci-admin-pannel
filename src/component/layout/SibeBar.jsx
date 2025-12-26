@@ -169,10 +169,29 @@ const CustomSidebar = () => {
         </Link>
       ),
     },
+     {
+      key: 8,
+      path: "/admin/faq",
+      style: {
+        backgroundColor: selectKey == 8 && "#F0D5A0",
+        marginBottom: "10px",
+        height: "40px",
+        border: selectKey != 8 && "2px solid #F0D5A0",
+      },
+      label: (
+        <Link to={"/admin/faq"}>
+          <Typography.Text
+            className={`${
+              selectKey == 8 ? "!text-[#214344]" : "!text-[#fff]"
+            } font-[300] !text-[20px]`}
+          >
+            FAQ's Management
+          </Typography.Text>
+        </Link>
+      ),
+    },
   ];
-  const handleSidebar = (e) => {
-    console.log(e.key);
-    
+  const handleSidebar = (e) => {    
     setSelectKey(e.key);
     Cookies.set("key", e.key);
     const selectedItem = sidebarItems.find((item) => item.key === e.key);
@@ -185,7 +204,6 @@ const logoutHandler = async () => {
     try {
 
       const res=await  dispatch(logOutHandler({token,userId:userId})).unwrap();
-      console.log(res);
       if(res?.statusCode==200 && res.status=="success"){
       toast.success(res.message);
 

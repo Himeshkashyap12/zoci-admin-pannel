@@ -51,12 +51,14 @@ const WoMenCategory=()=>{
         }
     }
     const editHandler=async(item)=>{
+        setDeleteId(null)
        setEditData(item);
        setCategoryModel(true);
        
     }
 
     const deleteHandler=(id)=>{
+        setEditData(null)
     setCategoryModel(true);
     setDeleteId(id)
     }
@@ -71,7 +73,7 @@ const WoMenCategory=()=>{
                 <Row>
                     <Col span={4}>
                
-            <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setCategoryModel(true),setEditData(null)}}>
+            <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setCategoryModel(true),setEditData(null),setDeleteId(null)}}>
                <PlusOutlined style={{color:"#214344",fontSize:"30px",font:"bold"}} />
             </div>
               </Col>

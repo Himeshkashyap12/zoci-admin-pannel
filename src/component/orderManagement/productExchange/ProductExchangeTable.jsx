@@ -136,7 +136,7 @@ const ProuctExchangeTable=({setPage,page})=>{
   
     return(
         <>
-              <CustomTable scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productReturnedAndExchange?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={productReturnedAndExchange?.data} columns={columns}/>
               <CustomPagination pageNumber={page} total={productReturnedAndExchange?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

@@ -16,7 +16,7 @@ const MenCategory=()=>{
      const [deleteId,setDeleteId]=useState();
     const dispatch=useDispatch();
     const token=Cookies.get("token");
-    const [editData,setEditData]=useState({})
+    const [editData,setEditData]=useState(null)
     const {menCategory,isLoading}=useSelector(state=>state?.ui);
     
     const getCategory=async()=>{
@@ -51,10 +51,12 @@ const MenCategory=()=>{
        }
    
        const deleteHandler=(id)=>{
+        setEditData(null)
        setCategoryModel(true);
        setDeleteId(id)
        }
    const editHandler=(item)=>{
+    setDeleteId(null);
      setEditData(item);
      setCategoryModel(true);
    }
@@ -70,7 +72,7 @@ const MenCategory=()=>{
             <div>
                 <Row>
                     <Col span={4}>
-            <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setCategoryModel(true)}}>
+            <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setCategoryModel(true),setDeleteId(null),setEditData(null)}}>
                <PlusOutlined style={{color:"#214344",fontSize:"30px",font:"bold"}} />
             </div>
 

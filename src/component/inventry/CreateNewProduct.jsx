@@ -19,26 +19,21 @@ import { toast } from "react-toastify";
 import Loader from "../loader/Loader";
 import { createProductHandlerAsync, getAllProductByIdAsync, updateProductAsync } from "../../feature/inventaryManagement/inventarySlice";
 import { compareNewAndOldObject } from "../../constants/constants";
+import { specialChar } from "../../constants/regex";
 const CreateNewProduct = () => {
-  const {state}=useLocation();
-  console.log(state,"status");
-  
+  const {state}=useLocation();  
   const navigate = useNavigate();
   const dispatch=useDispatch();
   const token=Cookies.get("token")
   const {category}=useSelector(state=>state?.ui);
   const {isCreateProductLoading,productById,error}=useSelector(state=>state?.inventary);
-  const {isMediaLoading}=useSelector(state=>state?.media);
-console.log(productById?.product);
-
-  console.log(error,"bhhb");
-  
+  const {isMediaLoading}=useSelector(state=>state?.media);  
   const [productInput,setProductInput]=useState({
     title: "",
     description: "",
-    price: 0,
+    price: null,
     sku: "",
-    otherCharges: 0,
+    otherCharges: null,
     productionSource:"",
     category: "",
     subCategory: "",
@@ -48,9 +43,9 @@ console.log(productById?.product);
     metalColor: "",
     stone: "",
     designTags:"",
-    weight: 0,
+    weight: null,
     size: "",
-    quantity: 0,
+    quantity: null,
     hudNo: "",
     madefor: "",
     exclusive: "",
@@ -62,10 +57,7 @@ console.log(productById?.product);
     },
     video: []
   })
-  console.log(productInput?.video);
-  
- 
-  console.log(productInput);
+
   
   const madeForOption = [
     { label: "Men", value: "Men" },
@@ -83,6 +75,8 @@ console.log(productById?.product);
 
    const productInputHandler=(e)=>{
       const {name,value}=e.target;
+     if(specialChar?.test(value)) return ;
+      
       setProductInput({...productInput,[name]:value})
    }
   
@@ -97,9 +91,7 @@ console.log(productById?.product);
   }
 
 
-   const handleUpload = async (e,status) => {
-    console.log(status);
-    
+   const handleUpload = async (e,status) => {    
       const file = e.target.files[0];
         if (!file) return;
               try {
@@ -107,9 +99,7 @@ console.log(productById?.product);
               formData.append("productImages", file);
               const res=await dispatch(getImageUrlAsync({token,formData})).unwrap();
               if(res.message){
-                  toast.success(res?.message) 
-                  console.log(res);
-                  
+                  toast.success(res?.message)                   
                  switch(status){
                   case "modelImage":
                            setProductInput({...productInput,images:{...productInput?.images,modalImage:res?.images[0]}})
@@ -150,22 +140,15 @@ console.log(productById?.product);
     
     }else{
       const updatedData=compareNewAndOldObject({oldObj:productById?.product,newObj:productInput})
-      console.log(updatedData,"jbhvh");
        const res=await dispatch(updateProductAsync({token,data:updatedData,id:productById?.product?._id})).unwrap();
-
        if(res.status){
-      toast.success(res.message);
-      navigate("/admin/inventary")
+          toast.success(res.message);
+          navigate("/admin/inventary")
     }
     }
-   
-    
-   
    } catch (error) {
     console.log(error);
-    
-    toast.error("Something went wrong!")
-    
+    toast.error("Something went wrong!");
    }
     
   }
@@ -179,9 +162,7 @@ console.log(productById?.product);
       if(res.success){
         setProductInput(res.product)
       }
-   
    }
-      
      catch (error) {
       console.log(err);
       
@@ -296,10 +277,12 @@ console.log(productById?.product);
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Size"} />
-                  <CustomInput  name="size"
-                        value={productInput?.size}
-                        onchange={productInputHandler}
-                        className="!rounded-full" />
+                  <CustomInput
+                  type={"number"}
+                  name="size"
+                  value={productInput?.size}
+                  onchange={productInputHandler}
+                  className="!rounded-full" />
                 </div>
               </Col>
             </Row>
@@ -316,7 +299,9 @@ console.log(productById?.product);
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Quantity Avaliable"} />
-                  <CustomInput name="quantity"
+                  <CustomInput
+                  type={"number"}
+                  name="quantity"
                       value={productInput?.quantity}
                       onchange={productInputHandler}
                       className="!rounded-full" />
@@ -328,6 +313,7 @@ console.log(productById?.product);
                 <div className="flex flex-col gap-2">
                   <CustomLabel value={"Weight in Grams"} />
                   <CustomInput name="weight"
+                    type={"number"}
                       value={productInput?.weight}
                       onchange={productInputHandler}
                       className="!rounded-full" />
@@ -337,6 +323,7 @@ console.log(productById?.product);
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Price"} />
                   <CustomInput 
+                  type={"number"}
                    name="price"
                     value={productInput?.price}
                     onchange={productInputHandler}
@@ -370,6 +357,7 @@ console.log(productById?.product);
                 <div className="flex flex-col gap-2">
                   <CustomLabel value={"Other charges (If any)"} />
                   <CustomInput 
+                  type={"number"}
                   name="otherCharges"
                   value={productInput?.otherCharges}
                   onchange={productInputHandler}

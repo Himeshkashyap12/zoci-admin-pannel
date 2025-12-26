@@ -15,11 +15,12 @@ const NetProfit = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
    const [search,setSearch]=useState("");
+      const [date,setDate]=useState([]); 
      const debounce=useDebounce(search,500);
    const [sort,setSort]=useState([])    
    const [page,setPage]=useState(1)       
   const dispatch = useDispatch();
-  const { netProfit, isLoading } = useSelector((state) => state?.sales);
+  const { netProfit } = useSelector((state) => state?.sales);
   console.log(netProfit,"netProfit");
   
   const getNetProfitHanler = async () => {
@@ -29,6 +30,7 @@ const NetProfit = () => {
                   page:page,
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} )
 
                 }
               try {
@@ -55,9 +57,8 @@ const NetProfit = () => {
   ];
   useEffect(() => {
     getNetProfitHanler();
-  }, [debounce,sort,page]);
+  }, [debounce,sort,page,date]);
 
-  if (isLoading) return <Loader />;
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -89,7 +90,7 @@ const NetProfit = () => {
         </Row>
       </div>
       <div>
-        <NetProfitFilter   search={search} setSort={setSort} setSearch={setSearch} />
+        <NetProfitFilter setDate={setDate} date={date}  search={search} setSort={setSort} setSearch={setSearch} />
       </div>
       <div>
         <NetProfitTable  page={page} setPage={setPage} item={netProfit} />

@@ -8,9 +8,11 @@ import {toast} from "react-toastify";
 import Cookies from "js-cookie"
 import { createVendorAsync, vendorPerformanceAnalysis } from "../../../feature/inventaryManagement/inventarySlice";
 import Loader from "../../loader/Loader";
+import { gstRegex, specialChar } from "../../../constants/regex";
 const AddNewVendor=({setOpen})=>{
     const dispatch=useDispatch();
     const token=Cookies.get("token");
+  const [gstErrorMessage,setGstErrorMessage]=useState("")
   const [venderInput,setVenderInput]=useState({
           companyName: "",
           vendorName: "",
@@ -22,12 +24,29 @@ const AddNewVendor=({setOpen})=>{
         
   const vendorInputHandler=(e)=>{
        const {name,value}=e.target;
+       if(specialChar?.test(value)) return ;
+       if(name=="phoneNumber" && value?.length>10  ) return; 
+
+        if(name=="gst"){
+               if(value?.length>15) return ;
+                const gstValue = value.toUpperCase();
+             if (gstValue.length === 15 && !gstRegex.test(gstValue)) {
+              setGstErrorMessage("Wrong GST Number")
+              return;
+            }else{
+              setGstErrorMessage("");
+            }
+             
+           }
        setVenderInput({...venderInput,[name]:value})
   }
    const createVendorHandler=async()=>{
        if(!venderInput?.companyName || !venderInput?.gst || !venderInput?.companyName || !venderInput?.gst || !venderInput?.companyName ){
         return toast.error("Please fill all field")
        }
+       if(venderInput?.phoneNumber?.length!=10) return toast.error("Please enter valid phone number ")
+       if(!gstErrorMessage=="") return toast.error("Wrong Gst Number!");
+
       try {
         const data={...venderInput}
         const res=await dispatch(createVendorAsync({token,data})).unwrap();
@@ -42,9 +61,7 @@ const AddNewVendor=({setOpen})=>{
           gst: "",
           phoneNumber: ""
         });
-        }
-        console.log(res);
-        
+        }        
       } catch (err) {
         console.log(err);
         
@@ -76,7 +93,10 @@ const AddNewVendor=({setOpen})=>{
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"GST"}/>
-                     <CustomInput placeholder={"Enter GST Number"} name={"gst"} onchange={(e)=>{vendorInputHandler(e)}} value={venderInput?.gst}  className={"h-[46px]"}/>
+                     <CustomInput 
+                     
+                     placeholder={"Enter GST Number"} name={"gst"} onchange={(e)=>{vendorInputHandler(e)}} value={venderInput?.gst}  className={`h-[46px] ${!gstErrorMessage=="" && "!border-[1px] !border-[red]"}`}/>
+                     {gstErrorMessage && <CustomText className={"!text-[red] !text-[8px]"} value={gstErrorMessage}/>}
                     </div>
                     </Col>
                 </Row>
@@ -90,7 +110,7 @@ const AddNewVendor=({setOpen})=>{
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Phone Number"}/>
-                       <CustomInput placeholder={"Enter Phone Number"} name={"phoneNumber"} onchange={(e)=>{vendorInputHandler(e)}} value={venderInput?.phoneNumber}  className={"h-[46px]"}/>            
+                       <CustomInput type={"number"} placeholder={"Enter Phone Number"} name={"phoneNumber"} onchange={(e)=>{vendorInputHandler(e)}} value={venderInput?.phoneNumber}  className={"h-[46px]"}/>            
                       </div></Col>
                 </Row>
                  <Row gutter={[20,20]}>

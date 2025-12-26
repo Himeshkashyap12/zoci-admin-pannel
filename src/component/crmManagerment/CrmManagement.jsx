@@ -14,9 +14,7 @@ const CrmManagement=()=>{
       const navigate=useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {crmDashboard,isLoading}=useSelector(state=>state?.crm);
-            console.log(crmDashboard,"crmDashboard");
-    
+      const {crmDashboard,isLoading}=useSelector(state=>state?.crm);    
         const getcrmHandler=async()=>{
           try {
           const res=await dispatch(getCrmAsync({token})).unwrap();
@@ -24,7 +22,6 @@ const CrmManagement=()=>{
             console.log(error);
           }
         }
-
    const cardData=[
         {value:crmDashboard?.data?.anniversaryReminders,title:"Anniversary Reminders"},
         {value:crmDashboard?.data?.totalCustomers,title:"Total Costumers"},

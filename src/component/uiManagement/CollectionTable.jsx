@@ -4,7 +4,7 @@ import CustomText from "../common/CustomText";
 import SignatureUi from "./SignatureUi";
 import UiCollection from "./UiCollection";
 
-const CollectionTable=()=>{
+const CollectionTable=({setDeleteStatus,sentinelRef})=>{
     const [collectionId,setCollectionId]=useState("");
 
     const dataSource = [
@@ -26,7 +26,7 @@ const columns = [
     width:700,
     align:"start",
     justify:"start",
-    render:()=>{return <UiCollection collectionId={collectionId} setCollectionId={setCollectionId}/>}
+    render:()=>{return <UiCollection sentinelRef={sentinelRef} setDeleteStatus={setDeleteStatus} collectionId={collectionId} setCollectionId={setCollectionId}/>}
   },
   {
     title:  <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Signature"}/>,
@@ -41,8 +41,7 @@ const columns = [
 ];
     return(
         <>
-       
-       <CustomTable dataSource={dataSource} columns={columns}/>
+       <CustomTable  dataSource={dataSource} columns={columns}/>
         </>
     )
 }

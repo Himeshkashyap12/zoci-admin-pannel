@@ -14,7 +14,7 @@ const BestSellerFilter=({search,setSearch,setFilter,setSort,exportProductHandler
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput value={search} onchange={(e)=>{setSearch(e.target.value)}}  placeholder={"Search Your Products"} />
+                   <CustomInput search value={search} onchange={(e)=>{setSearch(e.target.value)}}  placeholder={"Search Your Products"} />
                    </div>
                  </Col>
                  

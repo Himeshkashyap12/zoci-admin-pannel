@@ -19,12 +19,14 @@ const initialState = {
 
 export const getSalesDashboardAsync = createAsyncThunk(
   "sales/salesDashboardAsync",
- async ({token}) => {
+ async ({token,data}) => {
         try {
       const res = await api.get(`/user/getSalesDashboard/all`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
+        },params:{
+          ...data
         }
       });
       return res?.data?.data; // No need for `await res.data`
@@ -246,7 +248,69 @@ export const createExpenseAsync = createAsyncThunk(
   }
 );
 
-
+export const onlinesalesExportInExcelAsync = createAsyncThunk(
+  "sales/onlineSalesExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/user/exportOnlineSalesCSV/all`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+        
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const makeToOrderSalesExportInExcelAsync = createAsyncThunk(
+  "sales/makeToOrderSalesExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/user/exportMakeToOrderCSV/all`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+        
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const offlineSalesExportInExcelAsync = createAsyncThunk(
+  "sales/offlineSalesExport",
+ async ({token,data}) => {
+        try {
+      const res = await api.get(`/offlineorder/offline-orders/export`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        params:{
+          ...data
+        },
+        responseType: "blob",
+        
+      });
+       return { blob: res.data, headers: res.headers };      
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 
 
@@ -391,6 +455,36 @@ export const salesSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         }); 
+          builder.addCase(onlinesalesExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(onlinesalesExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(onlinesalesExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        }); 
+           builder.addCase(makeToOrderSalesExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(makeToOrderSalesExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(makeToOrderSalesExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+           builder.addCase(offlineSalesExportInExcelAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(offlineSalesExportInExcelAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(offlineSalesExportInExcelAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
         
   },
 });

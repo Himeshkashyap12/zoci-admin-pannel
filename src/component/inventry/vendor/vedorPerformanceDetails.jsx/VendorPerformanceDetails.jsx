@@ -15,9 +15,7 @@ import VendorPerformanceDetailTable from "./VendorPerformanceDetailTable";
 import { useDebounce } from "../../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../../constants";
 const VendorPerformanceAnalysisDetails = () => {
-        const [selectedRowKeys,setSelectedRowKeys]=useState([]);
-        console.log(selectedRowKeys,"njbhvhbhbh");
-        
+        const [selectedRowKeys,setSelectedRowKeys]=useState([]);        
         const {id}=useParams();  
         const dispatch=useDispatch()
         const token=Cookies.get("token");
@@ -40,9 +38,7 @@ const VendorPerformanceAnalysisDetails = () => {
                 }
               try {
           if(search && !trimSearch) return;
-      const res=await dispatch(vendorPerformanceDetailsAnalysis({token,id,data})).unwrap();
-      console.log(res);
-      
+      const res=await dispatch(vendorPerformanceDetailsAnalysis({token,id,data})).unwrap();      
     } catch (error) {
       console.log(error);
     }

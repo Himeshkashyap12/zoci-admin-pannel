@@ -31,7 +31,7 @@ const BestSellerTable=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
       dataIndex: "images",
       key: "images",
       width: 200,
-      render: (text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
+      render: (_,text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
     },
       {
       title: (
@@ -102,7 +102,6 @@ const BestSellerTable=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
   ];
 
  const onSelectChange = productsId => {
-    console.log('selectedRowKeys changed: ', productsId);
     setSelectedRowKeys(productsId);
   };
  const rowSelection = {

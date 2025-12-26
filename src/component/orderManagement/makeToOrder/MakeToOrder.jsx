@@ -28,7 +28,7 @@ const MakeToOrder=()=>{
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
-                  ...((date?.length>0 && date[0]!='') && {startDate:[date[0]],endDate:date[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
 
                 }
           try {

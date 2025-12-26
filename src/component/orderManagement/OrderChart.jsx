@@ -61,10 +61,10 @@ const OnlineOrderChart = ({onlineOrders}) => {
     <div className="flex flex-col gap-[20px]">
     <div className="flex justify-between items-center">
        <CustomText className={"!text-[20px] text-[#0D141C] font-[500]"} value={"Online Orders"}/>
-       <CustomButton value={<div className="flex gap-2 items-center">
-        <Image preview={false} className="!size-[16px] object-cover"  src={calender}/>
+       {/* <CustomButton value={<div className="flex gap-2 items-center"> */}
+        {/* <Image preview={false} className="!size-[16px] object-cover"  src={calender}/> */}
         {/* <CustomText className={"!text-[#fff]"} value={"Last 7 days"}/> */}
-        </div>}/>
+        {/* </div>}/> */}
     </div>
       <div className="flex flex-col gap-4">
        <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={`+ ${onlineOrders?.percent}`}/>

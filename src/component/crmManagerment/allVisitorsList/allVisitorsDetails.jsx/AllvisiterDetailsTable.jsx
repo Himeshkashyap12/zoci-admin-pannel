@@ -81,16 +81,6 @@ const AllVisitorsDetailsTable=({item,setPage})=>{
     render: (price) => <CustomText value={`Rs. ${price}`} />
   },
 ];
-
-
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
 if(isLoading) return <Loader/>
 
     return(

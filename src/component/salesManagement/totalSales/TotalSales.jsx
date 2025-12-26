@@ -14,12 +14,12 @@ import { useDebounce } from "../../../hooks/UseDebounce";
 const TotalSales = () => {
   const navigate = useNavigate();
      const token=Cookies.get("token"); 
+      const [date,setDate]=useState([]); 
        const [search,setSearch]=useState("");
              const debounce=useDebounce(search,500);
              const [filter,setFilter]=useState([])
              const [sort,setSort]=useState([]) 
       const [page,setPage]=useState(1)
-
       const dispatch=useDispatch();
       const {totalSales,isLoading}=useSelector(state=>state?.sales);
             
@@ -31,6 +31,7 @@ const TotalSales = () => {
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
 
                 }
               try {
@@ -57,7 +58,7 @@ const TotalSales = () => {
             ]
             useEffect(()=>{
               getTotalSalesHandler();
-            },[debounce,page,filter,sort])
+            },[debounce,page,filter,sort,date])
    return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -91,7 +92,7 @@ const TotalSales = () => {
         </Row>
       </div>
       <div>
-        <ToTalSalesFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
+        <ToTalSalesFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
       </div>
       <div>
         <TotalSalesTable page={page} setPage={setPage}  totalSales={totalSales}/>

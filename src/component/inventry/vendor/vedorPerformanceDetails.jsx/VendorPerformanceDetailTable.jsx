@@ -34,10 +34,7 @@ const VendorPerformanceDetailTable=({setSelectedRowKeys,selectedRowKeys,id,page,
       const res=await dispatch(deleteProductAsync({token,id:deleteId})).unwrap();
       if(res?.success){
        dispatch(vendorPerformanceDetailsAnalysis({token,id}))
-      }
-      debugger
-      console.log(res);
-      
+      }      
       if(res.success){
         toast.success(res?.message);
         setDeleteConfirm(false)
