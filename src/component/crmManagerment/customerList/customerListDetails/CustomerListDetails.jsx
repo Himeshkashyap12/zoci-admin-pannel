@@ -19,15 +19,11 @@ const CustomerListDetails = () => {
   const dispatch=useDispatch()
   const token=Cookies.get("token");
   const {wishListAndBag,isLoading}=useSelector(state=>state?.crm);
-  console.log(wishListAndBag,"customerDetails");
   const navigate = useNavigate();
-  console.log(wishListAndBag);
   
   const getCustomerDetails=async()=>{
     try {
-      const res=await dispatch(customerWishListAndBagAsync({token,id})).unwrap();
-      console.log(res);
-      
+      const res=await dispatch(customerWishListAndBagAsync({token,id})).unwrap();      
     } catch (error) {
       
     }
@@ -37,7 +33,6 @@ const CustomerListDetails = () => {
     getCustomerDetails();
   },[])
   
- console.log(customerDetails,"customerDetails");
   return (
     <div className="flex flex-col gap-10 p-[24px]">
       <div className="flex gap-2 items-center">

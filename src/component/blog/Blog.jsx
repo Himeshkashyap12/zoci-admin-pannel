@@ -2,7 +2,7 @@
 import CustomText from "../common/CustomText";
 import BlogFilter from "./BlogFilter";
 import BlogCard from "./BlogCard";
-import { Col, Row } from "antd";
+import { Col, Empty, Row } from "antd";
 import Cookies from "js-cookie"
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
@@ -59,7 +59,7 @@ const Blog = () => {
       </div>
       <div>
        <Row gutter={[20,20]}>
-            {blog?.map((item)=>{
+            {blog?.length==0 ?<div className="flex justify-center w-full"><Empty/></div>:blog?.map((item)=>{
                 return(
                     <>
                     <Col xxl={6} xl={8} md={8} sm={12} xs={24}>

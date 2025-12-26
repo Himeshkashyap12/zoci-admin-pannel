@@ -12,9 +12,7 @@ const MarketingTools=()=>{
     const navigate=useNavigate();
     const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {marketingDashboard,isLoading}=useSelector(state=>state?.marketing);
-            console.log(marketingDashboard,"jbhvhb");
-            
+      const {marketingDashboard,isLoading}=useSelector(state=>state?.marketing);     
         const getMarketingdashboard=async()=>{
           try {
           const res=await dispatch(getMarketingDashboardAsync({token})).unwrap();
@@ -24,8 +22,7 @@ const MarketingTools=()=>{
         }
         useEffect(()=>{
         getMarketingdashboard();
-        },[])
-
+        },[]);
      const dashboardData = [
             {
               title: "Active Promotions",
@@ -39,11 +36,8 @@ const MarketingTools=()=>{
               title: "Current Month Usage",
               value: marketingDashboard?.summary?.[0]?.currentMonthRedemptionCount,
             }
-  
-];
-if(isLoading) return <Loader/>
-console.log(marketingDashboard);
-
+  ];
+if(isLoading) return <Loader/>;
     return(
         <div className="flex flex-col gap-5 p-5">
           <Row gutter={[20,20]}>

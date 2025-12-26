@@ -16,6 +16,7 @@ const TotalExpenditure = () => {
         const [page,setPage]=useState(1);
         const [search,setSearch]=useState("");
         const debounce=useDebounce(search,500);
+        const [date,setDate]=useState([]); 
         const [filter,setFilter]=useState([])
         const [sort,setSort]=useState([])
         const navigate = useNavigate();
@@ -30,6 +31,8 @@ const TotalExpenditure = () => {
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} )
+
 
                 }
                 if(search && !trimSearch) return;
@@ -56,7 +59,7 @@ const TotalExpenditure = () => {
 
                useEffect(()=>{
                 totalExpenditureHandler();
-              },[debounce,filter,sort]);
+              },[debounce,filter,sort,date]);
 
   return (
     <div className="flex flex-col gap-5 p-[24px]">
@@ -91,7 +94,7 @@ const TotalExpenditure = () => {
         </Row>
       </div>
       <div>
-        <TotalExpenditureFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+        <TotalExpenditureFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
       </div>
       <div>
         <TotalExpenditureTable item={totalExpenditure} setPage={setPage} page={page} />

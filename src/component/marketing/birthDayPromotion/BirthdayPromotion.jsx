@@ -14,6 +14,7 @@ import { getAllAnniversaryAsync, getAllBirthdayPromotion } from "../../../featur
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { anniversaryPromotionHandler, birthdayPromotionHandler } from "../exportMarketing";
 const BirthdayPromotion=()=>{
           const [birthdayPromotion,setBirthdayPromotion]=useState(false);
           const [selectedRowKeys,setSelectedRowKeys]=useState([]);
@@ -23,12 +24,14 @@ const BirthdayPromotion=()=>{
           const debouncedText=useDebounce(search,500) ;
           const [page,setPage]=useState(1)
           const token=Cookies.get("token");  
+          const [filter,setFilter]=useState([])
           const dispatch=useDispatch();     
             const getBirthdayPromotion=async()=>{
               const trimSearch=search.trim();
                 const data={
                     ...(trimSearch && { search:trimSearch }),
                     ...(activeSort?.length>0 && {[activeSort[0]]:activeSort[1]}),
+                    ...(filter?.length>0 && { [filter[0]]:filter[1] }),
                     page:page,
                     limit:10
                 }
@@ -47,6 +50,7 @@ const BirthdayPromotion=()=>{
                         const data={
                             ...(trimSearch && { search:trimSearch }),
                             ...(activeSort?.length>0 && { [activeSort[0]]:activeSort[1] }),
+                            ...(filter?.length>0 && { [filter[0]]:filter[1] }),
                             page:page,
                             limit:10
                         }
@@ -60,6 +64,22 @@ const BirthdayPromotion=()=>{
                         console.log(error);
                       }
                     }
+
+
+                     const exportOrderHandler = async () => {
+                               const trimSearch=search.trim();
+                                const data={
+                                    ...(trimSearch && { search:trimSearch }),
+                                    ...(filter?.length>0 && { [filter[0]]:filter[1] }),
+                                      page:1,
+                                      limit:10
+                                    }
+                                    if(birthdayPromotion){
+                                     birthdayPromotionHandler({dispatch,token,data})
+                                    }else{
+                                     anniversaryPromotionHandler({dispatch,token,data})
+                                    }
+                             };
               useEffect(()=>{
                 if(birthdayPromotion){
                 getBirthdayPromotion();
@@ -68,7 +88,7 @@ const BirthdayPromotion=()=>{
                 getAnniversayPromotion();
 
                 }
-        },[birthdayPromotion,debouncedText,activeSort])
+        },[birthdayPromotion,debouncedText,activeSort,filter])
     return(
         <div className="flex flex-col gap-5 p-[24px]">
             <div className="flex gap-2 items-center">
@@ -78,7 +98,7 @@ const BirthdayPromotion=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Marketing Tools →  Birthday / Anniversary Banners"}/>
             </div>
             <div>
-                <BirthdayPromotionFilter  search={search} setSort={setSort} setSearch={setSearch}/>
+                <BirthdayPromotionFilter  exportOrderHandler={exportOrderHandler} setFilter={setFilter} search={search} setSort={setSort} setSearch={setSearch}/>
             </div>
              <div>
                 <BirthdayPromotionButton birthdayPromotion={birthdayPromotion}  setBirthdayPromotion={setBirthdayPromotion}/>

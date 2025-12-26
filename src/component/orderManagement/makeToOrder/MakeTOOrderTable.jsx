@@ -10,6 +10,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import CustomSelect from "../../common/CustomSelect";
 import Loader from "../../loader/Loader";
 import CustomPagination from "../../common/CustomPagination";
+import { isoToIST } from "../../../constants/constants";
 const MakeToOrderTablePage=({setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {makeToOrder,isLoading}=useSelector(state=>state?.order);
@@ -152,7 +153,15 @@ const MakeToOrderTablePage=({setPage,page})=>{
                      
                      `}
                     value={text?.orderStatus}/> )
-              }
+              },
+               {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Date"}/>),
+                dataIndex: "items",
+                key: "items",
+                width: 250,
+                align: "center",
+                render: (_,text) => <CustomText value={` ${isoToIST(text.createdAt)}`}/>
+              },
             ];
           const onSelectChange = newSelectedRowKeys => {
               console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -165,7 +174,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
             if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable scroll={{x:2500}} rowSelection={rowSelection}  dataSource={makeToOrder?.data} columns={columns}/>
+              <CustomTable scroll={{x:2500}}  dataSource={makeToOrder?.data} columns={columns}/>
               <CustomPagination pageNumber={page} total={makeToOrder?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

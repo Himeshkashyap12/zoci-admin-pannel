@@ -8,6 +8,7 @@ import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
 import { Image } from "antd";
 import CustomPagination from "../../common/CustomPagination";
 import Loader from "../../loader/Loader";
+import { isoToIST } from "../../../constants/constants";
 const TotalSalesTable=({totalSales,page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {isLoading}=useSelector(state=>state?.sales)
@@ -88,6 +89,14 @@ const TotalSalesTable=({totalSales,page,setPage})=>{
                                 align:"center",
                                 width: 150,
                                 render: (text) => <CustomText value={`Rs. ${text}`} />,
+                              },
+                              {
+                                title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Date" />,
+                                dataIndex: "createdAt",
+                                key: "createdAt",
+                                align:"center",
+                                width: 150,
+                                render: (_,text) => <CustomText value={`${isoToIST(text?.createdAt)}`} />,
                               },
 
                              

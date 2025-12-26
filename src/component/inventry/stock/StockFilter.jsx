@@ -14,7 +14,7 @@ const StockFilter=({setSearch,setFilter,setSort,search,stockAlerstStatus,exportP
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Products"} />
+                   <CustomInput search value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Products"} />
                    </div>
                  </Col>
                  

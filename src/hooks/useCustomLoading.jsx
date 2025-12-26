@@ -11,18 +11,14 @@ const useInfiniteScrollObserver = (onLoadMore, options = {}) => {
     if (!enabled) return;
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        console.log(entry);
-        
+      entries.forEach((entry) => {        
         if (entry.isIntersecting) {
           onLoadMore();
         }
       });
     }, { root, rootMargin, threshold });
 
-    observerRef.current = observer;
-    console.log(observer);
-    
+    observerRef.current = observer;    
     const currentSentinel = sentinelRef.current;
     if (currentSentinel) observer.observe(currentSentinel);
 

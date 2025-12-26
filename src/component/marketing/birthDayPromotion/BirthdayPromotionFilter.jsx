@@ -6,14 +6,14 @@ import CustomText from "../../common/CustomText";
 import CustomButton from "../../common/CustomButton";
 import CustomInput from "../../common/CustomInput";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
-import { birthdaySort } from "./birdthDayData";
-const BirthdayPromotionFilter=({setSearch,search,setSort})=>{
+import { birthdayFilter, birthdaySort } from "./birdthDayData";
+const BirthdayPromotionFilter=({setSearch,search,setSort,setFilter,exportOrderHandler})=>{
     return(
         <div className="marketing">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput value={search} onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Customer"} />
+                   <CustomInput search value={search} onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Customer"} />
                    </div>
                  </Col>
                  
@@ -23,14 +23,18 @@ const BirthdayPromotionFilter=({setSearch,search,setSort})=>{
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
                     <CustomMultipleFilter  placeholder={"Sort"}    onchange={(value)=>{setSort(value)}} option={birthdaySort}/>
+                  </div>}/>
+                   <CustomButton value={<div className="flex items-center gap-2">
+                    <Image preview={false} className="!size-[20px]" src={sort}/>
+                    <CustomMultipleFilter  placeholder={"Filter"}    onchange={(value)=>{setFilter(value)}} option={birthdayFilter}/>
 
                   </div>}/>
                   
                   
-                  {/* <CustomButton value={<div className="flex items-center gap-2">
+                  <CustomButton onclick={exportOrderHandler}  value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={exports}/>
                     <CustomText className={"!text-[#fff]"} value={"Export in Excel"}/>
-                  </div>}/> */}
+                  </div>}/>
                   </div>
               </Col>
             </Row>

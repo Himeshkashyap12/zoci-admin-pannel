@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Image } from "antd";
 import Loader from "../../loader/Loader";
 import CustomPagination from "../../common/CustomPagination";
+import { isoToIST } from "../../../constants/constants";
 const OfflineSalesTable=({page,setPage})=>{
      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
@@ -103,6 +104,21 @@ const OfflineSalesTable=({page,setPage})=>{
                 width: 250,
                 align: "center",
                 render: (text) => <CustomText value={`Rs. ${text}`}/>
+              },
+                {
+                    title: (
+                      <CustomText
+                        className="!text-[14px] !text-[#fff] font-semibold"
+                        value="Date"
+                      />
+                    ),
+                    dataIndex: "createdAt",
+                    key: "createdAt",
+                    align: "center",
+                    width: 300,
+                    render: (_, text) => (
+                      <CustomText value={`${isoToIST(text?.createdAt)}`} />
+                    ),
               },
               
 

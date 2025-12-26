@@ -16,10 +16,9 @@ const EssanceVideo=()=>{
     const [essanceModel,setEssanceModel]=useState(false);
        const [videoLoading,setVideoLoading]=useState(false); 
      const [deleteId,setDeleteId]=useState(null);
-     const [deleted,setDeleted]=useState(false);
     const dispatch=useDispatch();
     const token=Cookies.get("token");
-    const [editData,setEditData]=useState({})
+    const [editData,setEditData]=useState(null)
     const [edit,setEdit]=useState(false)
     const {homeVideos,isLoading} =useSelector(state=>state?.ui);
     const essanceVideo=homeVideos?.data?.filter(item=>item?.title!="BannerVideo")
@@ -43,7 +42,6 @@ const EssanceVideo=()=>{
                 toast.success("Essance Video deleted succefully");
                 getEssanceVideos();
                 setEssanceModel(false)
-                 setDeleted(false)
                
            } catch (error) {
                console.log(error);
@@ -52,11 +50,12 @@ const EssanceVideo=()=>{
        }
    
        const deleteHandler=(id)=>{
+       setEditData(null)
        setEssanceModel(true);
-       setDeleted(true)
-       setDeleteId(id)
+       setDeleteId(id);
        }
    const editHandler=(item)=>{
+    setDeleteId(null)
      setEditData(item);
      setEssanceModel(true);
      setEdit(true)
@@ -72,12 +71,10 @@ const EssanceVideo=()=>{
             <CustomText className={"!text-[#214344] font-[400] !text-[20px]"} value={"Essance Videos"}/>
             <div>
                 <Row>
-                    <Col span={4}>
-            <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setEssanceModel(true)}}>
-               <PlusOutlined style={{color:"#214344",fontSize:"30px",font:"bold"}} />
-            </div>
-
-             
+            <Col span={4}>
+                <div className="flex justify-center items-center h-[150px] w-[150px]  rounded-full bg-[#fff]" onClick={()=>{setEssanceModel(true),setDeleteId(null),setEditData(null),setEdit(false)}}>
+                <PlusOutlined style={{color:"#214344",fontSize:"30px",font:"bold"}} />
+                </div>
               </Col>
               {essanceVideo?.map((item)=>{
                 return(
@@ -114,7 +111,7 @@ const EssanceVideo=()=>{
               }
               </Row>
             </div>
-            <CustomModal closeIcon  footer={false} setOpen={setEssanceModel} open={essanceModel} modalBody={deleted?<ConfirmationPopup setDeleted={setDeleted} setDeleteConfirm={setEssanceModel} confirmationPopUpHandler={deleteEssanceHandler}/>:<AddVideoModel edit={edit} setEdit={setEdit} setDeleted={setDeleted} setDeleteId={setDeleteId} essance={true} bannerVideo={[editData]}   setOpen={setEssanceModel} open={essanceModel} editData={editData}/> } width={"800px"}  align={"center"}/>
+            <CustomModal closeIcon  footer={false} setOpen={setEssanceModel} open={essanceModel} modalBody={deleteId?<ConfirmationPopup  setDeleteConfirm={setEssanceModel} confirmationPopUpHandler={deleteEssanceHandler}/>:<AddVideoModel edit={edit} setEdit={setEdit}  setDeleteId={setDeleteId} essance={true} bannerVideo={[editData]}   setOpen={setEssanceModel} open={essanceModel} editData={editData}/> } width={"800px"}  align={"center"}/>
 
 
         </div>

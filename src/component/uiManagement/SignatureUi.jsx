@@ -4,7 +4,7 @@ import deleteIcon from "../../assets/icons/deleteIcon.png"
 import {useDispatch, useSelector} from "react-redux";
 import { Image } from "antd";
 import Cookies from "js-cookie"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {  deleteItemToCollectionAsync, getSignatureAsync } from "../../feature/uiManagement/UiManagementSlice";
 import ImageLoader from "../loader/ImageLoader";
 import CustomModal from "../common/CustomModal";
@@ -12,19 +12,21 @@ import AddNewSignature from "./AddNewSignature";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ConfirmationPopup from "../common/ConfirmationPopup";
+import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 const SignatureUi=({collectionId})=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
     const token=Cookies.get("token")
     const [signatureModel,setSignatureModel]=useState(false)
-    const [deleteId,setDeleteId]=useState("")
-    const {signatureItem ,isLoading}=useSelector(state=>state?.ui);
+    const [deleteId,setDeleteId]=useState("");
+   
+
+    const {signatureItem ,isCollectionItemLoading ,isLoading}=useSelector(state=>state?.ui);
     
     const getCollectionById=async()=>{
         try {
-            const res=await dispatch(getSignatureAsync({token,id:collectionId}))
-            console.log(res);
-            
+            const res=await dispatch(getSignatureAsync({token,id:collectionId})).unwrap();
+           
         } catch (error) {
             console.log(error);
             
@@ -61,9 +63,14 @@ const SignatureUi=({collectionId})=>{
     }
 
     useEffect(()=>{
-     getCollectionById();
+        if(collectionId){
+          getCollectionById();
+        }
     },[collectionId])
-    if(isLoading) return <ImageLoader/>
+
+
+
+    if(isCollectionItemLoading  || isLoading) return <ImageLoader/>
     return(
         <>
        <div className="bg-[#EFE6DC] ">
@@ -105,6 +112,7 @@ const SignatureUi=({collectionId})=>{
 
            </div>
         </div>
+
 
         </div>
             <CustomModal closeIcon  footer={false} setOpen={setSignatureModel} open={signatureModel} modalBody={deleteId?<ConfirmationPopup setDeleteId={setDeleteId} setDeleteConfirm={setSignatureModel} confirmationPopUpHandler={deleteItemToCollectionHandler}/>:<AddNewSignature setSignatureModel={setSignatureModel} collectionId={collectionId} />} width={"700px"}  align={"center"}/>

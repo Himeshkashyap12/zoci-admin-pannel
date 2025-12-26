@@ -13,10 +13,12 @@ import { getOnlineSalesList } from "../../../feature/sales/salesSlice";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie"
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { onlineSalesExport } from "../constants";
 const OnlineSaleList = () => {
       const navigate = useNavigate();
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
+      const [date,setDate]=useState([]); 
        const [page,setPage]=useState(1);
        const [search,setSearch]=useState("");
        const debounce=useDebounce(search,500);
@@ -32,6 +34,8 @@ const OnlineSaleList = () => {
             ...(search && {search:trimSearch} ),
             ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
             ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+           ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
+
 
           }
 
@@ -42,9 +46,21 @@ const OnlineSaleList = () => {
             console.log(error);
           }
         }
+
+    
+           const exportOnlineSales = async () => {
+                   const data={
+                     ...(search && {search:trimSearch} ),
+                            ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                      ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                          ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
+
+                    }
+                             onlineSalesExport({dispatch,token,data})
+           };
         useEffect(()=>{
         getOnlineSalesListHandler();
-        },[page,filter,sort,debounce])
+        },[page,filter,sort,debounce,date])
  
   return (
     <div className="flex flex-col gap-5 p-[24px]">
@@ -67,7 +83,7 @@ const OnlineSaleList = () => {
       </div>
      
       <div>
-        <OnlineSalesFilter setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
+        <OnlineSalesFilter exportOnlineSales={exportOnlineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
       </div>
       <div>
         <OnlineSalesTable onlineSales={onlineSales} page={page} setPage={setPage} />

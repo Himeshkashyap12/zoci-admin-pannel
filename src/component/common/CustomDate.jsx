@@ -3,7 +3,10 @@ import { DatePicker, Space } from 'antd';
 const CustomDate=({onchange,className})=>{
     return(
         <>
-        <DatePicker className={`${className}`} onChange={onchange} />
+        <DatePicker  disabledDate={(current) => {
+                      return current && current > new Date().setHours(0, 0, 0, 0);
+                    }} 
+                     className={`${className}`} onChange={onchange} />
         </>
     )
 }

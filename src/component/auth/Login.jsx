@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import Loader from "../loader/Loader";
 import CustomInput from "../common/CustomInput";
 import CustomText from "../common/CustomText";
+import { specialChar } from "../../constants/regex";
 const Login = ({ setSingnin }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,9 +18,8 @@ const Login = ({ setSingnin }) => {
   });
 const {isLoading}=useSelector(state=>state?.auth);
   const inputHandler = (e) => {
-      if(e.target.name==="mobile" && isNaN(e.target.value)){
-        return;
-      }
+    const {name,value}=e.target;
+           if(name=="mobile" && value?.length>10  || specialChar?.test(value) ) return; 
     setInput((prevInput) => ({
       ...prevInput,
       [e.target.name]: e.target.value,
@@ -35,7 +35,6 @@ const {isLoading}=useSelector(state=>state?.auth);
           navigate("/admin/inventary");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
      
 

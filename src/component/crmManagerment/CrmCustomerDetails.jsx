@@ -5,11 +5,7 @@ import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
 import { isoToDDMMYYYY, isoToIST, isoToISTTime } from "../../constants/constants";
 const CrmCustomerDetails=({item,visitors})=>{
-    const {isLoading} =useSelector(state=>state?.crm)
-console.log(item);
-
-
-
+    const {isLoading} =useSelector(state=>state?.crm);
      if(isLoading) return <Loader/>
 
     return(

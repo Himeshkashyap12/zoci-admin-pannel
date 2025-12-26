@@ -1,6 +1,6 @@
 
 
-import { Col, Empty, Row } from "antd";
+import { Col, Empty, Row, Skeleton } from "antd";
 import CustomText from "../common/CustomText";
 import ProductSalesChart from "./ProductSalesChart";
 import MonthlySalesChart from "./MonthLySalesChart";
@@ -16,38 +16,73 @@ import Cookies from "js-cookie"
 import { useDispatch, useSelector } from "react-redux";
 import { getSalesDashboardAsync, getSalesTimeAsync } from "../../feature/sales/salesSlice";
 import Loader from "../loader/Loader";
+import dayjs from "dayjs";
+import { DotChartOutlined } from "@ant-design/icons";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
+  const [salesDateOptionValue,setSalesDateOptionValue]=useState({});
+  const [salesChartValue,setSalesChartValue]=useState("");
+  console.log(salesDateOptionValue,"kbdsfh");
+  
   const navigate=useNavigate();
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
   const {slaesDashboard,isLoading,isDashboardLoading}=useSelector(state=>state?.sales);
-            console.log(slaesDashboard,"lmknjn");
-            
+
+   const handleSalesReport=(e)=>{
+    setSalesChartValue(e)
+    const endDate = dayjs(); // today
+  let startDate = dayjs();
+
+  if (e === "oneYear") {
+    startDate = endDate.subtract(1, "year");
+  }
+  if (e === "oneMonth") {
+    startDate = endDate.subtract(1, "month");
+  }
+
+  if (e === "sixMonth") {
+    startDate = endDate.subtract(6, "month");
+  }
+
+  if (e === "threeMonth") {
+    startDate = endDate.subtract(3, "month");
+  }
+
+  const payload = {
+    startDate: startDate.format("YYYY-MM-DD"),
+    endDate: endDate.format("YYYY-MM-DD")
+  };
+  setSalesDateOptionValue(payload)
+
+    
+
+  }
         const getSalesDashboard=async()=>{
           try {
-          const res=await dispatch(getSalesDashboardAsync({token})).unwrap();
+            const data={...salesDateOptionValue}
+          const res=await dispatch(getSalesDashboardAsync({token,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
         }
-       
- const getSalesRevenue=async()=>{
-    try {
-      const res=await dispatch(getSalesTimeAsync({token}))
-      console.log(res);
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
+        const getSalesRevenue=async()=>{
+            try {
+              const res=await dispatch(getSalesTimeAsync({token}))
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
 
         useEffect(()=>{
         getSalesDashboard();
 
-        getSalesRevenue();
-        },[])
+     
+        },[salesDateOptionValue]);
+        useEffect(()=>{
+               getSalesRevenue()
+          },[])
         if(isLoading) return <Loader/>
 
         const dashboardData = [
@@ -94,19 +129,20 @@ const SalesReport=()=>{
       }
     ];
 
-if(isLoading | isDashboardLoading) return <Loader/>
+if(isLoading ) return <Loader/>
     return(
        <div className="flex flex-col gap-5 p-5">
         <CustomText value={"Sales Reports"}/>
            <Row gutter={[20,20]}>
             <Col span={12}>
             <div className="w-auto">
-                <MonthlySalesChart  item={slaesDashboard?.monthlySales}/>
+                {/* {isDashboardLoading?<Skeleton.Node active style={{ width: 680,height:430 }} /> */}
+<MonthlySalesChart salesChartValue={salesChartValue} handleSalesReport={handleSalesReport}  item={slaesDashboard?.monthlySales}/>
           </div>
             </Col>
             <Col span={12}>
             <div className="w-auto">
-          <ProductSalesChart  item={slaesDashboard?.productSoldByCategory} />
+          <ProductSalesChart salesChartValue={salesChartValue} handleSalesReport={handleSalesReport}  item={slaesDashboard?.productSoldByCategory} />
           </div>
             </Col>
           </Row>
@@ -134,7 +170,7 @@ if(isLoading | isDashboardLoading) return <Loader/>
           </Row>
           <Row>
             <Col span={24}>
-           <EventSales item={slaesDashboard?.events}/>
+          {slaesDashboard?.events?.length>0 &&  <EventSales item={slaesDashboard?.events}/>}
              </Col>
           </Row>
          <div className="flex justify-between">

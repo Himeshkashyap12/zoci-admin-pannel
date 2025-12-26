@@ -7,6 +7,8 @@ const initialState = {
   menCategory:[],
   womenCategory:[],
   homeVideos:[],
+  isCollectionLoading:false,
+  isCollectionItemLoading:false,
   isLoading: false,
   error: null,
 };
@@ -125,7 +127,6 @@ export const createCollectionAsync = createAsyncThunk(
 export const getCollectionAsync = createAsyncThunk(
   "collection/getCollection",
  async ({token,data}) => {
-  
         try {
       const res = await api.get(`/ui/collections`,{
         headers: {
@@ -162,7 +163,6 @@ export const getSignatureAsync = createAsyncThunk(
 export const addItemToCollectionAsync = createAsyncThunk(
   "collection/addItemToAsync",
  async ({token,id,data}) => {
-  console.log(id);
   
         try {
       const res = await api.post(`ui/collections/${id}/items`,data,{
@@ -184,6 +184,24 @@ export const deleteItemToCollectionAsync = createAsyncThunk(
   
         try {
       const res = await api.delete(`ui/collections/${collectionId}/items/${ItemId}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const deleteCollectionAsync = createAsyncThunk(
+  "collection/deleteColection",
+ async ({token,collectionId}) => {
+  
+        try {
+      const res = await api.delete(`/ui/collections/${collectionId}`,{
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
@@ -305,6 +323,10 @@ export const editCategoryAsync = createAsyncThunk(
 );
 
 
+
+
+
+
 export const categorySlice = createSlice({
   name: "category",
   initialState,
@@ -337,27 +359,26 @@ export const categorySlice = createSlice({
           state.error = action;
         });
         builder.addCase(getCollectionAsync.pending, (state) => {
-          state.isLoading = true;
+          state.isCollectionLoading = true;
         });
         builder.addCase(getCollectionAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;
-          console.log(action.payload);
+          state.isCollectionLoading = false;
           
           state.collection=[...state.collection,...action.payload?.collections]
         });
         builder.addCase(getCollectionAsync.rejected, (state, action) => {
-          state.isLoading = false;
+          state.isCollectionLoading = false;
           state.error = action;
         });
         builder.addCase(getSignatureAsync.pending, (state) => {
-          state.isLoading = true;
+          state.isCollectionItemLoading = true;
         });
         builder.addCase(getSignatureAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;
+          state.isCollectionItemLoading = false;
           state.signatureItem=action.payload
         });
         builder.addCase(getSignatureAsync.rejected, (state, action) => {
-          state.isLoading = false;
+          state.isCollectionItemLoading = false;
           state.error = action;
         });
         builder.addCase(addItemToCollectionAsync.pending, (state) => {
@@ -488,15 +509,16 @@ export const categorySlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
-        
-        
-        
-        
-        
-        
-        
-        
-        
+         builder.addCase(deleteCollectionAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(deleteCollectionAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(deleteCollectionAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        }); 
   },
 });
 

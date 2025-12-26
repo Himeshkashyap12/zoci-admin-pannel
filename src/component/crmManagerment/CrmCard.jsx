@@ -2,9 +2,7 @@
 import { Card } from "antd";
 import CustomText from "../common/CustomText";
 
-const CrmCard=({item})=>{
-    console.log(item);
-    
+const CrmCard=({item})=>{    
     return(
         <>
         <Card >

@@ -9,22 +9,11 @@ import Loader from "../../loader/Loader";
 import {CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import {toast} from "react-toastify";
 import CustomPagination from "../../common/CustomPagination";
-const CustomerListTable=()=>{
+const CustomerListTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const [page,setPage]=useState(1)
       const {customerList,isLoading}=useSelector(state=>state?.crm);
-
-        const getAllCustomerListHandler=async()=>{
-          try {
-            const data={page:page,limit:10}
-          const res=await dispatch(getAllCustomerList({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
+      const navigate=useNavigate();
+      
 
          const copyTextHandler=async(text)=>{
           try {
@@ -35,10 +24,7 @@ const CustomerListTable=()=>{
             }
           
         }
-         useEffect(()=>{
-                getAllCustomerListHandler();
-                },[page])
-               
+      
                 
       const columns = [
          {
@@ -118,14 +104,6 @@ const CustomerListTable=()=>{
       render: (text) => <CustomText value={`Rs. ${text}`}/>
     }
   ];
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
    if(isLoading) return <Loader/>
     return(
         <>

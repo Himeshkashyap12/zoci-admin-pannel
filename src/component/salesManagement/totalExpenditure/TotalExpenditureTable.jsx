@@ -58,15 +58,7 @@ const TotalExpenditureTable=({item,setPage ,page})=>{
 
  
 
-  {
-    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Date" />,
-    dataIndex: "date",
-    key: "date",
-    width: 150,
-    render: (text) => (
-      <CustomText value={isoToIST(text)} />
-    ),
-  },
+ 
 
   {
     title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Total Amount" />,
@@ -74,6 +66,15 @@ const TotalExpenditureTable=({item,setPage ,page})=>{
     key: "totalAmount",
     width: 150,
     render: (text) => <CustomText value={`Rs. ${text.toLocaleString()}`} />,
+  },
+   {
+    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Date" />,
+    dataIndex: "date",
+    key: "date",
+    width: 150,
+    render: (text) => (
+      <CustomText value={isoToIST(text)} />
+    ),
   },
 
   

@@ -21,7 +21,7 @@ const   VendorPerformanceFilter=({setSort,setFilter,setSearch,search,exportProdu
                  <div className="flex  gap-20 items-center">
                    
                    <div >
-                   <CustomInput onchange={(e)=>{setSearch(e.target.value)}}  className={"!w-[350px]"} search={search} placeholder={"Search Vendor Products"} />
+                   <CustomInput search onchange={(e)=>{setSearch(e.target.value)}}  className={"!w-[350px]"}  placeholder={"Search Vendor Products"} />
                    </div>
                    </div>
                  </Col>

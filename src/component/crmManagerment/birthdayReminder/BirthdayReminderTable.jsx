@@ -10,14 +10,10 @@ import { CopyOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import Loader from "../../loader/Loader";
 import CustomPagination from "../../common/CustomPagination";
-const BirthdayReminderTable=()=>{
+const BirthdayReminderTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-       const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const [page,setPage]=useState(1)
       const {birthdayAnniversaryReminder,isLoading}=useSelector(state=>state?.crm);
-      console.log(birthdayAnniversaryReminder,"hvhv");
+     
       
  const copyTextHandler=async(text)=>{
           try {
@@ -28,19 +24,7 @@ const BirthdayReminderTable=()=>{
             }
           
         }
-        const getCrmBirthdayReminderHandler=async()=>{
-          try {
-            const data={type:"birthday",limit:10,page:page}
-          const res=await dispatch(getBirthdayAnniversaryReminderAsync({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-
-        
-         useEffect(()=>{
-                getCrmBirthdayReminderHandler();
-                },[page])
+       
                
      const columns = [
          {
@@ -93,15 +77,6 @@ const BirthdayReminderTable=()=>{
     }
    
   ];
-
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
   if(isLoading) return <Loader/>
     return(
         <>

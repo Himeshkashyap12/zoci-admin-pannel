@@ -4,9 +4,13 @@ import CustomText from "../../common/CustomText";
 import { useNavigate } from "react-router-dom";
 import { isoToIST } from "../../../constants/constants";
 import CustomPagination from "../../common/CustomPagination";
+import Loader from "../../loader/Loader";
+import { useSelector } from "react-redux";
 
 const NetProfitTable=({item,setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+      const {  isLoading } = useSelector((state) => state?.sales);
+
       const navigate=useNavigate();
    const columns = [
   {
@@ -24,17 +28,6 @@ const NetProfitTable=({item,setPage,page})=>{
     key: "description",
     width: 250, 
     render: (text) => <CustomText value={text} />,
-  },
-
-  {
-    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Date" />,
-    dataIndex: "date",
-    key: "date",
-    width: 150,
-    align:"center",
-    render: (text) => (
-      <CustomText value={isoToIST(text)} />
-    ),
   },
 
   {
@@ -85,6 +78,17 @@ const NetProfitTable=({item,setPage,page})=>{
       <CustomText value={`Rs. ${value}`} />
     ),
   },
+    {
+    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Date" />,
+    dataIndex: "date",
+    key: "date",
+    width: 150,
+    align:"center",
+    render: (text) => (
+      <CustomText value={isoToIST(text)} />
+    ),
+  },
+   
 ];
 
 const data = [
@@ -103,6 +107,8 @@ const data = [
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  if (isLoading) return <Loader />;
+
     return(
         <>
               <CustomTable  dataSource={item?.data} columns={columns}/>

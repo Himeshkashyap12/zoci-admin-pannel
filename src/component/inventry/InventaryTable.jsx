@@ -21,22 +21,14 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   const dispatch=useDispatch();
   const navigate=useNavigate();
   const [page,setPage]=useState(1);
-  const {products,isLoading}=useSelector(state=>state?.inventary);
-  console.log(products);
-  
+  const {products,isLoading}=useSelector(state=>state?.inventary);  
   const productData=products?.products?.map((item)=>{
     return {...item,key:item?._id}
-  })
-  console.log(productData,"jhyg");
-  console.log(products,"products");
-  
-  
+  });
   const getAllProducts=async()=>{
     try {
       const data={page:page,limit:10}
-    const res=await dispatch(getAllProductAsync({token,data})).unwrap();
-    console.log(res);
-    
+    const res=await dispatch(getAllProductAsync({token,data})).unwrap();    
     } catch (error) {
       console.log(error);
     }
@@ -47,10 +39,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       if(res?.success){
         getAllProducts()
       }
-      debugger
-      console.log(res);
-      
-      if(res.success){
+      if(res?.success){
         toast.success(res?.message);
         setDeleteConfirm(false)
 

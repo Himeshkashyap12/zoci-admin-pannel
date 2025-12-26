@@ -4,9 +4,7 @@ import blogIcon from "../../assets/blog/blogIcon2.png";
 import { EyeOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import CustomText from "../common/CustomText";
 import { blogDateConverter } from "../../constants/constants";
-const BlogCard=({item})=>{
-  console.log(item);
-  
+const BlogCard=({item})=>{  
     return(
         <>
          <div className="relative flex flex-col gap-2 bg-[#fff] rounded-2xl p-[8px]">

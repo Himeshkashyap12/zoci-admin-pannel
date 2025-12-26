@@ -15,12 +15,14 @@ import { getOfflineListAsync } from "../../../feature/sales/salesSlice";
 import { useEffect, useState } from "react";
 import CustomPagination from "../../common/CustomPagination";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { offlineSalesExport } from "../constants";
 const OfflineSalesList = () => {
   const navigate = useNavigate();
   const token=Cookies.get("token");  
       const dispatch=useDispatch();
       const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
        const [page,setPage]=useState(1);
+      const [date,setDate]=useState([]); 
              const [search,setSearch]=useState("");
              const debounce=useDebounce(search,500);
              const [filter,setFilter]=useState([])
@@ -33,6 +35,7 @@ const OfflineSalesList = () => {
             ...(search && {search:trimSearch} ),
             ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
             ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+             ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
 
           }
              if(search && !trimSearch) return ;
@@ -43,9 +46,19 @@ const OfflineSalesList = () => {
             console.log(error);
           }
         }
+         const exportOfflineSales = async () => {
+                           const data={
+                             ...(search && {search:trimSearch} ),
+                                    ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
+                              ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
+        
+                            }
+                                     offlineSalesExport({dispatch,token,data})
+                   };
         useEffect(()=>{
         getOfflineSalesList();
-        },[debounce,filter,sort])
+        },[debounce,filter,sort,date])
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">
@@ -67,7 +80,7 @@ const OfflineSalesList = () => {
       </div>
      
       <div>
-        <OfflineSalesFilter  setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
+        <OfflineSalesFilter exportOfflineSales={exportOfflineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
       </div>
       <div>
         <OfflineSalesTable page={page} setPage={setPage} />

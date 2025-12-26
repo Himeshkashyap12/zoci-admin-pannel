@@ -146,8 +146,8 @@ const handleUpload = async (e) => {
         <div className="flex justify-center gap-4 pt-10">
           <CustomButton
           onclick={()=>{CreateCategoryHandler()}}
-            className={"!text-[#fff] !bg-[#214344] w-[180px]"}
-            value={isLoading?"Loading...":`Yes, ${editData?"Edit":"Add"} New Collection`}
+            className={"!text-[#fff] !bg-[#214344] w-[200px]"}
+            value={isLoading?"Loading...":`Yes, Submit Category`}
           />
           <Button
             onClick={() => {

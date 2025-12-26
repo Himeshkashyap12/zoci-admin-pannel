@@ -34,9 +34,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       dataIndex: "vendorName",
       key: "vendorName",
       width: 250,
-      render: (_,text) => {
-        console.log(text,"dfsdh");
-        
+      render: (_,text) => {        
         return (
             <div onClick={()=>{navigate(`/admin/vendor-performance/${text?.phoneNumber}`)}}><CustomText value={text?.vendorName}/></div>
         )

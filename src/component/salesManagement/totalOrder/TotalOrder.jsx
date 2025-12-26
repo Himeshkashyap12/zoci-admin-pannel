@@ -22,6 +22,7 @@ const TotalOrder = () => {
          const [filter,setFilter]=useState([])
          const [sort,setSort]=useState([])       
          const [page,setPage]=useState(1)
+         const [date,setDate]=useState([]); 
     
     const {totalOrders,isLoading}=useSelector(state=>state?.sales);  
             const totalOrderHandler=async()=>{
@@ -32,6 +33,8 @@ const TotalOrder = () => {
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} )
+
 
                 }
               try {
@@ -57,7 +60,7 @@ const TotalOrder = () => {
             ]
               useEffect(()=>{
                 totalOrderHandler();
-              },[page,filter,sort,debounce]);
+              },[page,filter,sort,debounce,date]);
 
   return (
     <div className="flex flex-col gap-5 p-[24px]">
@@ -92,7 +95,7 @@ const TotalOrder = () => {
         </Row>
       </div>
       <div>
-        <TotalOrderFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
+        <TotalOrderFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
       </div>
       <div>
         <TotalOrderTable page={page} setPage={setPage}   item={totalOrders} />

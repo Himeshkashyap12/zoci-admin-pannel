@@ -17,9 +17,7 @@ import "./blog.css"
 const BlogFilter=()=>{
      const navigate=useNavigate();
      const  [search,setSearch]=useState("");
-     const  [sort,setSort]=useState([]);
-     console.log(sort);
-     
+     const  [sort,setSort]=useState([]);     
       const token=Cookies.get("token"); 
       const {blog,isLoading}=useSelector(state=>state?.blog);
       const [isFilter,setIsFilter]=useState(false)
@@ -61,7 +59,7 @@ const BlogFilter=()=>{
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput name={"search"} value={search} onchange={(e)=>{setSearch(e.target.value),setIsFilter(true)}} placeholder={"Search Blog"} />
+                   <CustomInput search name={"search"} value={search} onchange={(e)=>{setSearch(e.target.value),setIsFilter(true)}} placeholder={"Search Blog"} />
                    </div>
                  </Col>
                  <Col span={16}>

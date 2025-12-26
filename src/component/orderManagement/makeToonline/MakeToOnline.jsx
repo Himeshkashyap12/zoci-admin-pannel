@@ -25,6 +25,7 @@ const MakeToOnline=()=>{
               const data={
                   limit:10,
                   page:page,
+                  status:"Pending",
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
@@ -38,12 +39,12 @@ const MakeToOnline=()=>{
                 }
               } 
             const exportOrderHandler = async () => {
-             const data={startDate:[date[0]],endDate:date[1]}
+             const data={startDate:date[0],endDate:date[1]}
                    orderExportInExcelHandler({dispatch,token,data})
                };
               useEffect(()=>{
               getMakeToOnlineOrder();
-              },[page,filter,sort,debounce,date])
+              },[page,filter,sort,debounce,date]);
         return(
           <div className="flex flex-col gap-5 p-[24px]">
               <div className="flex gap-2 items-center">

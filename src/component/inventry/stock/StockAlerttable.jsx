@@ -34,8 +34,8 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       ),
       dataIndex: "images",
       key: "images",
-      width: 200,
-      render: (text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
+      width: 150,
+      render: (_,text) => <div className="flex justify-center"> <Image className="!size-[50px]" src={text?.productImage}/></div>
     },
       {
       title: (

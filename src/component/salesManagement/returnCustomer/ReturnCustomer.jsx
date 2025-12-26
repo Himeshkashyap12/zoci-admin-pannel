@@ -19,6 +19,7 @@ const ReturnCustomer = () => {
    const token=Cookies.get("token");
    const [search,setSearch]=useState("");
    const debounce=useDebounce(search,500);
+      const [date,setDate]=useState([]); 
    const [filter,setFilter]=useState([])
    const [sort,setSort]=useState([]) 
    const [page,setPage]=useState(1)              
@@ -32,6 +33,8 @@ const ReturnCustomer = () => {
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
+
 
                 }
               try {
@@ -57,7 +60,7 @@ const ReturnCustomer = () => {
             ]
             useEffect(()=>{
                   returningCustomerHandler();
-                },[debounce,sort,filter,page]);
+                },[debounce,sort,filter,page,date]);
   
           return (
           <div className="flex flex-col gap-5 p-[24px]">
@@ -91,7 +94,7 @@ const ReturnCustomer = () => {
               </Row>
             </div>
             <div>
-              <ReturningCustomerFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+              <ReturningCustomerFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
             </div>
             <div>
               <ReturningCustomerTable  page={page} setPage={setPage} returningCustomers={returningCustomers}/>

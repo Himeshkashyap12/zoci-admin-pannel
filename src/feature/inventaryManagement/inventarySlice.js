@@ -9,6 +9,7 @@ const initialState = {
   bestSeller:[],
   vendorPerformanceAnalysisData:[],
   productById:[],
+  productBySku:[],
   isLoading: false,
   isDashboardLoading:false,
   isCreateProductLoading:false,
@@ -280,6 +281,25 @@ export const createBulkProductAsync = createAsyncThunk(
 );
 
 
+export const productBySkuAsync = createAsyncThunk(
+  "inventary/productBySku",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/exhibition/search-sku`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });      
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
+
 export const inventarySlice = createSlice({
   name: "inventary",
   initialState,
@@ -459,6 +479,19 @@ export const inventarySlice = createSlice({
           
           state.error = action.payload;
         });
+         builder.addCase(productBySkuAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(productBySkuAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;  
+          state.productBySku=action?.payload?.products; 
+
+        });
+        builder.addCase(productBySkuAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+          state.productBySku=[];
+                });
         
         
         

@@ -145,7 +145,7 @@ const ProductList=({exportProductHandler})=>{
                    <CustomText className={"font-bold !text-[#214344]"} value={"Entire Product list"}/>
                    </div>
                    <div >
-                   <CustomInput className={"!w-[350px]"}  onchange={(e)=>setSearch(e.target.value)} search={true} placeholder={"Search your product"} />
+                   <CustomInput search className={"!w-[350px]"}  onchange={(e)=>setSearch(e.target.value)}  placeholder={"Search your product"} />
                    </div>
                    </div>
                  </Col>

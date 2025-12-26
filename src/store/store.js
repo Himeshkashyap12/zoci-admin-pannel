@@ -11,6 +11,7 @@ import crmReducer from "../feature/crm/crmSlice"
 import orderReducer from "../feature/order/orderSlice"
 import salesReducer from "../feature/sales/salesSlice"
 import uiReducer from "../feature/uiManagement/UiManagementSlice"
+import faqReducer from "../feature/faq/faqSlice"
 const store=configureStore({
     reducer:{
         admin:adminReducer,
@@ -23,7 +24,8 @@ const store=configureStore({
         crm:crmReducer,
         order:orderReducer,
         sales:salesReducer,
-        ui:uiReducer
+        ui:uiReducer,
+        faq:faqReducer
     }
 })
 

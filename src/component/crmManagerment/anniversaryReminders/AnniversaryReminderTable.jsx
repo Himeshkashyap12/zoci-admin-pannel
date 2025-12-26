@@ -11,34 +11,15 @@ import { isoToIST } from "../../../constants/constants";
 import Loader from "../../loader/Loader";
 const AnniversaryRemindertable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
       const {birthdayAnniversaryReminder,isLoading}=useSelector(state=>state?.crm);
-      console.log(birthdayAnniversaryReminder,"hvhv");
-      
-     const copyTextHandler=async(text)=>{
-          try {
-              await navigator.clipboard.writeText(text);
-              toast.success("Address copied successfully");
-            } catch (err) {
-              console.error('Failed to copy text: ', err);
-            }
-          
-        }
-        const getCrmAnniversaryReminderHandler=async()=>{
-          try {
-            const data={type:"anniversary"}
-          const res=await dispatch(getBirthdayAnniversaryReminderAsync({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-
-        
-         useEffect(()=>{
-                getCrmAnniversaryReminderHandler();
-                },[])
+      const copyTextHandler=async(text)=>{
+             try {
+                await navigator.clipboard.writeText(text);
+                toast.success("Address copied successfully");
+              } catch (err) {
+                console.error('Failed to copy text: ', err);
+              }
+         }
                
      const columns = [
          {
@@ -90,16 +71,7 @@ const AnniversaryRemindertable=()=>{
     }
    
   ];
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-    if(isLoading) return <Loader/>
-  
+    if(isLoading) return <Loader/>;
     return(
         <>
               <CustomTable   dataSource={birthdayAnniversaryReminder?.data} columns={columns}/>

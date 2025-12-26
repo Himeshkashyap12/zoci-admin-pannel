@@ -25,9 +25,7 @@ const AllVisitorsDetails = () => {
   const dispatch=useDispatch()
   const token=Cookies.get("token");
   const {visitorsDetails}=useSelector(state=>state?.crm);
-  const navigate = useNavigate();
-  console.log(visitorsDetails);
-  
+  const navigate = useNavigate();  
   const getVisitorsDetails=async()=>{
     try {
       const data={
@@ -35,9 +33,7 @@ const AllVisitorsDetails = () => {
            limit:10,
           ...(search &&  {search:search})
       }
-      const res=await dispatch(allVisitorsDetailsAsync({token,id,data})).unwrap();
-      console.log(res);
-      
+      const res=await dispatch(allVisitorsDetailsAsync({token,id,data})).unwrap();      
     } catch (error) {
       
     }

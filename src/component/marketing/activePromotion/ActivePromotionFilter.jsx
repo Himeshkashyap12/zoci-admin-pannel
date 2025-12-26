@@ -1,4 +1,4 @@
-import { Col, Image, Row } from "antd";
+import { Col, DatePicker, Image, Row } from "antd";
 import filter from "../../../assets/inventary/filter.png"
 import sort from "../../../assets/inventary/sort.png"
 import exports from "../../../assets/inventary/export.png"
@@ -10,11 +10,15 @@ import { useEffect, useState } from "react";
 import CreateNewPromotion from "../CreateNewPromotion";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie"
-import { getAllPromotionAsync } from "../../../feature/marketing/marketingSlice";
+import { getAllPromotionAsync, promotionExportInExcelAsync } from "../../../feature/marketing/marketingSlice";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
 import { activePromotionFilter, activePromotionSort } from "./activePromotionFilterData";
 import "../marketing.css"
+import CustomDate from "../../common/CustomDate";
+import { isoToUTC } from "../../../constants/constants";
+import { marketingPromotionHandler } from "../exportMarketing";
+const { RangePicker } = DatePicker;
 const ActivePromotionFilter=()=>{
   const [newPromotionModel,setPromotionModel]=useState(false);
      const token=Cookies.get("token");  
@@ -22,15 +26,12 @@ const ActivePromotionFilter=()=>{
       const [search,setSearch]=useState("");
       const [activeSort,setSort]=useState([]);
       const [activeFilter,setFilter]=useState([]);
-      const debouncedText=useDebounce(search,500)    
-      console.log(activeFilter,"jnjn");
-       
+      const [expireDate,setExpireDate]=useState("");
+      const [promotionDate,setPromotionDate]=useState("")
+      const debouncedText=useDebounce(search,500);
         const getActivePromotion=async()=>{
           try {
              const trimSearch=search.trim();
-           
-
-          
             const data={
                 ...(trimSearch && { search:trimSearch }),
                 ...(activeSort?.length>0 && { [activeSort[0]]:activeSort[1] }),
@@ -38,31 +39,37 @@ const ActivePromotionFilter=()=>{
                   page:1,
                   limit:10
               }
-
       if (search && !trimSearch) {
         return; 
       }
-          const res=await dispatch(getAllPromotionAsync({token,data})).unwrap();
+       const res=await dispatch(getAllPromotionAsync({token,data})).unwrap();
           } catch (error) {
             console.log(error);
           }
         }
 
-
+      const exportOrderHandler = async () => {
+           const trimSearch=search.trim();
+            const data={
+                ...(trimSearch && { search:trimSearch }),
+                ...(activeSort?.length>0 && { [activeSort[0]]:activeSort[1] }),
+                ...(activeFilter?.length>0 && { [activeFilter[0]]:activeFilter[1] }),
+                  page:1,
+                  limit:10
+                }
+           marketingPromotionHandler({dispatch,token,data})
+         };
 
         useEffect(()=>{
-         
             getActivePromotion();
-
-          
-        },[debouncedText,activeFilter,activeSort])
+        },[debouncedText,activeFilter,activeSort,expireDate])
 
     return(
         <div className="marketing">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Promotion"} />
+                   <CustomInput search  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Promotion"} />
                    </div>
                  </Col>
                  
@@ -72,19 +79,15 @@ const ActivePromotionFilter=()=>{
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                         <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={activePromotionFilter}/>
-
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter  placeholder={"Sort"}    onchange={(value)=>{setSort(value)}} option={activePromotionSort}/>
-
-
+                    <CustomMultipleFilter  placeholder={"Sort"}    onchange={(value)=>{setPromotionDate(value)}} option={activePromotionSort}/>
                   </div>}/>
-                  {/* <CustomButton value={<div className="flex items-center gap-2">
+                    <CustomButton onclick={()=>{exportOrderHandler()}} value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={exports}/>
-                   <CustomMultipleFilter placeholder={"Sort"} onchange={(value)=>{setFilter(value)}} option={uiFilterData}/>
-
-                  </div>}/> */}
+                    <CustomText className={"!text-[#fff]"} value={"Export in Excel"}/>
+                  </div>}/>
                   </div>
               </Col>
             </Row>

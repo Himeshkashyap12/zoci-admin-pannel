@@ -1,8 +1,7 @@
 
 
-import { Button, Col, Image, Row } from "antd";
+import { Button, Col, DatePicker, Row, Select } from "antd";
 import { useEffect, useState } from "react";
-import TextArea from "antd/es/input/TextArea";
 import CustomImageUpload from "../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,54 +12,54 @@ import {useNavigate} from "react-router-dom";
 import CustomText from "../common/CustomText";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
-import CustomDate from "../common/CustomDate";
 import CustomSelect from "../common/CustomSelect";
 import { CreateNewPromotionAsync, getAllPromotionAsync, updateNewPromotionAsync } from "../../feature/marketing/marketingSlice";
-import Loader from "../loader/Loader";
 import { compareNewAndOldObject, isoTODate } from "../../constants/constants";
+import { specialChar } from "../../constants/regex";
+import { useDebounce } from "../../hooks/UseDebounce";
+import { getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
+import Search from "antd/es/input/Search";
 const CreateNewPromotion=({setOpen,edititem,edit})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
-  const navigate=useNavigate();
+  const [productSku,setProductSku]=useState([]);
+  const [productSkuSearch,setProductSkuSearch]=useState("");
+  const debounceText=useDebounce(productSkuSearch,500)  ;
+  const {products}=useSelector(state=>state?.inventary)
   const {isMediaLoading}=useSelector(state=>state?.media)
-  const {isLoading}=useSelector(state=>state?.marketing)
-  console.log(edititem?._id,"fgfd");
-  
-    const [promotion, setPromotion] = useState({   
+  const productOption=products?.products?.map(item=>{
+    return {label:item?.sku,value:item.sku}
+  })
+  const [promotion, setPromotion] = useState({   
           code: "",
           type: "",
           value: "" ,
+          applyOn:"",
           minOrderValue:"" ,
           maxOrderValue:"" ,
           category: "",
           expiryDate: "2025-12-31",
           usageLimit: "",
           banner: "",
-          productSKU:"",
+          productSKU:[],
 
     });
 
     const promotionHandler=(e,status)=>{
-      console.log(status);
-      
       if(status){
        setPromotion({...promotion,[status]:e})
       }else{
       const {name,value}=e.target;
-
+       if(specialChar?.test(value)) return ;
       setPromotion({...promotion,[name]:value})
-
-      }
-      
+      } 
     }
     const dateHandler=(date)=>{
       setPromotion({...promotion,expiryDate:isoTODate(date.toISOString())});
-      
     }
 
     const categoryOption=[
        {label:"Custom",value:"Custom"},
-       {label:"Customer",value:"Customer"},
        {label:"Birthday",value:"Birthday"},
        {label:"Anniversary",value:"Anniversary"},
     ]
@@ -92,12 +91,24 @@ const typeOption=[
     
 
         const addpromotionHandler=async()=>{
-          
+          if(promotion?.value>100 ) return toast.error("Value should be 1-100 ")
             try {
               if(!edit){
-                const data={...promotion}
+               const data={
+                 code: promotion?.code,
+                type:promotion?.type,
+                value:promotion?.value,
+                applyOn:promotion?.applyOn,
+                minOrderValue:promotion?.minOrderValue ,
+                maxOrderValue:promotion?.maxOrderValue ,
+                category: promotion?.category,
+                expiryDate: promotion?.expiryDate,
+                usageLimit: promotion?.usageLimit,
+                banner: promotion?.banner,
+                ...(promotion.applyOn!="ALL" && {productSKU:productSku})
+               }
+                
               const res=await dispatch(CreateNewPromotionAsync({token,data})).unwrap();  
-              console.log(res);
                if(res.status=="success"){
                 toast.success(res.message);
                 setOpen(false);
@@ -111,7 +122,9 @@ const typeOption=[
                     category: "",
                     expiryDate: "2025-12-31",
                     usageLimit: "",
-                    banner: ""
+                    banner: "",
+                    productSKU:[],
+                    applyOn:""
                 })
               }else{
                 toast.error(res.response?.data?.message);
@@ -124,7 +137,10 @@ const typeOption=[
                     category: "",
                     expiryDate: "2025-12-31",
                     usageLimit: "",
-                    banner: ""
+                    banner: "",
+                      productSKU:[],
+                    applyOn:""
+
                 })
                 setOpen(false)
               }
@@ -133,7 +149,6 @@ const typeOption=[
                 const data=compareNewAndOldObject({oldObj:edititem,newObj:promotion})
                
               const res=await dispatch(updateNewPromotionAsync({token,data,id:edititem?._id})).unwrap();  
-              console.log(res);
                if(res.status=="success"){
                 toast.success(res.message);
                 setOpen(false);
@@ -147,7 +162,9 @@ const typeOption=[
                     category: "",
                     expiryDate: "2025-12-31",
                     usageLimit: "",
-                    banner: ""
+                    banner: "",
+                      productSKU:[],
+                    applyOn:""
                 })
               }else{
                 toast.error(res.response?.data?.message);
@@ -160,29 +177,34 @@ const typeOption=[
                     category: "",
                     expiryDate: "2025-12-31",
                     usageLimit: "",
-                    banner: ""
+                    banner: "",
+                      productSKU:[],
+                    applyOn:""
                 })
                 setOpen(false)
               }
               }
-              
-                          
-             
-              
-              
             } catch (error) {
                console.log(error); 
                 toast.error("Something went wrong!")
             }
         }
+        const getProducts=async()=>{
+          try{
+            const data={search:productSkuSearch}
+            const res=await dispatch(getAllProductAsync({token,data})).unwrap();
+          }catch(err){
+            console.log(err);
+          }
+        }
         useEffect(()=>{
-              if(edit){
-                console.log(edititem);
-                
-                setPromotion(edititem)
-              }
-                },[edititem])
-        if(isMediaLoading || isLoading ) return <Loader/>
+           getProducts();
+        },[debounceText])
+        useEffect(()=>{
+           if(edit){                
+              setPromotion(edititem)
+            }
+        },[edititem])
     return(
         <div >
             <div className="flex justify-center">
@@ -200,7 +222,7 @@ const typeOption=[
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Expiry  Date"}/>
-                      <CustomDate  onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
+                      <DatePicker  onChange={(date)=>dateHandler(date)} className={"h-[46px]"} />
                        
                       </div></Col>
                 </Row>
@@ -214,7 +236,7 @@ const typeOption=[
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Value"}/>
-                       <CustomInput type={"number"}  name={"value"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.value} className={"h-[46px]"}/>
+                       <CustomInput type={"number"}  name={"value"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.value} className={"h-[46px]"} />
                       </div></Col>
                 </Row>
                
@@ -227,10 +249,15 @@ const typeOption=[
                       </div>
                     </Col>
                       <Col span={12}>
-                     <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Product  SKU"}/>
-                       <CustomInput name={"productSKU"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.productSKU} className={"h-[46px]"}/>
-                      </div>
+                     
+                       <div className="flex flex-col gap-3">
+                   
+                    <CustomText value={"Range"}/>
+                     <div className="flex gap-3">
+                    <CustomInput type={"number"}  className={"h-[46px]"} name={"minOrderValue"} value={promotion?.minOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Min Value"}/>
+                    <CustomInput  type={"number"} className={"h-[46px]"} name={"maxOrderValue"} value={promotion?.maxOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Max Value"}/>
+                   </div>
+                    </div>
                       </Col>
                 </Row>
               
@@ -242,14 +269,11 @@ const typeOption=[
                     </div>
                   </Col>
                    <Col span={12}>
-                  <div className="flex flex-col gap-3">
-                   
-                    <CustomText value={"Range"}/>
-                     <div className="flex gap-3">
-                    <CustomInput type={"number"}  className={"h-[46px]"} name={"minOrderValue"} value={promotion?.minOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Min Value"}/>
-                    <CustomInput  type={"number"} className={"h-[46px]"} name={"maxOrderValue"} value={promotion?.maxOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Max Value"}/>
-                   </div>
-                    </div>
+                 <div className="flex flex-col gap-3">
+                      <CustomText className={"text-[16px] "} value={"Product"}/>
+                       {/* <CustomInput name={"productSKU"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.productSKU} className={"h-[46px]"}/> */}
+                      <CustomSelect   className="!h-[44px]" value={promotion?.applyOn} onchange={(e)=>setPromotion({...promotion,applyOn:e})} options={[{label:"All Products",value:"ALL"},{label:"PRODUCTS",value:"PRODUCTS"}]}/>
+                      </div>
                   </Col>
                 </Row>
                  <Row gutter={[20,20]}>
@@ -264,16 +288,28 @@ const typeOption=[
                       
               />
               <div>
-                   {promotion?.banner &&  <Image  className="!size-[100px] rounded-md" src={promotion?.banner}/>}
+                   {/* {promotion?.banner &&  <Image  className="!size-[100px] rounded-md" src={promotion?.banner}/>} */}
                     </div>
 
                     </div>
                   </Col>
                    <Col span={12}>
-                  <div className="flex flex-col gap-3">
-                  <CustomText value={"Mobile Number"}/>
-                    <CustomInput type={"number"} className={"h-[46px]"} name={"customerMobile"} value={promotion?.customerMobile} onchange={(e)=>{promotionHandler(e)}} placeholder={"Enter Customer Mobile"}/>
-                    </div>
+                  {promotion?.applyOn=="PRODUCTS" &&  <div className="flex flex-col gap-3">
+                  <CustomText value={"Product SKU"}/>
+                   <CustomSelect
+                              className="h-[44px]"
+                              mode="multiple"
+                              value={productSku}
+                              style={{ width: '100%' }}
+                              onchange={setProductSku}
+                              placeholder="Please Select SKU"
+                              onSearch={(e)=>{setProductSkuSearch(e)}}
+                              showSearch
+                              options={productOption}
+                            /> 
+                  
+                  
+                    </div>}
                   </Col>
                 </Row>
                 

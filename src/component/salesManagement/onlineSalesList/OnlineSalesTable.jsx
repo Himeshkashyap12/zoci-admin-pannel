@@ -5,6 +5,7 @@ import Loader from "../../loader/Loader";
 import { Image } from "antd";
 import { useSelector } from "react-redux";
 import CustomPagination from "../../common/CustomPagination";
+import { isoToIST } from "../../../constants/constants";
 const OnlineSalesTable=({onlineSales,setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {isLoading}=useSelector(state=>state?.sales);
@@ -83,7 +84,22 @@ const OnlineSalesTable=({onlineSales,setPage,page})=>{
                 width: 250,
                 align: "center",
                 render: (text) => <CustomText value={`Rs. ${text}`}/>
-              }
+              },
+               {
+      title: (
+        <CustomText
+          className="!text-[14px] !text-[#fff] font-semibold"
+          value="Date"
+        />
+      ),
+      dataIndex: "createdAt",
+      key: "createdAt",
+      align: "center",
+      width: 300,
+      render: (_, text) => (
+        <CustomText value={`${isoToIST(text?.createdAt)}`} />
+      ),
+    },
              
             ];
 

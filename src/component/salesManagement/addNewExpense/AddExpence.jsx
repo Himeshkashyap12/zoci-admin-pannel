@@ -1,5 +1,5 @@
 
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Skeleton } from "antd";
 import CustomText from "../../common/CustomText";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
@@ -16,10 +16,12 @@ import { toast } from "react-toastify";
 import { createExpenseAsync, getTotalExpenditureAsync } from "../../../feature/sales/salesSlice";
 import {useNavigate} from "react-router-dom";
 import { isoTODate } from "../../../constants/constants";
+import { gstRegex, specialChar } from "../../../constants/regex";
 const AddExpense=({setOpen})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
   const navigate=useNavigate();
+  const [gstErrorMessage,setGstErrorMessage]=useState("")
   const {isMediaLoading}=useSelector(state=>state?.media)
     const [expense, setExpense] = useState({
                 category: "",
@@ -27,7 +29,6 @@ const AddExpense=({setOpen})=>{
                 date: new Date().toISOString().slice(0, 10),
                 value: "",
                 quantity: "",
-                payeeName: "",
                 gstApplicable: true,
                 gstPercent: "",
                 comment: "",
@@ -36,13 +37,27 @@ const AddExpense=({setOpen})=>{
 
     const expenseHandler=(e)=>{
       const {name,value}=e.target;
-      setExpense({...expense,[name]:value})
+      if(specialChar?.test(value)) return ;
+      if(name=="gstPercent"){
+        if(value?.length>15) return ;
+         const gstValue = value.toUpperCase();
+      if (gstValue.length === 15 && !gstRegex.test(gstValue)) {
+       setGstErrorMessage("Wrong GST number")
+       return;
+     }else{
+       setGstErrorMessage("");
+
+     }
       
     }
+  
+      setExpense({...expense,[name]:value})
+  }
     const dateHandler=(date)=>{
       setExpense({...expense,date:isoTODate(date.toISOString())});
       
-    }
+    
+  }
 
 
   
@@ -66,6 +81,7 @@ const AddExpense=({setOpen})=>{
     
 
         const addexpenseHandler=async()=>{
+          if(!gstErrorMessage=="") return toast.error("Wrong Gst Number!")
             try {
               const data={...expense}
               const res=await dispatch(createExpenseAsync({token,data})).unwrap();
@@ -93,9 +109,8 @@ const AddExpense=({setOpen})=>{
                 <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Expenditure Category"}/>
-                       <CustomInput name={"category"} onchange={(e)=>{expenseHandler(e)}} value={expense?.category} className={"h-[46px]"}/>
-                       
+                       <CustomText className={"text-[16px] "} value={"Expenditure Category"}/>
+                       <CustomInput name={"category"} onchange={(e)=>{expenseHandler(e)}} value={expense?.category} className={"h-[46px]"}/> 
                       </div>
                     </Col>
                     <Col span={12}>
@@ -116,12 +131,14 @@ const AddExpense=({setOpen})=>{
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Attach file (If any)"}/>
-                       {/* <CustomInput className={"h-[46px]"}/> */}
-                       <CustomImageUpload imageUploadHandler={(e)=>{handleUpload(e)}} label={
-            <div className="flex gap-2 items-center  h-[46px] p-[20px]  bg-[#fff]">
+                      <CustomImageUpload imageUploadHandler={(e)=>{handleUpload(e)}} label={
+                        <>
+            {isMediaLoading?<Skeleton.Input  paragraph={{rows:0,titleHeight:"60px"}}/>: <div className="flex gap-2 items-center  h-[46px] p-[20px]  bg-[#fff]">
                {!expense?.file && <UploadOutlined style={{fontSize:"24px" }} />}
             <CustomText className={"!text-[16px]"} value={(isMediaLoading&& "Loading...")|| expense?.file?"File Uploaded":"Upload attachement"}/>
             </div>}
+            </>
+          }
 
               />
                       </div></Col>
@@ -130,14 +147,14 @@ const AddExpense=({setOpen})=>{
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Expenditure value"}/>
-                       <CustomInput name={"value"} onchange={(e)=>{expenseHandler(e)}} value={expense?.value} className={"h-[46px]"}/>
+                       <CustomInput type={"number"} name={"value"} onchange={(e)=>{expenseHandler(e)}} value={expense?.value} className={"h-[46px]"}/>
                        
                       </div>
                     </Col>
                       <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Quantity"}/>
-                       <CustomInput name={"quantity"} onchange={(e)=>{expenseHandler(e)}} value={expense?.quantity} className={"h-[46px]"}/>
+                       <CustomInput type={"number"} name={"quantity"} onchange={(e)=>{expenseHandler(e)}} value={expense?.quantity} className={"h-[46px]"}/>
                       </div>
                       </Col>
                 </Row>
@@ -149,7 +166,12 @@ const AddExpense=({setOpen})=>{
                   <Col span={24}>
                   <div className="flex flex-col gap-3">
                   <CustomText value={"GST in %"}/>
-                    <CustomInput  className={"h-[46px]"} name={"gstPercent"} value={expense?.gstPercent} onchange={(e)=>{expenseHandler(e)}} placeholder={"Enter GST"}/>
+                    <CustomInput   className={`h-[46px] ${gstErrorMessage && expense?.gstPercent!="" && " !border-[1px] !border-[red]"}`} name={"gstPercent"} value={expense?.gstPercent} 
+                    
+                    onchange={(e)=>{expenseHandler(e)}} placeholder={"Enter GST"}
+                    
+                    />
+                   {gstErrorMessage && expense?.gstPercent!="" &&  <CustomText className={"!text-[12px] !text-[red]"} value={gstErrorMessage}/>}
                     </div>
                   </Col>
                 </Row>}

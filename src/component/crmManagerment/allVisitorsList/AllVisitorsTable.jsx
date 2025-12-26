@@ -9,27 +9,12 @@ import {EyeOutlined } from "@ant-design/icons";
 import Loader from "../../loader/Loader";
 import { isoToIST } from "../../../constants/constants";
 import CustomPagination from "../../common/CustomPagination";
-const AllVisitorsTable=()=>{
+const AllVisitorsTable=({page,setPage})=>{
+  const navigate=useNavigate();
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const navigate=useNavigate();
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const [page,setPage]=useState(1);
       const {allvisitors,isLoading}=useSelector(state=>state?.crm);
-            console.log(allvisitors,"allvisitors");
-    
-        const getAllVisitors=async()=>{
-          try {
-            const data={limit:10,page:page}
-          const res=await dispatch(getAllVisitorsAsync({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-         useEffect(()=>{
-                getAllVisitors();
-                },[page])
-        
+
+     
         const columns = [
             {
           title: (
@@ -72,7 +57,7 @@ const AllVisitorsTable=()=>{
           key: "bag",
           width: 130,
           align:"center",
-          render: (text) =>   <CustomText value={text}/>
+          render: (text) =>   <CustomText value={text?.length}/>
         },
         {
           title: (
@@ -82,7 +67,33 @@ const AllVisitorsTable=()=>{
           key: "wishlist",
           width: 200,
           align: "center",
-          render: (text) =>  <CustomText value={text}/>
+          render: (text) =>  <CustomText value={text?.length}/>
+        },
+        
+      
+         {
+          title: (
+                    <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Item in Wishlist"}/>
+          ),
+          dataIndex: "wishlist",
+          key: "wishlist",
+          width: 300,
+          align: "start",
+           render: (text) => ( text?.length==0?"-": text?.map((item)=>{     
+              return (<CustomText value={item}/>)
+          }))
+        },
+        {
+          title: (
+                    <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Item in Bag"}/>
+          ),
+          dataIndex: "bag",
+          key: "bag",
+          width: 300,
+          align: "start",
+          render: (text) =>  ( text?.length==0?"-":text?.map((item)=>{
+              return (<CustomText value={item}/>)
+          }  ))
         },
         {
           title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
@@ -93,20 +104,12 @@ const AllVisitorsTable=()=>{
           render: (_,text) => <div className="cursor-pointer" onClick={()=>{navigate(`/admin/crm-all-visitors-list/${text?._id}`)}}><EyeOutlined style={{fontSize:"20px"}} /></div>
         }
       ];
-
-        const onSelectChange = newSelectedRowKeys => {
-            console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-            setSelectedRowKeys(newSelectedRowKeys);
-          };
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: onSelectChange,
-          };
+       
   if(isLoading) return <Loader/>
   
     return(
         <>
-              <CustomTable scroll={{x:1500}} dataSource={allvisitors?.data} columns={columns}/>
+              <CustomTable scroll={{x:1800}} dataSource={allvisitors?.data} columns={columns}/>
         <CustomPagination pageNumber={page} total={allvisitors?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>
