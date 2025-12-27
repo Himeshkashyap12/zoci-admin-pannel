@@ -84,7 +84,7 @@ const BestSellerTable=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
       title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Category"}/>),
       dataIndex: "category",
       key: "category",
-      width: 300,
+      width: 250,
       align: "center",
       render: (text) =>  <CustomText value={text??"NA"}/>
     },
@@ -111,7 +111,7 @@ const BestSellerTable=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={bestSellerData} columns={columns}/>
+              <CustomTable rowSelection={rowSelection} scroll={{x:1400}}  dataSource={bestSellerData} columns={columns}/>
               <CustomPagination pageNumber={page} total={bestSeller?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

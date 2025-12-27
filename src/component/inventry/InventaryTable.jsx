@@ -76,7 +76,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 100,
+      width: 70,
       fixed:true,
       render: (_,record,idx) =>  <CustomText  value={idx+1}/>
     },
@@ -87,7 +87,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "sku",
       key: "sku",
-      width: 150,
+      width: 130,
       fixed:true,
       render: (text) =>  <CustomText value={text}/>
     },
@@ -109,7 +109,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 350,
+      width: 250,
       render: (text) =>  <CustomText value={text}/>
     },
    
@@ -117,7 +117,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>,
       dataIndex: "size",
       key: "size",
-      width: 130,
+      width: 120,
       render: (text) =>   <CustomText value={text??"Na"}/>
     },
     {
@@ -126,15 +126,14 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       ),
       dataIndex: "price",
       key: "price",
-      width: 200,
-      align: "center",
+      width: 150,
       render: (text) =>  <CustomText value={`Rs. ${text}`}/>
     },
     {
       title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>),
       dataIndex: "quantity",
       key: "quantity",
-      width: 200,
+      width: 150,
       align: "center",
       render: (text) => <CustomText value={text}/>
     },
@@ -144,15 +143,15 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       key: "metalType",
       width: 200,
       align: "center",
-      render: (text) => <CustomText value={text??"NA"}/>
+      render: (text) => <CustomText value={text??"-"}/>
     },
     {
       title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Vendor"}/>),
       dataIndex: "vendor",
       key: "vendor",
-      width: 300,
+      width: 250,
       align: "center",
-      render: (text) =>  <CustomText value={text??"NA"}/>
+      render: (text) =>  <CustomText value={text??"-"}/>
     },
     {
       title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Stock"}/>),
@@ -202,7 +201,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:1800}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
+        <CustomTable   scroll={{x:1400}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
          <CustomPagination pageNumber={page} total={products?.totalProducts} onchange={(e)=>{setPage(e)}}/>
          <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         

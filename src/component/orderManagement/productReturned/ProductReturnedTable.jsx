@@ -15,9 +15,7 @@ import Loader from "../../loader/Loader";
 import CustomPagination from "../../common/CustomPagination";
 const ProductReturnedTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const {productReturnedAndExchange,isLoading}=useSelector(state=>state?.order)
-      console.log(productReturnedAndExchange);
-      
+      const {productReturnedAndExchange,isLoading}=useSelector(state=>state?.order)      
       const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
@@ -128,7 +126,6 @@ const ProductReturnedTable=({page,setPage})=>{
             ];
       
  const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
  const rowSelection = {

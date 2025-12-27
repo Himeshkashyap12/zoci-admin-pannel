@@ -11,9 +11,7 @@ import Loader from "../loader/Loader";
 const OrderManagement=()=>{
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {orderDashboard,isLoading}=useSelector(state=>state?.order);
-            console.log(orderDashboard);
-            
+      const {orderDashboard,isLoading}=useSelector(state=>state?.order);            
         const getOrderDashboard=async()=>{
           try {
           const res=await dispatch(getOrderManagementDashboardAsync({token})).unwrap();

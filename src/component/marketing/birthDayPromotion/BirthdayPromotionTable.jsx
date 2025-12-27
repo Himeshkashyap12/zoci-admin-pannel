@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { isoToISTDateOnly } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"
-import { useDispatch, useSelector } from "react-redux";
-import { getAllBirthdayPromotion } from "../../../feature/marketing/marketingSlice";
 import Loader from "../../loader/Loader";
-import { CopyOutlined } from "@ant-design/icons";
-import {toast} from "react-toastify"
-import { isoToIST } from "../../../constants/constants";
-import CustomPagination from "../../common/CustomPagination";
 const BirthdayPromotionTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})=>{
       const {birthday,isLoading}=useSelector(state=>state?.marketing);
         const copyTextHandler=async(text)=>{
@@ -70,13 +66,12 @@ const BirthdayPromotionTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})
               key: "birthday",
               width: 250,
               align:"center",
-              render: (text) =>   <CustomText value={isoToIST(text)}/>
+              render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
             }
           
           ];
 
  const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
  const rowSelection = {

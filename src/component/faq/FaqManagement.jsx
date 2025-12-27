@@ -165,7 +165,7 @@ if(isLoading) return <Loader/>
           </div>
       </div>
 
-            <CustomModal closeIcon  footer={false} setOpen={setFaqModel} open={faqModel} modalBody={deleteId?<ConfirmationPopup setDeleteId={setDeleteId} confirmationPopUpHandler={deleteConfirmFaqHandler} setOpen={setFaqModel} />:<AddFaq editItem={editItem} setFaqModel={setFaqModel}  />} width={"800px"}  align={"center"}/>
+            <CustomModal closeIcon  footer={false} setOpen={setFaqModel} open={faqModel} modalBody={deleteId?<ConfirmationPopup setDeleteId={setDeleteId} confirmationPopUpHandler={deleteConfirmFaqHandler} setDeleteConfirm={setFaqModel} />:<AddFaq editItem={editItem} setFaqModel={setFaqModel}  />} width={"800px"}  align={"center"}/>
 
     </>
   );

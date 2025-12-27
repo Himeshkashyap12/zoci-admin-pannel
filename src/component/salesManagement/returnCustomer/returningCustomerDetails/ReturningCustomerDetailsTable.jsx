@@ -11,9 +11,7 @@ import CustomPagination from "../../../common/CustomPagination";
 import Loader from "../../../loader/Loader";
 
 const ReturningCustomerDetailsTable=({page,setPage})=>{
-    const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);      
-     console.log(returningCustomerDetails,"fjbdhfdhb");
-     
+    const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);           
        const [selectedRowKeys, setSelectedRowKeys] = useState([]);
        const navigate=useNavigate();
                const columns = [
@@ -149,7 +147,6 @@ const ReturningCustomerDetailsTable=({page,setPage})=>{
 
 
  const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
  const rowSelection = {

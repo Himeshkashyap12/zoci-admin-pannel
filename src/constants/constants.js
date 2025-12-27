@@ -7,6 +7,13 @@ export function isoToIST(isoString) {
   const date = new Date(isoString); // Convert ISO string to Date object
   return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 }
+export function isoToISTDateOnly(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-IN", {
+    timeZone: "Asia/Kolkata",
+  });
+}
+
 
 export function isoToISTTime(isoString) {
   const date = new Date(isoString);
@@ -77,7 +84,9 @@ export const isoTODate = (isoDate) => {
 };
 
 
-
+export function generate4DigitRandomNumber() {
+  return `ORD#${Math.floor(1000 + Math.random() * 9000)}`;
+}
 
 dayjs.extend(utc);
 

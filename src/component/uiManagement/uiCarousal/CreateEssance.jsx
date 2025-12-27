@@ -7,22 +7,17 @@ import Cookies from "js-cookie";
 import CustomText from "../../common/CustomText";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
-import TextArea from "antd/es/input/TextArea";
 import CustomImageUpload from "../../common/CustomImageUpload";
 import blogUpload from "../../../assets/icons/blogUpload.png"
 import { getImageUrlAsync } from "../../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import ImageLoader from "../../loader/ImageLoader";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createCategoryAsync, editCategoryAsync, getMenCategoryHandlerAsync, getWomenCategoryHandlerAsync } from "../../../feature/uiManagement/UiManagementSlice";
 import { compareNewAndOldObject } from "../../../constants/constants";
-const CreateEssance = ({ setOpen,madeFor,editData,setEditData}) => {
-    console.log(editData,"editData");
-    
+const CreateEssance = ({ setOpen,madeFor,editData,setEditData}) => {    
   const dispatch = useDispatch();
   const token = Cookies.get("token");
-  const navigate=useNavigate();
   const {isMediaLoading}=useSelector(state=>state?.media);
   const {isLoading}=useSelector(state=>state?.ui);
   const [category, setCategory] = useState({

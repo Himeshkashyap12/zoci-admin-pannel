@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/axios";
+import shipRocketApi from "../../axios/ShipRocket";
+import Cookies from "js-cookie";
 const initialState = {
   orderDashboard:[],
   makeOnlineOrders:[],
@@ -203,6 +205,22 @@ export const addNewOrderAsync = createAsyncThunk(
     }
   }
 );
+// ship rocket api
+export const logInShipRocketAsync = createAsyncThunk(
+  "order/shipRocketAsync",
+ async ({data}) => {
+        try {
+      const res = await shipRocketApi.post(`auth/login`,data,{
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 
 export const orderSlice = createSlice({
@@ -319,8 +337,19 @@ export const orderSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
-        
-        
+        builder.addCase(logInShipRocketAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(logInShipRocketAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          
+          Cookies.set("shipRocketToken",action?.payload?.token,{expires:1})
+        });
+        builder.addCase(logInShipRocketAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+      
         
        
         

@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { isoToISTDateOnly } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { getBirthdayAnniversaryReminderAsync } from "../../../feature/crm/crmSlice";
-import { isoToIST } from "../../../constants/constants";
-import { CopyOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
 import Loader from "../../loader/Loader";
-import CustomPagination from "../../common/CustomPagination";
 const BirthdayReminderTable=({page,setPage})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {birthdayAnniversaryReminder,isLoading}=useSelector(state=>state?.crm);
@@ -73,7 +70,8 @@ const BirthdayReminderTable=({page,setPage})=>{
       dataIndex: "birthdayDate",
       key: "birthdayDate",
       width: 130,
-      render: (text) =>   <CustomText value={isoToIST(text)}/>
+      align:"center",
+      render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
     }
    
   ];

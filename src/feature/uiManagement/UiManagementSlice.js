@@ -69,9 +69,7 @@ export const addEssanceVideoAsync = createAsyncThunk(
 );
 export const updateHomeVideoAsync = createAsyncThunk(
   "category/updateVideo",
- async ({token,id,formData}) => {
-  console.log(formData,"formdata");
-  
+ async ({token,id,formData}) => {  
         try {
       const res = await api.put(`/ui/updateVideo/${id}`,formData,{
         headers: {

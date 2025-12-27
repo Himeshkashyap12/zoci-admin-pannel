@@ -24,7 +24,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       ),
       dataIndex: "title",
       key: "title",
-      width: 100,
+      width: 70,
       render: (_,text,idx) =>  <CustomText className={  " "} value={idx+1}/>
     },
     
@@ -54,7 +54,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       ),
       dataIndex: "sku",
       key: "sku",
-      width: 150,
+      width: 120,
       render: (text) =>  <CustomText value={text}/>
     },
   
@@ -64,7 +64,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       ),
       dataIndex: "price",
       key: "price",
-      width: 200,
+      width: 180,
       align: "center",
       render: (text) =>  <CustomText value={`Rs. ${text}`}/>
     },
@@ -72,7 +72,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Available Qut."}/>),
       dataIndex: "availableQuantity",
       key: "availableQuantity",
-      width: 200,
+      width: 120,
       align: "center",
       render: (text) => <CustomText value={text}/>
     },
@@ -80,7 +80,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Metal Type"}/>),
       dataIndex: "metalType",
       key: "metalType",
-      width: 200,
+      width: 150,
       align: "center",
       render: (text) => <CustomText value={text==""?"NA":text}/>
     },
@@ -88,7 +88,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
       title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Category"}/>),
       dataIndex: "category",
       key: "category",
-      width: 300,
+      width: 120,
       align: "center",
       render: (text) =>  <CustomText value={text}/>
     },
@@ -115,7 +115,7 @@ const StockAlertTable=({setSelectedRowKeys,selectedRowKeys,stockAlertData,total,
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={stockAlertData} columns={columns} scroll={{x:1700}}/>
+              <CustomTable rowSelection={rowSelection}  dataSource={stockAlertData} columns={columns} scroll={{x:1400}}/>
               <CustomPagination pageNumber={page} total={total} onchange={(e)=>{setPage(e)}}/>
  
         </>

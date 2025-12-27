@@ -94,8 +94,6 @@ const AddnewOrder = () => {
   };
 
   const quantityHandler = (record, item) => {
-    console.log(record);
-
     if (
       record?.quantity == record?.stock ||
       (record?.quantity == 1 && item === "minus") ||
@@ -114,7 +112,6 @@ const AddnewOrder = () => {
       });
       setInvoiceInputHandler({ ...invoiceInputHandler, items: data });
     }
-    console.log(item);
   };
 
   const skuSearchHandler = async (e) => {
@@ -139,9 +136,6 @@ const AddnewOrder = () => {
 
 
   const addSkuHandler = (item) => {
-    debugger
-    console.log(invoiceInputHandler,"gnjnjjn");
-    
     const data = { ...item, quantity: 1};
     if (invoiceInputHandler?.items?.some((product) => product?.sku == item?.sku)) {
       return toast.error("Item already exist");
@@ -154,7 +148,6 @@ const AddnewOrder = () => {
     }
   };
   const generateInvoiceHandler = async () => {
-    console.log(invoiceInputHandler);
     
 
     if (
@@ -203,7 +196,6 @@ const AddnewOrder = () => {
   const removeproductHandler = (item) => {
     const data = [...invoiceInputHandler?.items];
     const index = data.findIndex((product) => product?.id == item.id);
-    console.log(index);
     data.splice(index, 1);
     setInvoiceInputHandler({ ...invoiceInputHandler, items: data });
   };
@@ -317,8 +309,6 @@ const AddnewOrder = () => {
       width: 160,
       align: "center",
       render: (_, record) => {
-        console.log(record);
-
         return (
           <>
             <div className="flex justify-between px-[20px]">

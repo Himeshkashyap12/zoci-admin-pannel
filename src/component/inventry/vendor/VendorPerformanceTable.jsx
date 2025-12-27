@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import { Image } from "antd";
-import { vendorPerformanceAnalysis } from "../../../feature/inventaryManagement/inventarySlice";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import Loader from "../../loader/Loader";
-import CustomPagination from "../../common/CustomPagination";
 const VendorPerformanceTable=({page,setPage})=>{
   const navigate=useNavigate();
       const {vendorPerformance,isLoading}=useSelector(state=>state?.inventary);            
@@ -21,7 +17,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       ),
       dataIndex: "title",
       key: "title",
-      width: 100,
+      width: 70,
       align:"center",
       render: (_,text,idx) =>  <CustomText  value={idx+1}/>
     },
@@ -33,10 +29,10 @@ const VendorPerformanceTable=({page,setPage})=>{
       ),
       dataIndex: "vendorName",
       key: "vendorName",
-      width: 250,
+      width: 200,
       render: (_,text) => {        
         return (
-            <div onClick={()=>{navigate(`/admin/vendor-performance/${text?.phoneNumber}`)}}><CustomText value={text?.vendorName}/></div>
+            <div className="cursor-pointer" onClick={()=>{navigate(`/admin/vendor-performance/${text?.phoneNumber}`)}}><CustomText value={text?.vendorName}/></div>
         )
       } 
     },
@@ -47,7 +43,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       ),
       dataIndex: "skuQuantity",
       key: "skuQuantity",
-      width: 150,
+      width: 180,
       align:"center",
       render: (text) =>  <CustomText value={text}/>
     },
@@ -58,7 +54,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       ),
       dataIndex: "productQuantity",
       key: "productQuantity",
-      width: 200,
+      width: 180,
       align: "center",
       render: (text) =>  <CustomText value={` ${text}`}/>
     },
@@ -66,7 +62,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Average Rating"}/>),
       dataIndex: "averageRating",
       key: "averageRating",
-      width: 200,
+      width: 150,
       align: "center",
       render: (text) => <CustomText value={text}/>
     },
@@ -74,7 +70,7 @@ const VendorPerformanceTable=({page,setPage})=>{
       title: ( <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Total Sales"}/>),
       dataIndex: "totalSales",
       key: "totalSales",
-      width: 200,
+      width: 180,
       align: "center",
       render: (text) => <CustomText value={text}/>
     },
@@ -84,22 +80,15 @@ const VendorPerformanceTable=({page,setPage})=>{
       key: "revenue",
       width: 300,
       align: "center",
-      render: (text) =>  <CustomText value={text}/>
+      render: (text) =>  <CustomText value={`Rs. ${text}`}/>
     },
   
      
   ];
-//   const selectTableRowHandler = productKey => {
-//     setSelectedRowKeys(productKey);
-//   };
-//  const rowSelection = {
-//     selectedRowKeys,
-//     onChange: selectTableRowHandler,
-//   };
   if(isLoading) return <Loader/>
     return(
         <>
-              <CustomTable  dataSource={vendorData} columns={columns}/>
+              <CustomTable scroll={{x:1400}} dataSource={vendorData} columns={columns}/>
               <CustomPagination pageNumber={page} total={vendorPerformance?.totalVendors} onchange={(e)=>{setPage(e)}}/>
 
         </>

@@ -15,10 +15,7 @@ const CarousalUi=()=>{
     
     const getHomeVideos=async()=>{
         try {
-            const res=await dispatch(getHomeVideosAsync({token})).unwrap();
-            console.log(res);
-            
-            
+            const res=await dispatch(getHomeVideosAsync({token})).unwrap(); 
         } catch (error) {
            console.log(error);
             

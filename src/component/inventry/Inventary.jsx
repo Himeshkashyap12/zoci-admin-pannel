@@ -1,19 +1,16 @@
 import { Col, Row } from "antd";
-import CustomButton from "../common/CustomButton";
-import CustomText from "../common/CustomText";
-import InventaryTopButton from "./InventaryTopButton";
-import UnitSoldChart from "./UnitSoldChart";
-import UnitSoldByCategary from "./UnitSoldByCategary";
-import ChangeProductPrice from "./ChangeProductPrice.jsx";
-import InventaryCountCards from "./InventaryCountCards.jsx";
-import ProductList from "./ProductList.jsx";
-import InventaryTable from "./InventaryTable.jsx";
 import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import {  getInventaryDashbordAsync } from "../../feature/inventaryManagement/inventarySlice.js";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getInventaryDashbordAsync } from "../../feature/inventaryManagement/inventarySlice.js";
 import Loader from "../loader/Loader.jsx";
 import { dataExportInExcelHandler } from "./constants.jsx";
+import InventaryCountCards from "./InventaryCountCards.jsx";
+import InventaryTable from "./InventaryTable.jsx";
+import InventaryTopButton from "./InventaryTopButton";
+import ProductList from "./ProductList.jsx";
+import UnitSoldByCategary from "./UnitSoldByCategary";
+import UnitSoldChart from "./UnitSoldChart";
 
 const Inventary=()=>{
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);

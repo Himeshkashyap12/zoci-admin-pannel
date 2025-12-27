@@ -127,7 +127,6 @@ const GenerateInvoiceForm = () => {
       });
       setInvoiceInputHandler({ ...invoiceInputHandler, invoiceData: data });
     }
-    console.log(item);
   };
 
   const skuSearchHandler = async (e) => {
@@ -189,8 +188,6 @@ const GenerateInvoiceForm = () => {
     }
   };
   const generateInvoiceHandler = async () => {
-    console.log(invoiceInputHandler);
-
     setIsLoading(true);
     if (
       invoiceInputHandler?.name == "" ||
@@ -235,7 +232,6 @@ const GenerateInvoiceForm = () => {
   const removeproductHandler = (item) => {
     const data = [...invoiceInputHandler?.invoiceData];
     const index = data.findIndex((product) => product?.id == item.id);
-    console.log(index);
     data.splice(index, 1);
     setInvoiceInputHandler({ ...invoiceInputHandler, invoiceData: data });
   };
@@ -350,8 +346,6 @@ const GenerateInvoiceForm = () => {
       width: 160,
       align: "center",
       render: (_, record) => {
-        console.log(record);
-
         return (
           <>
             <div className="flex justify-between px-[20px]">

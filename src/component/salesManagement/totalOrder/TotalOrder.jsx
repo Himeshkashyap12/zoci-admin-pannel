@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
 import SalesCard from "../SalesCard";
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import TotalOrderFilter from "./TotalOrderFilter";
 import TotalOrderTable from "./TotalOrderTable";
 import { useEffect, useState } from "react";
@@ -87,7 +87,8 @@ const TotalOrder = () => {
            {totalOrderCard?.map((item)=>{
             return(
                 <Col span={8}>
-             <SalesCard item={item}/>
+              {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />: <SalesCard item={item}/>}
+
             </Col>
             )
            }) }

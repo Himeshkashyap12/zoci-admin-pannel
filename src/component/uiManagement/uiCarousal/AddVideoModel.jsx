@@ -25,9 +25,7 @@ const handleUpload = async (e) => {
      };
     const uploadVideoHandler=async()=>{
        try {
-        const formData=new FormData();
-        console.log(uploadeFle);
-        
+        const formData=new FormData();        
         formData.append("video",uploadeFle);
        {essance &&  formData.append("title",essanceTitle);}
         const res= await dispatch(updateHomeVideoAsync({token,id:bannerVideo?.[0]?._id,formData})).unwrap();
@@ -38,9 +36,7 @@ const handleUpload = async (e) => {
           setEssanceTitle("");
           setEdit(false)
           
-        }
-        console.log(res,"dsfbdshb");
-                
+        }                
       } catch (error) {
         console.log(error);
         
@@ -50,13 +46,10 @@ const handleUpload = async (e) => {
 
     const addEssanceVideoHandler=async()=>{
        try {
-         const formData=new FormData();
-        console.log(uploadeFle);
-        
+         const formData=new FormData();        
         formData.append("video",uploadeFle);
         formData.append("title",essanceTitle);
         const res=await dispatch(addEssanceVideoAsync({token,formData})).unwrap();
-        console.log(res);
         if(res.success){
          setDeleted(false);
           toast.success(res.message);

@@ -3,15 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { lazy, Suspense } from "react";
 import AdminProtectedRoute from "./utils/AdminProtectedRoute";
-const AdminOrdersPage = lazy(() => import("./pages/adminOrder/AdminOrderPage"));
 const AdminLayout = lazy(() => import("./component/layout/AdminLayout"));
-const AdminProductPage = lazy(() =>
-  import("./pages/adminProductPage/AdminProductPage")
-);
-const AdminCreateFormPage = lazy(() =>
-  import("./pages/adminCreateForm/AdminCreateFormPage")
-);
-
 import LoginPage from "./pages/auth/LoginPage";
 import InventaryPage from "./pages/inventaryPage/InventaryPage";
 import OrderManagementPage from "./pages/orderManagementPage/OrderManagementPage";
@@ -19,7 +11,6 @@ import SalesPage from "./pages/salesPage/SalesPage";
 import CrmPage from "./pages/crmPage/CrmPage";
 import MarketingToolsPage from "./pages/marketinToolsPage/MarketingToolPage";
 import UiManagementpage from "./pages/uiManagementPage/UiManagementpage";
-// import BlogManagementPage from "./pages/blogPage/blogPage";
 import StockAlertPage from "./pages/inventaryPage/StockAlertPage";
 import VendorPerformancePage from "./pages/inventaryPage/VendorPerformancePage";
 import BestSellerPage from "./pages/inventaryPage/BestSellerPage";
@@ -53,6 +44,7 @@ import CreateNewProductPage from "./pages/inventaryPage/CreateNewProduct";
 import VendorPerformanceAnalysisDetailsPage from "./pages/inventaryPage/VendorPerformanceAnalysisDetailsPage";
 import FaqPage from "./pages/faqPage/FaqPage";
 import AddNewOrderPage from "./pages/orderManagementPage/AddNewOrderPage";
+import AddOrderToShipRocketPage from "./pages/orderManagementPage/AddOrderToShipRocketPage";
 function App() {
 
 
@@ -84,6 +76,8 @@ function App() {
              <Route  path="product-returned" element={ <AdminProtectedRoute>  <ProductReturnedPage />  </AdminProtectedRoute> }/>
              <Route  path="generate-invoice" element={ <AdminProtectedRoute>  <GenerateInvoicePage />  </AdminProtectedRoute> }/>
              <Route  path="add-new-order" element={ <AdminProtectedRoute>  <AddNewOrderPage />  </AdminProtectedRoute> }/>
+             <Route  path="add-order-shiprocket" element={ <AdminProtectedRoute>  <AddOrderToShipRocketPage />  </AdminProtectedRoute> }/>
+            
              {/* Order route */}
 
              {/* crm routes */}
@@ -143,56 +137,3 @@ export default App;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-//  <Route
-//               path="products"
-//               element={
-//                 <AdminProtectedRoute>
-//                   <AdminProductPage />
-//                 </AdminProtectedRoute>
-//               }
-//             />
-//             <Route
-//               path="create-product"
-//               element={
-//                 <AdminProtectedRoute>
-//                   <AdminCreateFormPage />
-//                 </AdminProtectedRoute>
-//               }
-//             />
-//             <Route
-//               path="order"
-//               element={
-//                 <AdminProtectedRoute>
-//                   <AdminOrdersPage />
-//                 </AdminProtectedRoute>
-//               }
-//             />
-//             <Route
-//               path="invoice"
-//               element={
-//                 <AdminProtectedRoute>
-//                   <AdminInvoicePage />
-//                 </AdminProtectedRoute>
-//               }
-//             />
-//             <Route
-//               path="generate-invoice"
-//               element={
-//                 <AdminProtectedRoute>
-//                   <GenerateInvoiceForm />
-//                 </AdminProtectedRoute>
-//               }
-//             />
-            

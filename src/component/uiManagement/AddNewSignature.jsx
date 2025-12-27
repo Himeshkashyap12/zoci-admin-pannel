@@ -21,7 +21,6 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
       const data={...search  && {search:search.trim()}}
         try {
         const res=await dispatch(getAllProductAsync({token,data}))
-        console.log(res);
         } catch (error) {
             console.log(error);   
         }   
@@ -29,7 +28,6 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
 
     const selectProductHandler=(id)=>{
       const idx=productId?.findIndex(idx=>id==idx);
-      console.log(idx);
       if(idx==-1){
         setProductId([...productId,id])
       }else{
@@ -37,7 +35,6 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
         data.splice(idx,1);
         setProductId(data)
       }
-      console.log(productId);
       
     }
   
@@ -45,7 +42,6 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
          try {
           const data={productIds:productId}
           const res=await dispatch(addItemToCollectionAsync({token,id:collectionId,data})).unwrap();
-          console.log(res);
           if(res?.success){
             setSignatureModel(false);
             toast.success(res.message);

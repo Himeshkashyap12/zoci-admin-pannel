@@ -79,9 +79,7 @@ const SignatureUi=({collectionId})=>{
             <CustomText className={"text-[16px] font-semibold !text-[#214344] "} value={"Add New Item"}/>
         </div>
         <div className="flex flex-col gap-1 h-[420px] overflow-auto bg-[#fff]  ">
-            {signatureItem?.collection?.items?.map((item)=>{
-                console.log(item);
-                
+            {signatureItem?.collection?.items?.map((item)=>{                
                 return(
                     <>
                     <div className="flex justify-between items-center bg-[#fff] px-[20px]">

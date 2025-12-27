@@ -42,7 +42,6 @@ const ActivePromotionTable=()=>{
          const confirmationPopUpHandler=async()=>{
            try {
             const res=await dispatch(deleteNewPromotionAsync({token,id:seletedId})).unwrap();
-            console.log(res);
             if(res.status){
             toast.success(res.message);
             setPromotionModel(false);
