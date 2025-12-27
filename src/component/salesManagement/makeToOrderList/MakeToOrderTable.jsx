@@ -10,10 +10,7 @@ import { Image } from "antd";
 import { isoToIST } from "../../../constants/constants";
 import CustomPagination from "../../common/CustomPagination";
 const MakeToOrderTable=({page,setPage})=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-      const {makeToOrder,isLoading}=useSelector(state=>state?.sales);
-
-      
+      const {makeToOrder,isLoading}=useSelector(state=>state?.sales);      
      const columns = [
                   {
                 title: (
@@ -115,14 +112,7 @@ const MakeToOrderTable=({page,setPage})=>{
 
 
 
- const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+
     if(isLoading) return <Loader/>
     return(
         <>

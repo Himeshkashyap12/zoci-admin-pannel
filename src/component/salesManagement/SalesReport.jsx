@@ -1,33 +1,30 @@
 
 
-import { Col, Empty, Row, Skeleton } from "antd";
-import CustomText from "../common/CustomText";
-import ProductSalesChart from "./ProductSalesChart";
-import MonthlySalesChart from "./MonthLySalesChart";
-import SalesCard from "./SalesCard";
-import EventSales from "./EventSales";
-import CustomButton from "../common/CustomButton";
-import SalesReportTable from "./SalesReportTable";
-import { Link, useNavigate } from "react-router-dom";
-import CustomModal from "../common/CustomModal";
-import { useEffect, useState } from "react";
-import AddExpense from "./addNewExpense/AddExpence";
-import Cookies from "js-cookie"
-import { useDispatch, useSelector } from "react-redux";
-import { getSalesDashboardAsync, getSalesTimeAsync } from "../../feature/sales/salesSlice";
-import Loader from "../loader/Loader";
+import { Col, Row } from "antd";
 import dayjs from "dayjs";
-import { DotChartOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { getSalesDashboardAsync, getSalesTimeAsync } from "../../feature/sales/salesSlice";
+import CustomButton from "../common/CustomButton";
+import CustomModal from "../common/CustomModal";
+import CustomText from "../common/CustomText";
+import Loader from "../loader/Loader";
+import AddExpense from "./addNewExpense/AddExpence";
+import EventSales from "./EventSales";
+import MonthlySalesChart from "./MonthLySalesChart";
+import ProductSalesChart from "./ProductSalesChart";
+import SalesCard from "./SalesCard";
+import SalesReportTable from "./SalesReportTable";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const [salesDateOptionValue,setSalesDateOptionValue]=useState({});
-  const [salesChartValue,setSalesChartValue]=useState("");
-  console.log(salesDateOptionValue,"kbdsfh");
-  
+  const [salesChartValue,setSalesChartValue]=useState("");  
   const navigate=useNavigate();
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
-  const {slaesDashboard,isLoading,isDashboardLoading}=useSelector(state=>state?.sales);
+  const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
 
    const handleSalesReport=(e)=>{
     setSalesChartValue(e)
@@ -54,8 +51,6 @@ const SalesReport=()=>{
     endDate: endDate.format("YYYY-MM-DD")
   };
   setSalesDateOptionValue(payload)
-
-    
 
   }
         const getSalesDashboard=async()=>{

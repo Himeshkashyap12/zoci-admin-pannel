@@ -1,16 +1,14 @@
 
-import CustomText from "../common/CustomText";
-import BlogFilter from "./BlogFilter";
-import BlogCard from "./BlogCard";
 import { Col, Empty, Row } from "antd";
-import Cookies from "js-cookie"
-import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 import { useCallback, useEffect, useState } from "react";
-import { filteredDataHandler, getBlogAsync } from "../../feature/blog/blogSlice";
-import Loader from "../loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { getBlogAsync } from "../../feature/blog/blogSlice";
 import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
-import ImageLoader from "../loader/ImageLoader";
+import CustomText from "../common/CustomText";
 import PaginationLoader from "../loader/PaginationLoader";
+import BlogCard from "./BlogCard";
+import BlogFilter from "./BlogFilter";
 const Blog = () => {
       const token=Cookies.get("token");  
       const dispatch=useDispatch();

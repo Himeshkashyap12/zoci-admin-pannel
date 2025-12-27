@@ -188,9 +188,7 @@ export const promotionExportInExcelAsync = createAsyncThunk(
           ...data
         },
         responseType: "blob",
-      });
-      console.log(res);
-      
+      });      
        return { blob: res.data, headers: res.headers };      
     } catch (error) { 
       console.log(error);

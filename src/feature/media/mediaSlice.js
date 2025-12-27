@@ -8,9 +8,7 @@ const initialState = {
 
 export const getImageUrlAsync = createAsyncThunk(
   "image/imageUrlAsync",
- async ({token,formData}) => {
-  console.log(formData,"dkhjgj");
-  
+ async ({token,formData}) => {  
         try {
       const res = await api.post(`upload/uploadProductImages`,formData,{
         headers: {

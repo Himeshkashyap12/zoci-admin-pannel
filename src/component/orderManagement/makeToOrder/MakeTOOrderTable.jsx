@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import { Image } from "antd";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { isoToIST } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import { getMakeToOrderAsync } from "../../../feature/order/orderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie"
-import { Image } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
-import CustomSelect from "../../common/CustomSelect";
 import Loader from "../../loader/Loader";
-import CustomPagination from "../../common/CustomPagination";
-import { isoToIST } from "../../../constants/constants";
 const MakeToOrderTablePage=({setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {makeToOrder,isLoading}=useSelector(state=>state?.order);
+      const navigate=useNavigate();
          const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
@@ -41,7 +39,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 dataIndex: "image",
                 key: "image",
                 align:"center",
-                width: 200,
+                width: 150,
                 render: (_,text) => <div className="flex justify-center"> <div className="size-[70px] "><Image className="h-full w-full object-cover" src={text?.items[0]?.image}/></div></div>
               },
                 {
@@ -50,7 +48,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 dataIndex: "orderId",
                 key: "orderId",
                 align:"center",
-                width: 250,
+                width: 200,
                 render: (_,text) =>  <CustomText value={text?.orderId}/>
               },
               {
@@ -87,7 +85,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Address"}/> ),
                 dataIndex: "customerAddress",
                 key: "customerAddress",
-                width: 250,
+                width: 350,
                 render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
 
               },
@@ -95,8 +93,8 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Contact No."}/>),
                 dataIndex: "customerMobile",
                 key: "customerMobile",
-                width: 250,
-                align: "start",
+                width: 180,
+                align: "center",
                 render: (text) => <CustomText value={text}/>
               },
                {
@@ -111,7 +109,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Adv Payment"}/>),
                 dataIndex: "advancePayment",
                 key: "advancePayment",
-                width: 250,
+                width: 200,
                 align: "center",
                 render: (text) => <CustomText value={`Rs. ${text}`}/>
               },
@@ -119,7 +117,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Due payment"}/>),
                 dataIndex: "duePayment",
                 key: "duePayment",
-                width: 250,
+                width: 180,
                 align: "center",
                 render: (text) => <CustomText value={`Rs. ${text}`}/>
               },
@@ -138,7 +136,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),
                 dataIndex: "orderStatus",
                 key: "orderStatus",
-                width: 200,
+                width: 180,
                 align: "center",
                 render: (_,text) =>  (<CustomText 
                      className={`font-semibold
@@ -154,7 +152,15 @@ const MakeToOrderTablePage=({setPage,page})=>{
                      `}
                     value={text?.orderStatus}/> )
               },
-               {
+              //  {
+              //   title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Add to shiprocket"}/>),
+              //   dataIndex: "items",
+              //   key: "items",
+              //   width: 250,
+              //   align: "center",
+              //   render: (_,text) =><div className="cursor-pointer" onClick={()=>{navigate("/admin/add-order-shiprocket")}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
+              // },
+              {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Date"}/>),
                 dataIndex: "items",
                 key: "items",
@@ -164,7 +170,6 @@ const MakeToOrderTablePage=({setPage,page})=>{
               },
             ];
           const onSelectChange = newSelectedRowKeys => {
-              console.log('selectedRowKeys changed: ', newSelectedRowKeys);
               setSelectedRowKeys(newSelectedRowKeys);
             };
           const rowSelection = {

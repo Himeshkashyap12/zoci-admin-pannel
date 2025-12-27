@@ -9,9 +9,6 @@ import { toast } from "react-toastify";
 import CustomPagination from "../../common/CustomPagination.jsx"
 const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
       const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);
-      const makeOnlineOrderData=makeOnlineOrders?.orders?.map((item)=>{
-        return ( {...item,key:item?.orderId})
-      });      
          const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
@@ -137,7 +134,6 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
             ];
 
           const onSelectChange = newSelectedRowKeys => {
-              console.log('selectedRowKeys changed: ', newSelectedRowKeys);
               setSelectedRowKeys(newSelectedRowKeys);
             };
           const rowSelection = {
@@ -147,7 +143,7 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
         if(isLoading) return <Loader/>;
     return(
         <>
-              <CustomTable scroll={{x:1800}}  dataSource={makeOnlineOrderData} columns={columns}/>
+              <CustomTable scroll={{x:1800}}  dataSource={makeOnlineOrders?.orders} columns={columns}/>
          <CustomPagination pageNumber={page} total={makeOnlineOrders?.total} onchange={(e)=>{setPage(e)}}/>
 
         </>

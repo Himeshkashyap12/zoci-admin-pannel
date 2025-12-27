@@ -10,9 +10,7 @@ import PaginationLoader from "../../loader/PaginationLoader";
 const HomeVideo=({homeVideos})=>{
     const [videoLoading,setVideoLoading]=useState(true)
     const [VideoModel,setVideoModel]=useState(false);
-    const bannerVideo=homeVideos?.data?.filter((item)=> item?.title=="BannerVideo")
-    console.log(bannerVideo,"nfvkjbf");
-    
+    const bannerVideo=homeVideos?.data?.filter((item)=> item?.title=="BannerVideo")    
     return(
         <div className="flex flex-col gap-3 relative">
             <CustomText className={"!text-[#214344] font-[400] !text-[20px]"} value={"Home Page Video Slider"}/>

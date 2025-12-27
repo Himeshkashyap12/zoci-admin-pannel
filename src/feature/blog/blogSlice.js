@@ -58,9 +58,7 @@ export const blogSlice = createSlice({
           state.isLoading = true;
         });
         builder.addCase(getBlogAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;
-          console.log(action?.payload,"kfsufb");
-          
+          state.isLoading = false;          
           state.blog = [...state?.blog,...action.payload.blogs];
         });
         builder.addCase(getBlogAsync.rejected, (state, action) => {

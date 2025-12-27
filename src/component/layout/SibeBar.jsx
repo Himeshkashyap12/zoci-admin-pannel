@@ -27,6 +27,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 0 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 0 && "2px solid #F0D5A0",
       },
       label: (
@@ -50,6 +51,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 1 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 1 && "2px solid #F0D5A0",
       },
       label: (
@@ -71,6 +73,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 2 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 2 && "2px solid #F0D5A0",
       },
       label: (
@@ -92,6 +95,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 3 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 3 && "2px solid #F0D5A0",
       },
       label: (
@@ -113,6 +117,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 4 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 4 && "2px solid #F0D5A0",
       },
       label: (
@@ -134,6 +139,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 6 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 6 && "2px solid #F0D5A0",
       },
       label: (
@@ -155,6 +161,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 7 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 7 && "2px solid #F0D5A0",
       },
       label: (
@@ -176,6 +183,7 @@ const CustomSidebar = () => {
         backgroundColor: selectKey == 8 && "#F0D5A0",
         marginBottom: "10px",
         height: "40px",
+        paddingTop:"2px",
         border: selectKey != 8 && "2px solid #F0D5A0",
       },
       label: (

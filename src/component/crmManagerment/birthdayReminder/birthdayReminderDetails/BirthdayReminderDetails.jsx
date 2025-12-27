@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 import CustomText from "../../../common/CustomText";

@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { isoToISTDateOnly } from "../../../constants/constants";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie"
-import { toast } from "react-toastify";
-import { getBirthdayAnniversaryReminderAsync } from "../../../feature/crm/crmSlice";
-import { CopyOutlined } from "@ant-design/icons";
-import { isoToIST } from "../../../constants/constants";
 import Loader from "../../loader/Loader";
 const AnniversaryRemindertable=()=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -67,7 +64,8 @@ const AnniversaryRemindertable=()=>{
       dataIndex: "birthdayDate",
       key: "birthdayDate",
       width: 130,
-      render: (text) =>   <CustomText value={isoToIST(text)}/>
+      align:"center",
+      render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
     }
    
   ];

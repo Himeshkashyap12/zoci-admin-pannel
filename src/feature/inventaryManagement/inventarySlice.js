@@ -88,9 +88,7 @@ export const updateProductAsync = createAsyncThunk(
           "Authorization": `Bearer ${token}`,
         }
 
-      });
-      console.log(res,"dfdf");
-      
+      });      
       return res?.data; // No need for `await res.data`
     } catch (error) {
       throw error;
@@ -345,9 +343,7 @@ export const inventarySlice = createSlice({
           state.isLoading = true;
         });
         builder.addCase(stockLevelAlertAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;   
-          console.log(action.payload);
-          
+          state.isLoading = false;             
           state.stockLevelAlert = action.payload;
 
         });
@@ -359,9 +355,7 @@ export const inventarySlice = createSlice({
           state.isLoading = true;
         });
         builder.addCase(notifyMeAsync.fulfilled, (state, action) => {                
-          state.isLoading = false;   
-          console.log(action.payload);
-          
+          state.isLoading = false;             
           state.notfyMe = action.payload;
 
         });
@@ -436,9 +430,7 @@ export const inventarySlice = createSlice({
 
         });
         builder.addCase(createProductHandlerAsync.rejected, (state, action) => {
-          state.isCreateProductLoading = false;
-          console.log(action);
-          
+          state.isCreateProductLoading = false;          
           state.error = action.payload;
         });
          builder.addCase(createBulkProductAsync.pending, (state) => {
@@ -460,9 +452,7 @@ export const inventarySlice = createSlice({
 
         });
         builder.addCase(updateProductAsync.rejected, (state, action) => {
-          state.isCreateProductLoading = false;
-          console.log(action.payload);
-          
+          state.isCreateProductLoading = false;          
           state.error = action.payload;
         });
           builder.addCase(getAllProductByIdAsync.pending, (state) => {
@@ -474,9 +464,7 @@ export const inventarySlice = createSlice({
 
         });
         builder.addCase(getAllProductByIdAsync.rejected, (state, action) => {
-          state.isCreateProductLoading = false;
-          console.log(action.payload);
-          
+          state.isCreateProductLoading = false;          
           state.error = action.payload;
         });
          builder.addCase(productBySkuAsync.pending, (state) => {

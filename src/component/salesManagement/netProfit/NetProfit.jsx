@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
 import SalesCard from "../SalesCard";
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import NetProfitFilter from "./NetProfitFilter";
 import NetProfitTable from "./NetProfitTable";
 import Cookies from "js-cookie";
@@ -20,9 +20,7 @@ const NetProfit = () => {
    const [sort,setSort]=useState([])    
    const [page,setPage]=useState(1)       
   const dispatch = useDispatch();
-  const { netProfit } = useSelector((state) => state?.sales);
-  console.log(netProfit,"netProfit");
-  
+  const { netProfit,isLoading } = useSelector((state) => state?.sales);  
   const getNetProfitHanler = async () => {
       const trimSearch=search.trim();
                 const data={
@@ -83,7 +81,7 @@ const NetProfit = () => {
           {totalNetProfit?.map((item) => {
             return (
               <Col span={8}>
-                <SalesCard item={item} />
+                {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />: <SalesCard item={item}/>}
               </Col>
             );
           })}

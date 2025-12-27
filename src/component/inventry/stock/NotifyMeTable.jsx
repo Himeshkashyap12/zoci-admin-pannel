@@ -16,7 +16,7 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page
       ),
       dataIndex: "title",
       key: "title",
-      width: 100,
+      width: 80,
       render: (_,text,idx) =>  <CustomText className={  " "} value={idx+1}/>
     },
     
@@ -56,7 +56,7 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page
       ),
       dataIndex: "price",
       key: "price",
-      width: 200,
+      width: 180,
       align: "center",
       render: (text) =>  <CustomText value={`Rs. ${text}`}/>
     },
@@ -73,7 +73,7 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page
       title: (   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Category"}/>),
       dataIndex: "category",
       key: "category",
-      width: 300,
+      width: 200,
       align: "center",
       render: (text) =>  <CustomText value={text}/>
     },
@@ -82,7 +82,7 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page
       dataIndex: "interestedCount",
       align: "center",
       key: "interestedCount",
-      width: 300,
+      width: 250,
       render: (text) =>  <CustomText value={text}/>
 
      
@@ -100,7 +100,7 @@ const NotifyMeTable=({setSelectedRowKeys,selectedRowKeys,notifyMeData,total,page
 
     return(
         <>
-              <CustomTable rowSelection={rowSelection}  dataSource={notifyMeData} columns={columns}/>
+              <CustomTable scroll={{x:1400}} rowSelection={rowSelection}  dataSource={notifyMeData} columns={columns}/>
               <CustomPagination pageNumber={page} total={total} onchange={(e)=>{setPage(e)}}/>
 
         </>

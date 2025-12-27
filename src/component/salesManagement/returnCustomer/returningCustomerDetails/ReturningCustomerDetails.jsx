@@ -13,7 +13,6 @@ const ReturningCustomerDetails=({id})=>{
     const token=Cookies.get("token");
     const dispatch=useDispatch();
     const {returningCustomerDetails,isLoading}=useSelector(state=>state?.sales);      
-    console.log(returningCustomerDetails,"returningCustomerDetails");
     
             const returningCustomerDetailsHandler=async()=>{
               try {

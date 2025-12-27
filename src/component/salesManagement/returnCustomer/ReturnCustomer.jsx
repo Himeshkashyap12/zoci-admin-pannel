@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
 import SalesCard from "../SalesCard";
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import ReturningCustomerFilter from "./ReturningCustomerFilter";
 import ReturningCustomerTable from "./ReturningCustomerTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -86,7 +86,8 @@ const ReturnCustomer = () => {
                 {totalReturnCards?.map((item)=>{
                   return(
                       <Col span={8}>
-                  <SalesCard item={item}/>
+                    {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />: <SalesCard item={item}/>}
+
                   </Col>
                   )
                 }) }

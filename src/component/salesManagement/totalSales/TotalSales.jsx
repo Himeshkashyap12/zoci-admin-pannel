@@ -4,7 +4,7 @@ import ToTalSalesFilter from "./TotalSalesFilter";
 import TotalSalesTable from "./TotalSalesTable";
 import { LeftOutlined } from "@ant-design/icons";
 import SalesCard from "../SalesCard";
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
@@ -84,7 +84,7 @@ const TotalSales = () => {
            {totalSalesCard?.map((item)=>{
             return(
                 <Col span={8}>
-             <SalesCard item={item}/>
+            {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />: <SalesCard item={item}/>}
             </Col>
             )
            }) }

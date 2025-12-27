@@ -156,7 +156,6 @@ const TotalOrderTable = ({ item, page, setPage }) => {
   ];
 
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {

@@ -24,9 +24,7 @@ const ExpiredPromotionTable=()=>{
             const [page,setPage]=useState(1);
             const [promotionModel ,setPromotionModel]=useState(false);
             const {promotion,isLoading}=useSelector(state=>state?.marketing);
-            const [edititem,setEditItem]=useState(null)
-            console.log(promotion,"promotion");
-            
+            const [edititem,setEditItem]=useState(null)            
         const getActivePromotion=async()=>{
           try {
             const data={isActive:false}
@@ -38,7 +36,6 @@ const ExpiredPromotionTable=()=>{
  const confirmationPopUpHandler=async()=>{
            try {
             const res=await dispatch(deleteNewPromotionAsync({token,id:seletedId})).unwrap();
-            console.log(res);
             if(res.status){
             toast.success(res.message);
             setPromotionModel(false);

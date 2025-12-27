@@ -6,9 +6,7 @@ import CustomButton from "../common/CustomButton";
 import CustomText from "../common/CustomText";
 import calender from "../../assets/chart/calender.png"
 import { Avatar, Image } from "antd";
-const ProductChart=({exchangedCategories})=>{
-  console.log(exchangedCategories,"exchangedCategories");
-  
+const ProductChart=({exchangedCategories})=>{  
       const options = {
     chart: {
       id: "basic-line",

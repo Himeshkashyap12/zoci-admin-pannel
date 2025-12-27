@@ -8,7 +8,7 @@ import Cookies from "js-cookie"
 import Loader from "../../loader/Loader";
 import { CopyOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
-import { isoToIST } from "../../../constants/constants";
+import { isoToIST, isoToISTDateOnly } from "../../../constants/constants";
 import CustomPagination from "../../common/CustomPagination";
 const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})=>{
       const navigate=useNavigate();
@@ -35,7 +35,7 @@ const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,p
               ),
               dataIndex: "title",
               key: "title",
-              width: 100,
+              width: 70,
               render: (_,item,idx) =>  <CustomText  value={idx+1}/>
             },
             
@@ -56,7 +56,8 @@ const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,p
               dataIndex: "mobile",
               key: "mobile",
               align:"start",
-              width: 200,
+              width: 180,
+              align:"center",
               render: (text) =>  <CustomText value={text}/>
             },
             {
@@ -66,23 +67,23 @@ const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,p
               ),
               dataIndex: "address",
               key: "address",
-              width: 350,
+              width: 300,
               render: (_,text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.address[0]?.address.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text?.address[0]?.address)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
             },
             {
               title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Anniversary Date"}/>,
               dataIndex: "anniversary",
               key: "anniversary",
-              width: 250,
+              width: 180,
               align:"center",
-              render: (_,text) =>   <CustomText value={isoToIST(text?.anniversary?.date)}/>
+              render: (_,text) =>   <CustomText value={isoToISTDateOnly(text?.anniversary?.date)}/>
             },
              {
               title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Spouse Name"}/>,
               dataIndex: "anniversary",
               key: "anniversary",
-              width: 250,
-              align:"center",
+              width: 200,
+              align:"start",
               render: (_,text) =>   <CustomText value={text?.anniversary?.spouseName}/>
             },
              {
@@ -95,7 +96,6 @@ const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,p
             }
           ];
  const onSelectChange = newSelectedRowKeys => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
  const rowSelection = {
@@ -105,7 +105,7 @@ const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,p
   if(isLoading) return <Loader/>
     return(
         <>
-        <CustomTable   scroll={{x:1500}}  dataSource={anniversary?.users} columns={columns}/>
+        <CustomTable   scroll={{x:1400}}  dataSource={anniversary?.users} columns={columns}/>
         <CustomPagination pageNumber={page} total={anniversary?.total} onchange={(e)=>{setPage(e)}}/>
        
         </>
