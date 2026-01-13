@@ -18,7 +18,7 @@ import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import Loader from "../loader/Loader";
 import { createProductHandlerAsync, getAllProductByIdAsync, updateProductAsync } from "../../feature/inventaryManagement/inventarySlice";
-import { compareNewAndOldObject } from "../../constants/constants";
+import { compareNewAndOldObject, generate4DigitRandomNumber } from "../../constants/constants";
 import { specialChar } from "../../constants/regex";
 const CreateNewProduct = () => {
   const {state}=useLocation();  
@@ -115,12 +115,11 @@ const CreateNewProduct = () => {
                            break;
                  case "video":
                            setProductInput({...productInput,video:res?.images})
-                           break;
-                      
+                           break;   
                  }
               }
-              } catch (err) {
-              console.error(err);
+              } catch (error) {
+              console.error(error);
             }
       };
   const createProductHandler=async()=>{
@@ -134,17 +133,15 @@ const CreateNewProduct = () => {
         }else{
       {res?.response?.data?.errors.map((item)=>{
         return( toast.error(item))
-      })}
-      
+      })} 
     }
-    
     }else{
       const updatedData=compareNewAndOldObject({oldObj:productById?.product,newObj:productInput})
        const res=await dispatch(updateProductAsync({token,data:updatedData,id:productById?.product?._id})).unwrap();
        if(res.status){
           toast.success(res.message);
           navigate("/admin/inventary")
-    }
+      }
     }
    } catch (error) {
     console.log(error);
@@ -164,7 +161,7 @@ const CreateNewProduct = () => {
       }
    }
      catch (error) {
-      console.log(err);
+      console.log(error);
       
     }
   }
@@ -174,6 +171,13 @@ const CreateNewProduct = () => {
 
   useEffect(()=>{
      getCategoryHandler()
+  },[])
+
+  useEffect(()=>{
+      const randomSku=generate4DigitRandomNumber();
+      console.log(randomSku,"jbhb");
+      
+     setProductInput({...productInput,sku:randomSku})
   },[])
   if(isMediaLoading || isCreateProductLoading) return <Loader/>
   return (
@@ -209,13 +213,13 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
-                   <CustomLabel required value={"Prodution Source"} />
+                   <CustomLabel required value={"Product Source"} />
                    <CustomSelect value={productInput?.productionSource} onchange={(e)=>{setProductInput({...productInput,productionSource:e})}} options={[{label:"Company Custom",value:"Company Custom"},{label:"Vendor Custom",value:"Vendor Custom"}]} className="!rounded-full" />
                 </div>
               </Col>
               <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"Prodution Category"} />
+                  <CustomLabel required value={"Product Category"} />
                   <CustomSelect value={productInput?.category} onchange={(e)=>{setProductInput({...productInput,category:e})}} options={categoryData} className="!rounded-full" />
                 </div>
               </Col>
@@ -334,7 +338,7 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"HUD No."} />
+                  <CustomLabel  value={"HUD No."} />
                     <CustomInput name="hudNo"
                         value={productInput.hudNo}
                         onchange={productInputHandler}
@@ -346,9 +350,8 @@ const CreateNewProduct = () => {
                   <CustomLabel required value={"SKU ID"} />
                     <CustomInput 
                     name="sku"
-                  value={productInput.sku}
-                  onchange={productInputHandler} className="!rounded-full" />
-
+                    value={productInput?.sku}
+                    onchange={(e)=>{productInputHandler(e)}} className="!rounded-full" />
                 </div>
               </Col>
             </Row>
@@ -506,7 +509,7 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"Prodution Name"} />
+                  <CustomLabel required value={"Product Name"} />
                   <div className="relative">
                     <CustomInput 
                      name="title"

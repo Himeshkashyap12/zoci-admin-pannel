@@ -46,16 +46,16 @@ const TotalOrder = () => {
             }
      const totalOrderCard=[
               {
-              title: "Exhibition Expenses",
-              value: `Rs. ${totalOrders?.summary?.exhibitionOrders}`,
+              title: "Exhibition Orders",
+              value: `${totalOrders?.summary?.exhibitionOrders}`,
             },
             {
-              title: "Event Expenses",
-              value: `Rs. ${totalOrders?.summary?.eventOrders}`,
+              title: "Event Orders",
+              value: `${totalOrders?.summary?.eventOrders}`,
             },
             {
-              title: "Online/Operational Expenses",
-              value: `Rs. ${totalOrders?.summary?.onlineOrders}`,
+              title: "Online Orders",
+              value: `${totalOrders?.summary?.onlineOrders}`,
             },
             ]
               useEffect(()=>{
@@ -96,7 +96,7 @@ const TotalOrder = () => {
         </Row>
       </div>
       <div>
-        <TotalOrderFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
+        <TotalOrderFilter setPage={setPage} filterKey={filter} sortKey={sort}  setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
       </div>
       <div>
         <TotalOrderTable page={page} setPage={setPage}   item={totalOrders} />

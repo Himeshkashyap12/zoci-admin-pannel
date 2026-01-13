@@ -50,7 +50,7 @@ const VendorPerformance=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Inventory Management & Analysis → Vendor Performance Analysis"}/>
             </div>
             <div>
-                <VendorFilter search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+                <VendorFilter filterKey={filter} sortKey={sort} setPage={setPage} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
             </div>
             
               <div>

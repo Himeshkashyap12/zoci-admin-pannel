@@ -1,69 +1,40 @@
 import { Col, DatePicker, Image, Row } from "antd";
-import filter from "../../../assets/inventary/filter.png"
-import sort from "../../../assets/inventary/sort.png"
-import exports from "../../../assets/inventary/export.png"
-import CustomText from "../../common/CustomText";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import exports from "../../../assets/inventary/export.png";
+import filter from "../../../assets/inventary/filter.png";
+import sort from "../../../assets/inventary/sort.png";
+import { getAllPromotionAsync } from "../../../feature/marketing/marketingSlice";
+import { useDebounce } from "../../../hooks/UseDebounce";
 import CustomButton from "../../common/CustomButton";
 import CustomInput from "../../common/CustomInput";
 import CustomModal from "../../common/CustomModal";
-import { useEffect, useState } from "react";
-import CreateNewPromotion from "../CreateNewPromotion";
-import { useDispatch } from "react-redux";
-import Cookies from "js-cookie"
-import { getAllPromotionAsync, promotionExportInExcelAsync } from "../../../feature/marketing/marketingSlice";
-import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomText from "../../common/CustomText";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
-import { activePromotionFilter, activePromotionSort } from "./activePromotionFilterData";
-import "../marketing.css"
-import CustomDate from "../../common/CustomDate";
-import { isoToUTC } from "../../../constants/constants";
+import CreateNewPromotion from "../CreateNewPromotion";
 import { marketingPromotionHandler } from "../exportMarketing";
+import "../marketing.css";
+import { activePromotionFilter, activePromotionSort } from "./activePromotionFilterData";
+import { toast } from "react-toastify";
 const { RangePicker } = DatePicker;
-const ActivePromotionFilter=()=>{
-  const [newPromotionModel,setPromotionModel]=useState(false);
-     const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const [search,setSearch]=useState("");
-      const [activeSort,setSort]=useState([]);
-      const [activeFilter,setFilter]=useState([]);
-      const [expireDate,setExpireDate]=useState("");
-      const [promotionDate,setPromotionDate]=useState("")
-      const debouncedText=useDebounce(search,500);
-        const getActivePromotion=async()=>{
-          try {
-             const trimSearch=search.trim();
-            const data={
+const ActivePromotionFilter=({setSearch,search,setFilter,activeFilter,activeSort,setSort})=>{
+         const [newPromotionModel,setPromotionModel]=useState(false);
+         const dispatch=useDispatch();
+         const token=Cookies.get("token");
+         const {promotion}=useSelector(state=>state?.marketing);
+        const exportOrderHandler = async () => {
+         if(promotion?.promos?.length==0) return toast?.error("Please add promotion before export")
+           const trimSearch=search?.trim();
+              const data={
                 ...(trimSearch && { search:trimSearch }),
                 ...(activeSort?.length>0 && { [activeSort[0]]:activeSort[1] }),
                 ...(activeFilter?.length>0 && { [activeFilter[0]]:activeFilter[1] }),
                   page:1,
                   limit:10
-              }
-      if (search && !trimSearch) {
-        return; 
-      }
-       const res=await dispatch(getAllPromotionAsync({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-
-      const exportOrderHandler = async () => {
-           const trimSearch=search.trim();
-            const data={
-                ...(trimSearch && { search:trimSearch }),
-                ...(activeSort?.length>0 && { [activeSort[0]]:activeSort[1] }),
-                ...(activeFilter?.length>0 && { [activeFilter[0]]:activeFilter[1] }),
-                  page:1,
-                  limit:10
-                }
-           marketingPromotionHandler({dispatch,token,data})
-         };
-
-        useEffect(()=>{
-            getActivePromotion();
-        },[debouncedText,activeFilter,activeSort,expireDate])
-
+               }
+            marketingPromotionHandler({dispatch,token,data})
+        };
     return(
         <div className="marketing">
          <Row justify={"space-between"} gutter={[40]}>
@@ -82,7 +53,7 @@ const ActivePromotionFilter=()=>{
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter  placeholder={"Sort"}    onchange={(value)=>{setPromotionDate(value)}} option={activePromotionSort}/>
+                    <CustomMultipleFilter  placeholder={"Sort"}    onchange={(value)=>{setSort(value)}} option={activePromotionSort}/>
                   </div>}/>
                     <CustomButton onclick={()=>{exportOrderHandler()}} value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={exports}/>

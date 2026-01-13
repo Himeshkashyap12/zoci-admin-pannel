@@ -1,4 +1,4 @@
-import { CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Image } from "antd";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import Loader from "../../loader/Loader";
+
 const MakeToOrderTablePage=({setPage,page})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {makeToOrder,isLoading}=useSelector(state=>state?.order);
@@ -152,14 +153,14 @@ const MakeToOrderTablePage=({setPage,page})=>{
                      `}
                     value={text?.orderStatus}/> )
               },
-              //  {
-              //   title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Add to shiprocket"}/>),
-              //   dataIndex: "items",
-              //   key: "items",
-              //   width: 250,
-              //   align: "center",
-              //   render: (_,text) =><div className="cursor-pointer" onClick={()=>{navigate("/admin/add-order-shiprocket")}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
-              // },
+               {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Add to shiprocket"}/>),
+                dataIndex: "items",
+                key: "items",
+                width: 250,
+                align: "center",
+                render: (_,text) =><div className="cursor-pointer" onClick={()=>{navigate("/admin/add-order-shiprocket",{state:{item:text,status:"makeOnlineOrder"}})}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
+              },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Date"}/>),
                 dataIndex: "items",

@@ -33,7 +33,6 @@ const AddNewBlog=()=>{
     const newBlogInputField=newBlogInput?.title && newBlogInput?.description && newBlogInput?.image;
   const newBlogInputHandler=(e)=>{
     const {name,value}=e.target;
-     if(specialChar?.test(value)) return ;
      setNewBlogInput({...newBlogInput,[name]:value})
 
   }
@@ -101,6 +100,7 @@ const AddNewBlog=()=>{
                    <Image preview={false} className="!size-[30px]" src={blogUpload}/>
                 <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
                 <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
+                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image width should be min 1000px"}/>
                 </div>}/>:<div onClick={()=>{setImageUrl(null)}} className="relative cursor-pointer">
                     <Image preview={false} className="!h-[400px] !w-full object-cover rounded-xl" src={imageUrl}/>
                     <div className="absolute -top-3 -right-3 rounded-full border-[2px] border-[#214344] "><CloseOutlined  style={{color:"#214344" ,fontSize:"24px", padding:"2px"}}/></div>

@@ -179,7 +179,6 @@ const ExpiredPromotionTable=()=>{
         <>
         <CustomTable scroll={{x:1700}}  dataSource={promotion?.promos} columns={columns}/>
         <CustomPagination pageNumber={page} total={promotion?.total} onchange={(e)=>{setPage(e)}}/>
-     
        <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setOpen={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
 
         </>

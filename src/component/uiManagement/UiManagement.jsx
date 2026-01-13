@@ -51,6 +51,9 @@ const UiManagement=()=>{
         }
         useEffect(()=>{
                      getCollection();
+                     return()=>{
+                      dispatch(collectionDataHandler())
+                     }
                 },[debouncedText,sortFilter,deleteStatus,page]); ;
 
                 const loadMore = useCallback(() => {

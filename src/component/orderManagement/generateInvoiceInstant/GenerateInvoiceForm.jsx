@@ -1,39 +1,38 @@
+import { DeleteOutlined, LeftOutlined } from "@ant-design/icons";
 import {
   Avatar,
+  Button,
   Col,
   DatePicker,
-  Empty,
+  Form,
   Row,
   Select,
-  Table,
-  Typography,
+  Typography
 } from "antd";
-import { Button, Form } from "antd";
+import dayjs from "dayjs";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { specialChar } from "../../../constants/regex";
 import {
   generateInvoice,
   previewPdfHandler,
 } from "../../../feature/admin/adminApi";
 import { addSku } from "../../../feature/admin/adminSlice";
-import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
-import { DeleteOutlined, EditOutlined, LeftOutlined } from "@ant-design/icons";
-import CustomTable from "../../common/CustomTable";
-import CustomText from "../../common/CustomText";
-import Loader from "../../loader/Loader";
-import CustomInput from "../../common/CustomInput";
-import { specialChar } from "../../../constants/regex";
-import { useDebounce } from "../../../hooks/UseDebounce";
 import { productBySkuAsync } from "../../../feature/inventaryManagement/inventarySlice";
-import CustomSelect from "../../common/CustomSelect";
 import {
   getEventTypeAsync,
   getPreviousAddressAsync,
   getPreviousBillingPlaceAsync,
 } from "../../../feature/order/orderSlice";
-import Cookies from "js-cookie";
+import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomInput from "../../common/CustomInput";
+import CustomSelect from "../../common/CustomSelect";
+import CustomTable from "../../common/CustomTable";
+import CustomText from "../../common/CustomText";
+import Loader from "../../loader/Loader";
 const GenerateInvoiceForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ const GenerateInvoiceForm = () => {
   const skuFilteredData = productBySku.filter((item) => item?.stock > 0);
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState();
-  const debounceSearch = useDebounce(search, 500);
+  const debounceSearch = useDebounce(search, 500);  
   const previosAddressDataOption = previosAddressData?.data?.map((item) => {
     return { label: item, value: item };
   });
@@ -661,6 +660,7 @@ const GenerateInvoiceForm = () => {
         <Row>
           <Col span={24}>
             <CustomTable
+            scroll={{x:1200}}
               pagination={false}
               columns={columns}
               dataSource={invoiceInputHandler?.invoiceData}

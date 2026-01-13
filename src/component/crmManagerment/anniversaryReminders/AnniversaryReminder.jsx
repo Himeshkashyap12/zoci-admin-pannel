@@ -60,7 +60,7 @@ const AnniversaryReminder = () => {
       </div>
      
       <div>
-        <BirthdayReminderFilter setDate={setDate} date={date} search={search} setSearch={setSearch} setSortKey={setSortKey}/>
+        <BirthdayReminderFilter  setPage={setPage}  sortKey={sortKey} setDate={setDate} date={date} search={search} setSearch={setSearch} setSortKey={setSortKey}/>
       </div>
       <div>
         <AnniversaryRemindertable  page={page} setPage={setPage}/>

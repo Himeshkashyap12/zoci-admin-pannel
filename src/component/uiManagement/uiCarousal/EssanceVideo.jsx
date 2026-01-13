@@ -1,17 +1,16 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import CustomText from "../../common/CustomText";
-import { Col, Image, Row } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Col, Row } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import {  deleteCategoryAsync, deleteHomeVideoAsync, getHomeVideosAsync, getMenCategoryHandlerAsync } from "../../../feature/uiManagement/UiManagementSlice";
-import ImageLoader from "../../loader/ImageLoader";
-import CustomModal from "../../common/CustomModal";
-import CreateCategory from "./CreateCategory";
-import ConfirmationPopup from "../../common/ConfirmationPopup";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import AddVideoModel from "./AddVideoModel";
+import { deleteHomeVideoAsync, getHomeVideosAsync } from "../../../feature/uiManagement/UiManagementSlice";
+import ConfirmationPopup from "../../common/ConfirmationPopup";
+import CustomModal from "../../common/CustomModal";
+import CustomText from "../../common/CustomText";
+import ImageLoader from "../../loader/ImageLoader";
 import PaginationLoader from "../../loader/PaginationLoader";
+import AddVideoModel from "./AddVideoModel";
 const EssanceVideo=()=>{
     const [essanceModel,setEssanceModel]=useState(false);
        const [videoLoading,setVideoLoading]=useState(false); 
@@ -55,6 +54,8 @@ const EssanceVideo=()=>{
        setDeleteId(id);
        }
    const editHandler=(item)=>{
+    console.log(item);
+    
     setDeleteId(null)
      setEditData(item);
      setEssanceModel(true);

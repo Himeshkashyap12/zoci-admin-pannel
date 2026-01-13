@@ -1,10 +1,7 @@
-
-import { useEffect, useState } from "react";
 import CustomTable from "../common/CustomTable";
 import CustomText from "../common/CustomText";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie"
-import { getSalesTimeAsync } from "../../feature/sales/salesSlice";
 const SalesReportTable=()=>{
    const dispatch=useDispatch();
    const token=Cookies.get("token");

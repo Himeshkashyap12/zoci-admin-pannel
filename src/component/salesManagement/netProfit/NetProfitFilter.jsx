@@ -11,13 +11,13 @@ import "../sales.css"
 import { netProfitSaleSort } from "./totalSalesData";
 const { RangePicker } = DatePicker;
 
-const NetProfitFilter=({setSearch,setFilter,setSort,search,setDate})=>{
+const NetProfitFilter=({setSearch,setSort,search,setDate,setPage,sortKey})=>{
     return(
         <div className="sales">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Sales"} />
+                   <CustomInput search value={search}  onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search your Sales"} />
                    </div>
                  </Col>
                  
@@ -27,18 +27,11 @@ const NetProfitFilter=({setSearch,setFilter,setSort,search,setDate})=>{
                    disabledDate={(current) => {
                       return current && current > new Date().setHours(0, 0, 0, 0);
                     }}
-                   onChange={(i,value)=>{setDate(value)}} />  
+                   onChange={(i,value)=>{setPage(1),setDate(value)}} />  
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
-                   <CustomMultipleFilter  placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={netProfitSaleSort}/>
+                   <CustomMultipleFilter value={sortKey}  placeholder={"Sort"} onchange={(value)=>{setPage(1),setSort(value)}} option={netProfitSaleSort}/>
                        </div>}/>
-                  {/* <CustomButton value={<div className="flex items-center gap-2">
-                    <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={netProfitSaleFilter}/>
-
-
-                  </div>}/> */}
-                 
                   </div>
               </Col>
             </Row>

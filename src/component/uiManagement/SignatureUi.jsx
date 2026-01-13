@@ -12,7 +12,6 @@ import AddNewSignature from "./AddNewSignature";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ConfirmationPopup from "../common/ConfirmationPopup";
-import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 const SignatureUi=({collectionId})=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
@@ -48,8 +47,7 @@ const SignatureUi=({collectionId})=>{
             toast.success(res.message);
             getCollectionById();
             setSignatureModel(false);
-            setDeleteId(null)
-
+            setDeleteId(null);
         }
         
     } catch (error) {
@@ -84,7 +82,7 @@ const SignatureUi=({collectionId})=>{
                     <>
                     <div className="flex justify-between items-center bg-[#fff] px-[20px]">
                         <div className="flex gap-[10px] items-center">
-                            <Image preview={false} className="!size-[100px]" src={item?.image}/>
+                            <Image preview={false} className="!size-[100px]" src={item?.images?.productImage}/>
                             <CustomText className={"text-[16px]  !text-[#214344] "} value={item?.title}/>
 
                         </div>
@@ -96,7 +94,7 @@ const SignatureUi=({collectionId})=>{
                                     <Image preview={false} src={deleteIcon} alt="deleteIcon"/>
                                 </div>
                                 <div
-                                onClick={()=>{navigate("/admin/create-product",{state:item?.product})}}
+                                onClick={()=>{navigate("/admin/create-product",{state:item?._id})}}
                                     className="h-[20px] w-[20px] cursor-pointer"
                                 >
                                     <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />

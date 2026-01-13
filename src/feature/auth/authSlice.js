@@ -121,7 +121,8 @@ export const authSlice = createSlice({
           Cookies.remove('token');
           Cookies.remove('id');
           Cookies.remove("key");
-
+          Cookies.remove("shipRocketToken");
+          Cookies.remove("orderId");
         });
         builder.addCase(logOutHandler.rejected, (state, action) => {
           state.isLoading = false;

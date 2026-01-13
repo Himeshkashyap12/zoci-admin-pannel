@@ -94,7 +94,7 @@ const TotalExpenditure = () => {
         </Row>
       </div>
       <div>
-        <TotalExpenditureFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+        <TotalExpenditureFilter setPage={setPage} filterKey={filter} sortKey={sort}   setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
       </div>
       <div>
         <TotalExpenditureTable item={totalExpenditure} setPage={setPage} page={page} />

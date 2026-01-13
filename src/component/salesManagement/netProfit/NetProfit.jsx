@@ -88,7 +88,7 @@ const NetProfit = () => {
         </Row>
       </div>
       <div>
-        <NetProfitFilter setDate={setDate} date={date}  search={search} setSort={setSort} setSearch={setSearch} />
+        <NetProfitFilter  setPage={setPage}  sortKey={sort} setDate={setDate} date={date}  search={search} setSort={setSort} setSearch={setSearch} />
       </div>
       <div>
         <NetProfitTable  page={page} setPage={setPage} item={netProfit} />

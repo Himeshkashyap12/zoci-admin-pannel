@@ -85,7 +85,7 @@ export const isoTODate = (isoDate) => {
 
 
 export function generate4DigitRandomNumber() {
-  return `ORD#${Math.floor(1000 + Math.random() * 9000)}`;
+  return `SKU-${Math.floor(1000 + Math.random() * 9000)}`;
 }
 
 dayjs.extend(utc);

@@ -20,7 +20,6 @@ const OfflineSalesList = () => {
   const navigate = useNavigate();
   const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
        const [page,setPage]=useState(1);
       const [date,setDate]=useState([]); 
              const [search,setSearch]=useState("");
@@ -80,7 +79,7 @@ const OfflineSalesList = () => {
       </div>
      
       <div>
-        <OfflineSalesFilter exportOfflineSales={exportOfflineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
+        <OfflineSalesFilter setPage={setPage} filterKey={filter} sortKey={sort}  exportOfflineSales={exportOfflineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
       </div>
       <div>
         <OfflineSalesTable page={page} setPage={setPage} />

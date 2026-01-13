@@ -56,8 +56,7 @@ const AnniversaryRemindertable=()=>{
       dataIndex: "address",
       key: "address",
       width: 250,
-      render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
-
+      render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={`${text?.slice(0,100)} ${text?.length>100 ? "...":""}`}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
     },
     {
       title: <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Anniversary Date"}/>,
@@ -67,7 +66,6 @@ const AnniversaryRemindertable=()=>{
       align:"center",
       render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
     }
-   
   ];
     if(isLoading) return <Loader/>;
     return(

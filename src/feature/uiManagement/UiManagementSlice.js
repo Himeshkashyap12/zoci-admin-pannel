@@ -331,7 +331,7 @@ export const categorySlice = createSlice({
   reducers: {
     collectionDataHandler:(state,action)=>{
        state.collection=[];
-    }
+    },
    
   },
   extraReducers: (builder) => {
@@ -361,12 +361,12 @@ export const categorySlice = createSlice({
         });
         builder.addCase(getCollectionAsync.fulfilled, (state, action) => {                
           state.isCollectionLoading = false;
-          
-          state.collection=[...state.collection,...action.payload?.collections]
+          state.collection=[ ...state.collection,...action.payload?.collections]
         });
         builder.addCase(getCollectionAsync.rejected, (state, action) => {
           state.isCollectionLoading = false;
           state.error = action;
+          state.collection=[]
         });
         builder.addCase(getSignatureAsync.pending, (state) => {
           state.isCollectionItemLoading = true;

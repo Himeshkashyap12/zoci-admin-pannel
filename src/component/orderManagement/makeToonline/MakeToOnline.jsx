@@ -25,7 +25,6 @@ const MakeToOnline=()=>{
               const data={
                   limit:10,
                   page:page,
-                  status:"Pending",
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
@@ -54,7 +53,7 @@ const MakeToOnline=()=>{
                   <CustomText className={"!text-[#214344] !text-[20px]"} value={"Order Management → Manage Online Orders"}/>
                   </div>
                   <div>
-                    <MakeTOOrderFilter date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
+                    <MakeTOOrderFilter date={date} setPage={setPage} filterKey={filter} sortKey={sort} setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
                   </div>
                   <div>
                     <MakeToOrderTablePage setSelectedRowKeys={setSelectedRowKeys} selectedRowKeys={selectedRowKeys} setPage={setPage} page={page}/>

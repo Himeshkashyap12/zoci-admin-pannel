@@ -33,7 +33,7 @@ const AllVisitorsTable=({page,setPage})=>{
           dataIndex: "name",
           key: "name",
           width: 200,
-          render: (text) =>  <CustomText value={text??"NA"}/>
+          render: (text) =>  <CustomText value={text}/>
         },
           {
           title: (

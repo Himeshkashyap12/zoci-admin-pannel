@@ -68,7 +68,7 @@ const CustomerList = () => {
       </div>
      
       <div>
-        <CustomerListFilter setDate={setDate} date={date} setSearch={setSearch} search={search} setSortKey={setSortKey} />
+        <CustomerListFilter setPage={setPage}  sortKey={sortKey} setDate={setDate} date={date} setSearch={setSearch} search={search} setSortKey={setSortKey} />
       </div>
       <div>
         <CustomerListTable page={page} setPage={setPage} />

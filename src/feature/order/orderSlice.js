@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/axios";
-import shipRocketApi from "../../axios/ShipRocket";
 import Cookies from "js-cookie";
 const initialState = {
   orderDashboard:[],
   makeOnlineOrders:[],
   makeToOrder:[],
-  // generateInvoiceInstants:[],
   productReturnedAndExchange:[],
   previosAddressData:[],
   exhibitionPlace:[],
   eventType:[],
+  shipRocketAddress:[],
   isLoading: false,
+  addAddressIsLoading:false,
   error: null,
 };
 
@@ -205,14 +205,67 @@ export const addNewOrderAsync = createAsyncThunk(
     }
   }
 );
-// ship rocket api
-export const logInShipRocketAsync = createAsyncThunk(
-  "order/shipRocketAsync",
+
+
+// Ship Rocket Api 
+
+
+export const generateTokenAsync = createAsyncThunk(
+  "order/generateToken",
  async ({data}) => {
         try {
-      const res = await shipRocketApi.post(`auth/login`,data,{
+      const res = await api.post(`/shiprocket/proxy`,data,{
         headers: {
           "Content-Type": "application/json",
+        }
+      });
+      return res?.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const createOrderAsync = createAsyncThunk(
+  "order/cerateOrder",
+ async ({shipRocketToken,data}) => {
+        try {
+      const res = await api.post(`/shiprocket/proxy`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "x-shiprocket-token": `${shipRocketToken}`
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+export const addAddressAsync = createAsyncThunk(
+  "order/addAddress",
+ async ({shipRocketToken,data}) => {
+        try {
+      const res = await api.post(`/shiprocket/proxy`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "x-shiprocket-token": `${shipRocketToken}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      return error;
+    }
+  }
+);
+export const getAddressAsync = createAsyncThunk(
+  "order/getAddress",
+ async ({shipRocketToken,data}) => {
+        try {
+      const res = await api.post(`/shiprocket/proxy`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "x-shiprocket-token": `${shipRocketToken}`,
         }
       });
       return res?.data; // No need for `await res.data`
@@ -221,7 +274,6 @@ export const logInShipRocketAsync = createAsyncThunk(
     }
   }
 );
-
 
 export const orderSlice = createSlice({
   name: "order",
@@ -337,21 +389,49 @@ export const orderSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
-        builder.addCase(logInShipRocketAsync.pending, (state) => {
+
+         builder.addCase(generateTokenAsync.pending, (state) => {
           state.isLoading = true;
         });
-        builder.addCase(logInShipRocketAsync.fulfilled, (state, action) => {                
+        builder.addCase(generateTokenAsync.fulfilled, (state, action) => {                
           state.isLoading = false;
-          
-          Cookies.set("shipRocketToken",action?.payload?.token,{expires:1})
+          Cookies.set("shipRocketToken",action?.payload?.token)
         });
-        builder.addCase(logInShipRocketAsync.rejected, (state, action) => {
+        builder.addCase(generateTokenAsync.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action;
         });
-      
-        
-       
+         builder.addCase(getAddressAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(getAddressAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+          state.shipRocketAddress=action.payload?.data?.shipping_address
+        });
+        builder.addCase(getAddressAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+          builder.addCase(createOrderAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(createOrderAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(createOrderAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(addAddressAsync.pending, (state) => {
+          state.addAddressIsLoading = true;
+        });
+        builder.addCase(addAddressAsync.fulfilled, (state, action) => {                
+          state.addAddressIsLoading = false;
+        });
+        builder.addCase(addAddressAsync.rejected, (state, action) => {
+          state.addAddressIsLoading = false;
+          state.error = action;
+        });
         
   },
 });

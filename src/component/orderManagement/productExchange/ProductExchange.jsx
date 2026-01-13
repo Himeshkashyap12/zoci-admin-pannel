@@ -54,7 +54,7 @@ const ProductExchange=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Order Management → Products Exchanged"}/>
             </div>
             <div>
-                <ProductExchangeFilter date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort}  setSearch={setSearch} />
+                <ProductExchangeFilter setPage={setPage} sortKey={sort}  date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort}  setSearch={setSearch} />
             </div>
             
               <div>

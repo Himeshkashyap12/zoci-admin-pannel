@@ -37,9 +37,9 @@ const ProductReturned=()=>{
               }
             }
              const exportOrderHandler = async () => {
-                              const data={startDate:[date[0]],endDate:date[1]}
-                                       orderExportInExcelHandler({dispatch,token,data})
-                                   };
+                    const data={startDate:[date[0]],endDate:date[1]}
+                         orderExportInExcelHandler({dispatch,token,data})
+                       };
             useEffect(()=>{
             getProductExchangeHandler();
             },[debounce,sort,page,date])
@@ -52,7 +52,7 @@ const ProductReturned=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Order Management → Products Returned"}/>
             </div>
             <div>
-                <ProductFilter date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort}  setSearch={setSearch} />
+                <ProductFilter setPage={setPage}  sortKey={sort}  date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort}  setSearch={setSearch} />
             </div>
             
               <div>

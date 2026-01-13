@@ -98,7 +98,7 @@ const BirthdayPromotion=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Marketing Tools →  Birthday / Anniversary Banners"}/>
             </div>
             <div>
-                <BirthdayPromotionFilter  exportOrderHandler={exportOrderHandler} setFilter={setFilter} search={search} setSort={setSort} setSearch={setSearch}/>
+                <BirthdayPromotionFilter   exportOrderHandler={exportOrderHandler} setFilter={setFilter} search={search} setSort={setSort} setSearch={setSearch}/>
             </div>
              <div>
                 <BirthdayPromotionButton birthdayPromotion={birthdayPromotion}  setBirthdayPromotion={setBirthdayPromotion}/>

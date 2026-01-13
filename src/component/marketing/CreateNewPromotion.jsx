@@ -1,24 +1,23 @@
 
 
-import { Button, Col, DatePicker, Row, Select } from "antd";
-import { useEffect, useState } from "react";
-import CustomImageUpload from "../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { getImageUrlAsync } from "../../feature/media/mediaSlice";
+import { Button, Col, Row } from "antd";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
-import CustomText from "../common/CustomText";
-import CustomInput from "../common/CustomInput";
-import CustomButton from "../common/CustomButton";
-import CustomSelect from "../common/CustomSelect";
-import { CreateNewPromotionAsync, getAllPromotionAsync, updateNewPromotionAsync } from "../../feature/marketing/marketingSlice";
 import { compareNewAndOldObject, isoTODate } from "../../constants/constants";
 import { specialChar } from "../../constants/regex";
-import { useDebounce } from "../../hooks/UseDebounce";
 import { getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
-import Search from "antd/es/input/Search";
+import { CreateNewPromotionAsync, getAllPromotionAsync, updateNewPromotionAsync } from "../../feature/marketing/marketingSlice";
+import { getImageUrlAsync } from "../../feature/media/mediaSlice";
+import { useDebounce } from "../../hooks/UseDebounce";
+import CustomButton from "../common/CustomButton";
+import CustomDate from "../common/CustomDate";
+import CustomImageUpload from "../common/CustomImageUpload";
+import CustomInput from "../common/CustomInput";
+import CustomSelect from "../common/CustomSelect";
+import CustomText from "../common/CustomText";
 const CreateNewPromotion=({setOpen,edititem,edit})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
@@ -222,7 +221,7 @@ const typeOption=[
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
                       <CustomText className={"text-[16px] "} value={"Expiry  Date"}/>
-                      <DatePicker  onChange={(date)=>dateHandler(date)} className={"h-[46px]"} />
+                      <CustomDate  less onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
                        
                       </div></Col>
                 </Row>
@@ -315,7 +314,7 @@ const typeOption=[
                 
 
                 <div className="flex justify-center gap-4 pt-10">
-                    <CustomButton onclick={()=>{addpromotionHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={`Yes, ${edit?"Edit":"Add New"}  Expense`}/>
+                    <CustomButton disable={isMediaLoading?true:false} onclick={()=>{addpromotionHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={`Yes, ${edit?"Edit":"Add New"}  Expense`}/>
                     <Button onClick={()=>{setOpen(false)}} className="!border-[2px] !border-[#214344] rounded-full  w-[180px] text-[14px]">No, Cancel</Button>
 
                 </div>

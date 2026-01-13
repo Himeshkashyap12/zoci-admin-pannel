@@ -157,8 +157,9 @@ const AddnewOrder = () => {
       invoiceInputHandler?.exhibitionPlace == "" ||
       invoiceInputHandler?.eventType == "" ||
       invoiceInputHandler?.date == "" ||
-      invoiceInputHandler?.paymentMethod == "" ||
-      invoiceInputHandler?.invoiceData?.length == 0
+      invoiceInputHandler?.paymentMode == "" ||
+      invoiceInputHandler?.invoiceData?.length == 0,
+      invoiceInputHandler?.items?.length==0
     ) {
       toast.error("please Enter all required field");
     

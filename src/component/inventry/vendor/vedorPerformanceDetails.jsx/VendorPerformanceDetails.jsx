@@ -34,8 +34,7 @@ const VendorPerformanceAnalysisDetails = () => {
                       page:page,
                       ...(search && {search:trimSearch} ),
                       ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
-                      ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
-
+                      ...(filter?.length>0 && {[filter[0]]:filter[1]} )
                 }
               try {
           if(search && !trimSearch) return;
@@ -76,7 +75,7 @@ const VendorPerformanceAnalysisDetails = () => {
         {isLoading ?<Skeleton.Node active={"active"} className="!w-[300px] !h-[150px] rounded-xl" />:<VendorPerformanceDetailUsers item={vendorPerformanceAnalysisData?.data?.vendor}/>}
       </div>
       <div>
-        <VendorPerformanceFilter exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+        <VendorPerformanceFilter sortKey={sort} filterKey={filter} setPage={setPage}  exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
       </div>
       <div>
         <VendorPerformanceDetailTable setSelectedRowKeys={setSelectedRowKeys} selectedRowKeys={selectedRowKeys} setPage={setPage} page={page} id={id} />

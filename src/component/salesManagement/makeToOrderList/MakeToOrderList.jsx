@@ -83,6 +83,10 @@ const MakeToOrderList = () => {
           setFilter={setFilter}
           setSearch={setSearch}
           setSort={setSort}
+          setPage={setPage} 
+          filterKey={filter} 
+          sortKey={sort}
+
         />
       </div>
       <div>

@@ -92,7 +92,7 @@ const TotalSales = () => {
         </Row>
       </div>
       <div>
-        <ToTalSalesFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
+        <ToTalSalesFilter setPage={setPage} filterKey={filter} sortKey={sort}  setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
       </div>
       <div>
         <TotalSalesTable page={page} setPage={setPage}  totalSales={totalSales}/>

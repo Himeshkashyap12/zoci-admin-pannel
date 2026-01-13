@@ -83,7 +83,7 @@ const OnlineSaleList = () => {
       </div>
      
       <div>
-        <OnlineSalesFilter exportOnlineSales={exportOnlineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
+        <OnlineSalesFilter setPage={setPage} filterKey={filter} sortKey={sort} exportOnlineSales={exportOnlineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
       </div>
       <div>
         <OnlineSalesTable onlineSales={onlineSales} page={page} setPage={setPage} />

@@ -52,13 +52,12 @@ const BestSeller=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Inventory Management & Analysis → Best-selling Product "}/>
             </div>
             <div>
-                <BestSellerFilter exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+                <BestSellerFilter sortKey={sort} filterKey={filter} setPage={setPage}  exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
             </div>
             
               <div>
                <BestSellerTable setSelectedRowKeys={setSelectedRowKeys} selectedRowKeys={selectedRowKeys} setPage={setPage} page={page}/>
               </div>
-        
         </div>
     )
 }

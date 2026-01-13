@@ -54,18 +54,23 @@ export const bestSellerFilter=[
     value:"category",
     children: [
       {
-        value: 'Ring',
-        label: 'Ring',
+        value: 'Rings',
+        label: 'Rings',
       
       },
       {
-        value: 'Necklace',
-        label: 'Necklace',
+        value: 'Necklaces',
+        label: 'Necklaces',
       
       },
       {
-        value: 'Pendant',
-        label: 'Pendant',
+        value: 'Bracelets',
+        label: 'Bracelets',
+      
+      },
+      {
+        value: 'Earrings',
+        label: 'Earrings',
       
       }
     ],

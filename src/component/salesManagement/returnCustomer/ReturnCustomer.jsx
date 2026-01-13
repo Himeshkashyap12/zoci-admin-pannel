@@ -1,19 +1,18 @@
 
 
 
-import { useNavigate } from "react-router-dom";
-import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
-import SalesCard from "../SalesCard";
 import { Col, Row, Skeleton } from "antd";
-import ReturningCustomerFilter from "./ReturningCustomerFilter";
-import ReturningCustomerTable from "./ReturningCustomerTable";
-import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import Loader from "../../loader/Loader";
-import Cookies from "js-cookie"
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getReturningCustomerAsync } from "../../../feature/sales/salesSlice";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomText from "../../common/CustomText";
+import SalesCard from "../SalesCard";
+import ReturningCustomerFilter from "./ReturningCustomerFilter";
+import ReturningCustomerTable from "./ReturningCustomerTable";
 const ReturnCustomer = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
@@ -33,9 +32,7 @@ const ReturnCustomer = () => {
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
-                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} ),
-
-
+                  ...((date?.length>0 && date[0]!='') && {startDate:date[0],endDate:date[1]} )
                 }
               try {
                 if(search && !trimSearch) return;
@@ -47,15 +44,15 @@ const ReturnCustomer = () => {
             const totalReturnCards=[
               {
               title: "Exhibition Returning Customers",
-              value: `Rs. ${returningCustomers?.counts?.exhibition}`,
+              value: `${returningCustomers?.counts?.exhibition}`,
             },
             {
               title: "Event Returning Customers",
-              value: `Rs. ${returningCustomers?.counts?.event}`,
+              value: `${returningCustomers?.counts?.event}`,
             },
             {
               title: "Online/Operational Returning Customers",
-              value: `Rs. ${returningCustomers?.counts?.online}`,
+              value: `${returningCustomers?.counts?.online}`,
             },
             ]
             useEffect(()=>{
@@ -95,7 +92,7 @@ const ReturnCustomer = () => {
               </Row>
             </div>
             <div>
-              <ReturningCustomerFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+              <ReturningCustomerFilter setPage={setPage} filterKey={filter} sortKey={sort} setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
             </div>
             <div>
               <ReturningCustomerTable  page={page} setPage={setPage} returningCustomers={returningCustomers}/>

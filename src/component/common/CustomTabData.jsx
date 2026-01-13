@@ -1,11 +1,8 @@
-import moment from "moment";
+import { DatePicker } from "antd";
+import CustomLoader from "../loader/Loader";
 import CustomFiter from "./CustomFilter";
 import CustomSearch from "./CustomSearch";
 import CustomTable from "./CustomTable";
-import {DatePicker} from "antd"
-import CustomLoader from "../loader/Loader";
-import useSelection from "antd/es/table/hooks/useSelection";
-import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 
 const   CustomTabData=({columns,data,onRow,setSearch,options,onchange,setFilterDate,setFilterState,search,isLoading})=>{
