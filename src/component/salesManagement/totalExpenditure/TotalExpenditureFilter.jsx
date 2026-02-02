@@ -8,9 +8,20 @@ import CustomInput from "../../common/CustomInput";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
 import "../sales.css"
 import { totalSaleFilter, totalSaleSort } from "./totalExpenditureData";
+import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 
 const OnlineSalesFilter=({setSearch,setFilter,setSort,search,setDate,setPage,filterKey,sortKey})=>{
+   const {category}=useSelector(state=>state?.ui);
+  const filteredCategory=category?.categories?.map((item)=>{
+    return { label:item?.title,value:item?.title}
+  });
+  const filtedCategoryExpenditure={
+    label:"Category",
+    value:"category",
+    children: filteredCategory
+  
+  }
     return(
         <div className="sales">
          <Row justify={"space-between"} gutter={[40]}>
@@ -32,7 +43,7 @@ const OnlineSalesFilter=({setSearch,setFilter,setSort,search,setDate,setPage,fil
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter value={filterKey} placeholder={"Filter"} onchange={(value)=>{setPage(1),setFilter(value)}} option={totalSaleFilter}/>
+                    <CustomMultipleFilter value={filterKey} placeholder={"Filter"} onchange={(value)=>{setPage(1),setFilter(value)}} option={[filtedCategoryExpenditure]}/>
                   </div>}/>
                  
                   </div>

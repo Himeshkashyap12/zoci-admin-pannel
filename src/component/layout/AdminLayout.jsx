@@ -2,13 +2,15 @@ import {   Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import {  Outlet } from "react-router";
 import CustomSidebar from "./SibeBar";
-import { useState } from "react";
+import { useEffect } from "react";
 import Loader from "../loader/Loader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategoryAsync } from "../../feature/uiManagement/UiManagementSlice";
+import Cookies from "js-cookie";
 const AdminLayout = () => {
   const {isLoading}=useSelector(state=>state?.auth)
-
-
+  const dispatch=useDispatch();
+  const token=Cookies.get("token");
   const contentStyle = {
     color: "#d5c294",
     backgroundColor: "#efe6dc",
@@ -17,7 +19,19 @@ const AdminLayout = () => {
     overflow: "hidden",
     height: "100vh",
   };
+  const getCategoryHandler=async()=>{
+    try {
+      const res=await dispatch(getCategoryAsync(token))
+      
+    } catch (error) {
+     toast.error("Something went wrong. Please try again.");
+      
+    }
+  }
 
+  useEffect(()=>{
+    getCategoryHandler();
+  },[])
   
   if(isLoading) return <Loader/>
 

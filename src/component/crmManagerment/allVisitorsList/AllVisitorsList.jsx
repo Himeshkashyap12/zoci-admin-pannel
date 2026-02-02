@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { getAllVisitorsAsync } from "../../../feature/crm/crmSlice";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const AllVisitorsList = () => {
     const navigate=useNavigate();
     const [search,setSearch]=useState("");
@@ -34,7 +35,7 @@ const AllVisitorsList = () => {
              if(search && !trimSearch) return;
           const res=await dispatch(getAllVisitorsAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+          //  toast.error("Something went wrong. Please try again.");
           }
         }
          useEffect(()=>{

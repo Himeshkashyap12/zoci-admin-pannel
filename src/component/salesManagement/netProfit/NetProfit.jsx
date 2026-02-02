@@ -11,6 +11,7 @@ import { getNetProfitAsync } from "../../../feature/sales/salesSlice";
 import Loader from "../../loader/Loader";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const NetProfit = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
@@ -36,7 +37,7 @@ const NetProfit = () => {
 
       const res = await dispatch(getNetProfitAsync({ token,data })).unwrap();
     } catch (error) {
-      console.log(error);
+      //  toast.error("Something went wrong. Please try again.");  
     }
   };
   const totalNetProfit = [
@@ -73,7 +74,7 @@ const NetProfit = () => {
         </div>
         <CustomText
           className={"!text-[#214344] !text-[20px]"}
-          value={"Sales Reports → Net Profit"}
+          value={"Sales Reports → Lazer"}
         />
       </div>
       <div>

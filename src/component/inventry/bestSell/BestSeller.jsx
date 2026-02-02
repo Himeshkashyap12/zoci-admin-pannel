@@ -9,6 +9,7 @@ import { bestSellingProducts } from "../../../feature/inventaryManagement/invent
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const BestSeller=()=>{
       const [selectedRowKeys,setSelectedRowKeys]=useState([])
       const navigate=useNavigate();
@@ -33,7 +34,7 @@ const BestSeller=()=>{
           if(search && !trimSearch) return;
                 const res=await dispatch(bestSellingProducts({token,data})).unwrap();
              } catch (error) {
-                console.log(error);
+                // toast.error("Something went wrong. Please try again.");
             }
         }
        const exportProductHandler = async () => {

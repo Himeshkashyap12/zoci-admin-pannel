@@ -8,12 +8,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       }
       
     ],
@@ -41,7 +41,7 @@ export const totalOrderFilter=[
     value:"source",
     children: [
       {
-        value: 'Online',
+        value: 'online',
         label: 'Online',
       
       },

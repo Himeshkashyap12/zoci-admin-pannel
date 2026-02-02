@@ -15,6 +15,7 @@ import VendorPerformanceDetailTable from "./VendorPerformanceDetailTable";
 import { useDebounce } from "../../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../../constants";
 import { Skeleton } from "antd";
+import { toast } from "react-toastify";
 const VendorPerformanceAnalysisDetails = () => {
         const [selectedRowKeys,setSelectedRowKeys]=useState([]);        
         const {id}=useParams();  
@@ -40,7 +41,7 @@ const VendorPerformanceAnalysisDetails = () => {
           if(search && !trimSearch) return;
       const res=await dispatch(vendorPerformanceDetailsAnalysis({token,id,data})).unwrap();      
     } catch (error) {
-      console.log(error);
+      //  toast.error("Something went wrong. Please try again.");
     }
   }
 

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomText from "../common/CustomText";
 import { CloseOutlined, LeftOutlined, UploadOutlined } from "@ant-design/icons";
 import CustomInput from "../common/CustomInput";
@@ -6,7 +6,7 @@ import { Button, Col, Image, Row, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import blogUpload from "../../assets/icons/blogUpload.png";
 import CustomImageUpload from "../common/CustomImageUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import Cookies from "js-cookie"
@@ -15,8 +15,9 @@ import Loader from "../loader/Loader";
 import CustomButton from "../common/CustomButton";
 import CustomModal from "../common/CustomModal";
 import BlogPreviewModel from "./BlogPreviewModel";
-import { createBlogAsync } from "../../feature/blog/blogSlice";
+import { createBlogAsync, updateBlogAsync } from "../../feature/blog/blogSlice";
 import { specialChar } from "../../constants/regex";
+import { compareNewAndOldObject } from "../../constants/constants";
 const AddNewBlog=()=>{
     const [previewModel,setPreviewModel]=useState(false)
     const [imageUrl, setImageUrl] = useState(null);
@@ -25,6 +26,7 @@ const AddNewBlog=()=>{
     const {isMediaLoading}=useSelector(state=>state?.media)
     const {isLoading}=useSelector(state=>state?.blog)
     const token=Cookies.get("token");
+    const {state}=useLocation();    
     const [newBlogInput,setNewBlogInput]=useState({
         title:"",
         description:"",
@@ -40,6 +42,12 @@ const AddNewBlog=()=>{
     const file = e.target.files[0];
       if (!file) return;
             try {
+                 const WIDTH = 1200;
+                  const img = new window.Image();
+                   img.src = URL.createObjectURL(file);
+                    img.onload = async() => {
+                  const { naturalWidth: width } = img;
+                  if (width>=WIDTH ) {
             const formData = new FormData();
             formData.append("productImages", file);
             const res=await dispatch(getImageUrlAsync({token,formData})).unwrap();
@@ -48,6 +56,12 @@ const AddNewBlog=()=>{
                 setImageUrl(res?.images[0]);
                 setNewBlogInput({...newBlogInput,image:res?.images[0]})
             }
+             } else {
+                    toast.error(`Image dimensions must be at least ${WIDTH}px Current dimensions: ${width}.`);
+                    e.target.value = null; // Clear the input
+                  }
+                  URL.revokeObjectURL(img.src); // Clean up the local URL
+                };
             } catch (err) {
             console.error(err);
           }
@@ -57,25 +71,43 @@ const AddNewBlog=()=>{
     const createBlogHandler=async()=>{
         if(!newBlogInput?.title || !newBlogInput?.description || !newBlogInput?.image) return toast.error("Please fill all field")
         try {
-            const data={
+             if(!state){
+              const data={
                 ...newBlogInput
-            }
+                }
             const res=await dispatch(createBlogAsync({token,data})).unwrap();
             if(res.status=="success"){
-            toast.success("Blog created successfully");
-            navigate("/admin/blog")
-            }   
+                toast.success("Blog created successfully");
+                navigate("/admin/blog");
+            }  
+             }else{
+                const data=compareNewAndOldObject({oldObj:state,newObj:newBlogInput});
+                 const res=await dispatch(updateBlogAsync({token,data,id:state?.id})).unwrap();
+                    if(res.status=="success"){
+                        toast.success("Blog created successfully");
+                        navigate("/admin/blog");
+                    }  
+             }
+             
         } catch (error) {
-            
+            toast.error("Something went wrong!")
         }
 
     }
+
+
+    useEffect(()=>{
+       if(state){
+        setNewBlogInput({...state});
+        setImageUrl(state?.image)
+       }
+    },[])
    if(isLoading || isMediaLoading) return <Loader/>
     return(
         <>
          <div className="flex flex-col gap-5 p-[24px]  ">
             <div className="flex gap-2 items-center">
-                <div className="cursor-pointer" onClick={()=>{navigate("/admin/inventary")}}>
+                <div className="cursor-pointer" onClick={()=>{navigate("/admin/blog")}}>
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={<LeftOutlined />}/>
                 </div>
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Blog Management→ Add New Blog "}/>
@@ -96,11 +128,11 @@ const AddNewBlog=()=>{
                 <div className="flex flex-col gap-4 w-full">
                 <CustomText className={"!text-[#214344] !text-[16px] font-semibold"} value={"Blog Image"}/>
                 <div className="bg-[#fff] !rounded-md  !w-full !h-[500px] flex justify-center items-center">
-               {!imageUrl? <CustomImageUpload imageUploadHandler={handleUpload}   label={<div className="flex flex-col gap-3 items-center cursor-pointer ">
+               {!imageUrl   ? <CustomImageUpload imageUploadHandler={handleUpload}   label={<div className="flex flex-col gap-3 items-center cursor-pointer ">
                    <Image preview={false} className="!size-[30px]" src={blogUpload}/>
                 <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
                 <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
-                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image width should be min 1000px"}/>
+                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image width should be min 1200px"}/>
                 </div>}/>:<div onClick={()=>{setImageUrl(null)}} className="relative cursor-pointer">
                     <Image preview={false} className="!h-[400px] !w-full object-cover rounded-xl" src={imageUrl}/>
                     <div className="absolute -top-3 -right-3 rounded-full border-[2px] border-[#214344] "><CloseOutlined  style={{color:"#214344" ,fontSize:"24px", padding:"2px"}}/></div>

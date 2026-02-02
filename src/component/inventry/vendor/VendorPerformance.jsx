@@ -9,6 +9,7 @@ import { vendorPerformanceAnalysis } from "../../../feature/inventaryManagement/
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const VendorPerformance=()=>{
       // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
      const token=Cookies.get("token"); 
@@ -33,7 +34,7 @@ const VendorPerformance=()=>{
           if(search && !trimSearch) return;
           const res=await dispatch(vendorPerformanceAnalysis({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+             toast.error("Something went wrong. Please try again.");
           }
         }
   

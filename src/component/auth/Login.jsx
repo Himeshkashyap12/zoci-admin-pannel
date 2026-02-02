@@ -16,6 +16,7 @@ const Login = ({ setSingnin }) => {
     mobile: "",
     password: "",
   });
+  const newDate=new Date().getFullYear();
 const {isLoading}=useSelector(state=>state?.auth);
   const inputHandler = (e) => {
     const {name,value}=e.target;
@@ -64,7 +65,12 @@ if(isLoading) return <Loader/>
     <h2 className="text-center text-2xl mb-6 font-semibold text-[#1e1e1e]">
       Login
     </h2>
-
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          signInHandler();
+        }}
+      >
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
       <CustomText className={"!text-[#214344]"} value={"Username"}/>
@@ -77,7 +83,7 @@ if(isLoading) return <Loader/>
         placeholder="Username"
         className="px-4 py-2 rounded-md h-[46px]"
       />
-</div>
+    </div>
       <div className="flex flex-col gap-1">
       <CustomText className={"!text-[#214344]"} value={"Password"}/>
 
@@ -94,6 +100,7 @@ if(isLoading) return <Loader/>
       </p>
 
       <Button
+      htmlType="submit"
         onClick={signInHandler}
         className="!bg-[#214344] !text-white rounded-full !py-2">
         Login
@@ -101,11 +108,13 @@ if(isLoading) return <Loader/>
 
      
     </div>
+  </form>
+
   </div>
 
   {/* Footer */}
   <div className="absolute bottom-5 w-full text-center text-xs !text-[#fff]">
-    ©2025–2026 All Rights Reserved. Zoci® is a registered trademark.<br/>
+    ©{newDate}–{newDate+1}  All Rights Reserved. Zoci® is a registered trademark.<br/>
     Cookie Preferences, Privacy, and Terms.
   </div>
 

@@ -17,7 +17,7 @@ const CarousalUi=()=>{
         try {
             const res=await dispatch(getHomeVideosAsync({token})).unwrap(); 
         } catch (error) {
-           console.log(error);
+        //   toast.error("Something went wrong. Please try again.");
             
         }
     }

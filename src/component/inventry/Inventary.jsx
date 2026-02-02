@@ -12,6 +12,7 @@ import ProductList from "./ProductList.jsx";
 import UnitSoldByCategary from "./UnitSoldByCategary";
 import UnitSoldChart from "./UnitSoldChart";
 import { useDebounce } from "../../hooks/UseDebounce.jsx";
+import { toast } from "react-toastify";
 
 const Inventary=()=>{
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -28,7 +29,7 @@ const Inventary=()=>{
     try {
     const res=await dispatch(getInventaryDashbordAsync({token})).unwrap();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");
     }
   }
 
@@ -52,7 +53,7 @@ const exportProductHandler = async () => {
     try {
     const res=await dispatch(getAllProductAsync({token,data})).unwrap();
     } catch (error) {
-      console.log(error);
+      //  toast.error("Something went wrong. Please try again.");
 
     }
   }
@@ -82,7 +83,6 @@ const exportProductHandler = async () => {
           <InventaryCountCards cardData={inventaryDashboard?.cards}/>
           <ProductList setPage={setPage} filterKey={filterKey} sortKey={sortKey} setFilter={setFilter} setSearch={setSearch} setSort={setSort} exportProductHandler={exportProductHandler}/>
           <InventaryTable setPage={setPage} page={page} selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>
-          
         </div>
     )
 }

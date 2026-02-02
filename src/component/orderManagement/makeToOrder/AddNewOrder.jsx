@@ -1,10 +1,4 @@
-import {  Avatar,
-  Col,
-  DatePicker,
-  Row,
-  Select,
-  Typography
-} from "antd";
+import { Avatar, Col, DatePicker, Row, Select, Typography } from "antd";
 import { Button, Form } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,11 +22,12 @@ import {
   getPreviousBillingPlaceAsync,
 } from "../../../feature/order/orderSlice";
 import Cookies from "js-cookie";
+const { Option } = Select;
 const AddnewOrder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = Cookies.get("token");
-  const {isLoading}=useSelector(state=>state?.order)
+  const { isLoading } = useSelector((state) => state?.order);
   const [addressSearch, setAddressSearch] = useState({
     address: "",
     exhibition: "",
@@ -41,10 +36,10 @@ const AddnewOrder = () => {
 
   const { productBySku } = useSelector((state) => state?.inventary);
   const { previosAddressData, exhibitionPlace, eventType } = useSelector(
-    (state) => state?.order
+    (state) => state?.order,
   );
-  const skuFilteredData = productBySku.filter((item) => item.stock > 0);
-  const [search, setSearch] = useState();
+  const skuFilteredData = productBySku?.filter((item) => item?.stock > 0);
+  const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search, 500);
   const previosAddressDataOption = previosAddressData?.data?.map((item) => {
     return { label: item, value: item };
@@ -55,29 +50,30 @@ const AddnewOrder = () => {
   const eventTypePlaceOption = eventType?.data?.map((item) => {
     return { label: item, value: item };
   });
-  const [invoiceInputHandler, setInvoiceInputHandler] = useState({   
-          customerName: "",
-          customerMobile: "",
-          customerAddress: "",
-          billingPlace: "",
-          eventType: "",
-          paymentMode: "",
-          advancePayment: null,
-          items: [],
-          comment: ""
+  const [invoiceInputHandler, setInvoiceInputHandler] = useState({
+    customerName: "",
+    customerMobile: "",
+    customerAddress: "",
+    billingPlace: "",
+    eventType: "",
+    paymentMode: "",
+    advancePayment: null,
+    items: [],
+    comment: "",
   });
 
-  
   const subTotal = invoiceInputHandler?.items?.reduce(
     (accumulator, currentValue) => {
       return accumulator + currentValue?.price * currentValue?.quantity;
-    },0);
+    },
+    0,
+  );
   const invoiceInputDataHandler = (e, item) => {
-      if(item != "paymentMode"){
-     const {name,value}=e.target;
-       if(specialChar?.test(value)) return ;
-       if(name=="customerMobile" && value?.length>10  ) return;
-  }
+    if (item != "paymentMode") {
+      const { name, value } = e.target;
+      if (specialChar?.test(value)) return;
+      if (name == "customerMobile" && value?.length > 10  ) return;
+    }
     if (item == "paymentMode") {
       setInvoiceInputHandler({ ...invoiceInputHandler, [item]: e });
     } else if (item == "date") {
@@ -95,9 +91,8 @@ const AddnewOrder = () => {
 
   const quantityHandler = (record, item) => {
     if (
-      record?.quantity == record?.stock ||
-      (record?.quantity == 1 && item === "minus") ||
-      (record?.quantity >= record.stock && item === "plus")
+      (item === "minus" && record?.quantity <= 1) ||
+      (item === "plus" && record?.quantity >= record?.stock)
     ) {
       return;
     } else {
@@ -107,8 +102,8 @@ const AddnewOrder = () => {
         ...data[index],
         quantity:
           item == "plus"
-            ? data[index]?.quantity + 1
-            : data[index]?.quantity > 1 && data[index]?.quantity - 1,
+            ? Math.min(data[index]?.quantity + 1, data[index]?.stock)
+            : Math.max(data[index]?.quantity - 1, 1),
       });
       setInvoiceInputHandler({ ...invoiceInputHandler, items: data });
     }
@@ -129,69 +124,68 @@ const AddnewOrder = () => {
 
       const res = await dispatch(productBySkuAsync({ data })).unwrap();
     } catch (error) {
-      console.log(error);
+          //  toast.error("Something went wrong. Please try again.");  
+
     }
   };
 
-
-
   const addSkuHandler = (item) => {
-    const data = { ...item, quantity: 1};
-    if (invoiceInputHandler?.items?.some((product) => product?.sku == item?.sku)) {
+    setSearch("");
+    const data = { ...item, quantity: 1 };
+    if (
+      invoiceInputHandler?.items?.some((product) => product?.sku == item?.sku)
+    ) {
       return toast.error("Item already exist");
     } else {
       setInvoiceInputHandler({
         ...invoiceInputHandler,
-        items: [...invoiceInputHandler?.items , data],
+        items: [...invoiceInputHandler?.items, data],
       });
       dispatch(addSku([]));
     }
   };
   const generateInvoiceHandler = async () => {
-    
-
     if (
-      invoiceInputHandler?.name == "" ||
-      invoiceInputHandler?.mobile == "" ||
-      invoiceInputHandler?.address == "" ||
-      invoiceInputHandler?.exhibitionPlace == "" ||
+      invoiceInputHandler?.customerName == "" ||
+      invoiceInputHandler?.customerMobile == "" ||
+      invoiceInputHandler?.customerAddress == "" ||
+      invoiceInputHandler?.billingPlace == "" ||
       invoiceInputHandler?.eventType == "" ||
-      invoiceInputHandler?.date == "" ||
       invoiceInputHandler?.paymentMode == "" ||
-      invoiceInputHandler?.invoiceData?.length == 0,
-      invoiceInputHandler?.items?.length==0
+      invoiceInputHandler?.items?.length == 0
     ) {
-      toast.error("please Enter all required field");
-    
+      return toast.error("please Enter all required field");
     }
     try {
-
-
-            const item = invoiceInputHandler?.items?.map((item) => {
-              return { productName: item?.title, sku: item?.sku ,size:item?.size ,qty:item?.quantity,price:item?.price};
-            });
-         const data = {
-          customerName: invoiceInputHandler?.customerName,
-          customerMobile: invoiceInputHandler?.customerMobile,
-          customerAddress: invoiceInputHandler?.customerAddress,
-          billingPlace: invoiceInputHandler?.billingPlace,
-          eventType: invoiceInputHandler?.eventType,
-          paymentMode: invoiceInputHandler?.paymentMode,
-          advancePayment: invoiceInputHandler?.advancePayment,
-          items:item,
-          comment:invoiceInputHandler?.comment
+      const item = invoiceInputHandler?.items?.map((item) => {
+        return {
+          productName: item?.title,
+          sku: item?.sku,
+          size: item?.size,
+          qty: item?.quantity,
+          price: item?.price,
+        };
+      });
+      const data = {
+        customerName: invoiceInputHandler?.customerName,
+        customerMobile: invoiceInputHandler?.customerMobile,
+        customerAddress: invoiceInputHandler?.customerAddress,
+        billingPlace: invoiceInputHandler?.billingPlace,
+        eventType: invoiceInputHandler?.eventType,
+        paymentMode: invoiceInputHandler?.paymentMode,
+        advancePayment: invoiceInputHandler?.advancePayment,
+        items: item,
+        comment: invoiceInputHandler?.comment,
       };
-      const res=await dispatch(addNewOrderAsync({token,data})).unwrap();
-      if(res.success){
+      const res = await dispatch(addNewOrderAsync({ token, data })).unwrap();
+      if (res.success) {
         navigate("/admin/make-order");
-        toast.success(res?.message)
+        toast.success(res?.message);
       }
-      
     } catch (error) {
-      console.log(error);
-      
+        toast.error("Something went wrong. Please try again.");  
+
     }
-    
   };
 
   const removeproductHandler = (item) => {
@@ -201,17 +195,17 @@ const AddnewOrder = () => {
     setInvoiceInputHandler({ ...invoiceInputHandler, items: data });
   };
 
-
   const cancelInvoiceHandler = () => {
     setInvoiceInputHandler({
-      name: "",
-      mobile: "",
-      address: "",
-      exhibitionPlace: "",
+      customerName: "",
+      customerMobile: "",
+      customerAddress: "",
+      billingPlace: "",
       eventType: "",
-      date: dayjs().format("YYYY-MM-DD"),
-      discount: "",
-      paymentMethod: "cash",
+      paymentMode: "",
+      advancePayment: null,
+      items: [],
+      comment: "",
     });
   };
 
@@ -222,7 +216,8 @@ const AddnewOrder = () => {
       };
       const res = await dispatch(getPreviousAddressAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+        toast.error("Something went wrong. Please try again.");  
+
     }
   };
   const getexhibitionPlace = async () => {
@@ -232,7 +227,7 @@ const AddnewOrder = () => {
       };
       const res = await dispatch(getPreviousBillingPlaceAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");  
     }
   };
   const getEventType = async () => {
@@ -242,7 +237,7 @@ const AddnewOrder = () => {
       };
       const res = await dispatch(getEventTypeAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");  
     }
   };
   const columns = [
@@ -383,9 +378,9 @@ const AddnewOrder = () => {
   }, [debounceSearch]);
 
   useEffect(() => {
-      getPreviousAddress();
-      getexhibitionPlace();
-      getEventType();
+    getPreviousAddress();
+    getexhibitionPlace();
+    getEventType();
   }, []);
   if (isLoading) return <Loader />;
   return (
@@ -407,7 +402,6 @@ const AddnewOrder = () => {
             className={"!text-[#214344] !text-[20px]"}
             value={"Order Management →  Add New Order"}
           />
-          
         </div>
       </div>
       <div className="generate-form px-20 flex flex-col gap-5">
@@ -434,7 +428,7 @@ const AddnewOrder = () => {
                 Phone No.
               </Typography.Text>
               <CustomInput
-              type={"number"}
+                type={"number"}
                 name="customerMobile"
                 onchange={(e) => {
                   invoiceInputDataHandler(e);
@@ -450,10 +444,9 @@ const AddnewOrder = () => {
           <Col span={12}>
             <div className="flex flex-col gap-2">
               <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">
-              Customer’s Address
+                Customer’s Address
               </Typography.Text>
               <CustomSelect
-              
                 mode="tags"
                 options={previosAddressDataOption ?? []}
                 placeholder="Enter Address"
@@ -479,8 +472,7 @@ const AddnewOrder = () => {
               <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">
                 Billing Place
               </Typography.Text>
-             
-               <CustomSelect
+              <CustomSelect
                 mode="tags"
                 options={previosexhibitionPlaceOption ?? []}
                 placeholder="Enter Billing Place"
@@ -507,7 +499,7 @@ const AddnewOrder = () => {
               <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">
                 Event Type
               </Typography.Text>
-               <CustomSelect
+              <CustomSelect
                 mode="tags"
                 options={eventTypePlaceOption ?? []}
                 placeholder="Enter  Event Type"
@@ -518,7 +510,11 @@ const AddnewOrder = () => {
                     eventType: value,
                   }));
                 }}
-                value={invoiceInputHandler?.eventType ? [invoiceInputHandler?.eventType]: []}
+                value={
+                  invoiceInputHandler?.eventType
+                    ? [invoiceInputHandler?.eventType]
+                    : []
+                }
                 className="rounded-full !border-[#214344]"
               />
             </div>
@@ -576,13 +572,13 @@ const AddnewOrder = () => {
             </div>
           </Col>
         </Row>
-         <Row gutter={40}>
+        <Row gutter={40}>
           <Col span={12}>
             <div className="flex flex-col gap-2">
               <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">
-              Comment
+                Comment
               </Typography.Text>
-               <CustomInput
+              <CustomInput
                 name="comment"
                 onchange={(e) => {
                   invoiceInputDataHandler(e);
@@ -593,14 +589,16 @@ const AddnewOrder = () => {
               />
             </div>
           </Col>
-           <Col span={12}>
+          <Col span={12}>
             <div className="flex flex-col gap-2 relative">
               <Typography.Text className="text-[#214344] !font-[600] !text-[14px]">
                 Search Products
               </Typography.Text>
               <CustomInput
                 value={search}
-                onchange={(e) => {skuSearchHandler(e)}}
+                onchange={(e) => {
+                  skuSearchHandler(e);
+                }}
                 className="rounded-full !border-[#214344] "
                 placeholder="Please Enter SKU"
               />
@@ -635,9 +633,8 @@ const AddnewOrder = () => {
               ) : null}
             </div>
           </Col>
-        
         </Row>
-      
+
         <Row>
           <Col span={24}>
             <CustomTable
@@ -662,24 +659,24 @@ const AddnewOrder = () => {
                 <Row justify={"end"}>
                   <Col span={12}>
                     <Typography.Text className="text-[16px] font-[500] text-[#214344]">
-                      Advance Payment 
+                      Advance Payment
                     </Typography.Text>
                   </Col>
                   <Col span={12}>
                     <Typography.Text className="!text-end">
-                      Rs. {invoiceInputHandler?.advancePayment}
+                      Rs. {invoiceInputHandler?.advancePayment??0}
                     </Typography.Text>
                   </Col>
                 </Row>
                 <Row justify={"end"}>
                   <Col span={12}>
                     <Typography.Text className="text-[16px] font-[500] text-[#214344]">
-                      Due Payment 
+                      Due Payment
                     </Typography.Text>
                   </Col>
                   <Col span={12}>
                     <Typography.Text className="!text-end">
-                      Rs. {subTotal-invoiceInputHandler?.advancePayment}
+                      Rs. {subTotal - invoiceInputHandler?.advancePayment}
                     </Typography.Text>
                   </Col>
                 </Row>
@@ -694,19 +691,18 @@ const AddnewOrder = () => {
               >
                 Cancel
               </Button>
-            <div className="flex justify-center gap-3 py-5">
-              <Button
-                onClick={() => {
-                  generateInvoiceHandler();
-                }}
-                className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 "
-                htmlType="submit"
-              >
-                Save
-              </Button>
+              <div className="flex justify-center gap-3 py-5">
+                <Button
+                  onClick={() => {
+                    generateInvoiceHandler();
+                  }}
+                  className="!bg-[#214344] !text-[#fff] !rounded-full !w-[250px] !text-[16px] py-3 "
+                  htmlType="submit"
+                >
+                  Save
+                </Button>
+              </div>
             </div>
-            </div>
-
           </Col>
         </Row>
       </div>

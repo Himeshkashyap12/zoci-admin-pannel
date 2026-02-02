@@ -17,15 +17,15 @@ const   VendorPerformanceFilter=({setSort,setFilter,setSearch,search,exportProdu
         <>
          <div className="inventary">
             <Row justify={"center"} gutter={[40,20]}>
-                 <Col span={6}>
+                 <Col xxl={6} xl={24} lg={24} md={24}>
                  <div className="flex  gap-20 items-center">
                    <div >
                    <CustomInput search value={search} onchange={(e)=>{setPage(1),setSearch(e.target.value)}}  className={"!w-[350px]"}  placeholder={"Search Vendor Products"} />
                    </div>
                    </div>
                  </Col>
-                 <Col span={18}>
-                 <div className="flex gap-2 justify-end"> 
+                 <Col xxl={18} xl={24} lg={24} md={24}>
+                 <div className="flex gap-2 xl:justify-end"> 
                   <CustomButton onclick={()=>{setproductListBulkModel(true)}} className={"!text-[#fff]"} value={"Bulk Import"}/>
                   <CustomButton value={<div className="flex items-center justify-between gap-1 ">
                     <Image preview={false} className="!size-[16px]" src={filter}/>

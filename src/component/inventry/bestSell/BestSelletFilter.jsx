@@ -8,7 +8,21 @@ import CustomInput from "../../common/CustomInput";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
 import { bestSellerFilter, bestSellerSort } from "./bestSellerData";
 import "../inventary.css"
+import { useSelector } from "react-redux";
 const BestSellerFilter=({search,setSearch,setFilter,setSort,exportProductHandler,sortKey,filterKey,setPage})=>{
+  const {category}=useSelector(state=>state?.ui);
+  const filteredCategory=category?.categories?.map((item)=>{
+    return { label:item?.title,value:item?.title}
+  });
+  const filtedCategoryBestSeller={
+    label:"Category",
+    value:"category",
+    children: filteredCategory
+  
+  }
+
+  
+  
     return(
         <div className="inventary">
          <Row justify={"space-between"} gutter={[40]}>
@@ -25,7 +39,7 @@ const BestSellerFilter=({search,setSearch,setFilter,setSort,exportProductHandler
                   </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/> 
-                   <CustomMultipleFilter value={filterKey} placeholder={"Filter"}  onchange={(value)=>{setPage(1),setFilter(value)}} option={bestSellerFilter}   />
+                   <CustomMultipleFilter value={filterKey} placeholder={"Filter"}  onchange={(value)=>{setPage(1),setFilter(value)}} option={[...bestSellerFilter,filtedCategoryBestSeller]}   />
                        </div>}/>
                   <CustomButton onclick={()=>{exportProductHandler()}}  value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={exports}/>

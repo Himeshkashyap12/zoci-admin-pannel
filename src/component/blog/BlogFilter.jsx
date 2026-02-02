@@ -14,6 +14,7 @@ import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 import CustomMultipleFilter from "../common/CustumMultipleFilter";
 import { blogSort } from "./blogfilterData";
 import "./blog.css"
+import { toast } from "react-toastify";
 const BlogFilter=()=>{
      const navigate=useNavigate();
      const  [search,setSearch]=useState("");
@@ -40,7 +41,7 @@ const BlogFilter=()=>{
       dispatch(filteredDataHandler());
     const res=await dispatch(getBlogAsync({token,data})).unwrap();    
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");
     }
   }
 

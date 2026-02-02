@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 const initialState = {
   orderDashboard:[],
   makeOnlineOrders:[],
@@ -274,6 +275,27 @@ export const getAddressAsync = createAsyncThunk(
     }
   }
 );
+export const updateOrderStatusAsync = createAsyncThunk(
+  "order/updateOrderStatus",
+ async ({token,data,id}) => {
+  console.log(token,"token");
+  
+        try {
+      const res = await api.put(`/make-to-orders/${id}`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      
+      throw error;
+    }
+  }
+);
 
 export const orderSlice = createSlice({
   name: "order",
@@ -432,6 +454,17 @@ export const orderSlice = createSlice({
           state.addAddressIsLoading = false;
           state.error = action;
         });
+         builder.addCase(updateOrderStatusAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(updateOrderStatusAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(updateOrderStatusAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
         
   },
 });

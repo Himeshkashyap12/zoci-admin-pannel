@@ -49,7 +49,7 @@ const VendorPerformanceDetailTable=({setSelectedRowKeys,selectedRowKeys,id,page,
       
       
     } catch (error) {
-      console.log(error);
+       toast.error("Something went wrong. Please try again.");
         toast.error(error?.message);
 
         setDeleteConfirm(false)

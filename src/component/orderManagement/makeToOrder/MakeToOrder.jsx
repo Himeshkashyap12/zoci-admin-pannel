@@ -10,6 +10,7 @@ import { getMakeToOrderAsync } from "../../../feature/order/orderSlice";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { orderExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const MakeToOrder=()=>{
     const navigate=useNavigate()
     const token=Cookies.get("token");  
@@ -34,7 +35,7 @@ const MakeToOrder=()=>{
           if(search && !trimSearch) return;
           const res=await dispatch(getMakeToOrderAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            // toast.error("Something went wrong. Please try again.");  
           }
         }
           const exportOrderHandler = async () => {

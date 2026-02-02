@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { CopyOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { isoToISTDateOnly } from "../../../constants/constants";
+import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllAnniversaryAsync } from "../../../feature/marketing/marketingSlice";
-import Cookies from "js-cookie"
 import Loader from "../../loader/Loader";
-import { CopyOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import { isoToIST, isoToISTDateOnly } from "../../../constants/constants";
-import CustomPagination from "../../common/CustomPagination";
 const AnniversaryPromotionalTable=({selectedRowKeys,setSelectedRowKeys,setPage,page})=>{
       const navigate=useNavigate();
 

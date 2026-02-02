@@ -27,7 +27,7 @@ const SignatureUi=({collectionId})=>{
             const res=await dispatch(getSignatureAsync({token,id:collectionId})).unwrap();
            
         } catch (error) {
-            console.log(error);
+        //    toast.error("Something went wrong. Please try again.");  
             
         }
     }
@@ -71,12 +71,12 @@ const SignatureUi=({collectionId})=>{
     if(isCollectionItemLoading  || isLoading) return <ImageLoader/>
     return(
         <>
-       <div className="bg-[#EFE6DC] ">
+       <div className="bg-[#EFE6DC]  shadow-xl">
         <div className="flex gap-2 px-[20px] bg-[#fff] py-[20px]" onClick={()=>{addNewItemHandler()}}>
             <PlusOutlined style={{fontSize:"18px" }} />
             <CustomText className={"text-[16px] font-semibold !text-[#214344] "} value={"Add New Item"}/>
         </div>
-        <div className="flex flex-col gap-1 h-[420px] overflow-auto bg-[#fff]  ">
+        <div className="flex flex-col gap-1 h-[40vh] overflow-auto bg-[#fff]  ">
             {signatureItem?.collection?.items?.map((item)=>{                
                 return(
                     <>

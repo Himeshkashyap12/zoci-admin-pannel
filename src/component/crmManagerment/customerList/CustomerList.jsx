@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { getAllCustomerList } from "../../../feature/crm/crmSlice";
 import Cookies from "js-cookie"
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const CustomerList = () => {
           const navigate = useNavigate();
           const token=Cookies.get("token");  
@@ -38,7 +39,7 @@ const CustomerList = () => {
              if(search && !trimSearch) return;
             const res=await dispatch(getAllCustomerList({token,data})).unwrap();
             } catch (error) {
-              console.log(error);
+              //  toast.error("Something went wrong. Please try again.");
             }
           }
 

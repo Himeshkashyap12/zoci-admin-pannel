@@ -29,9 +29,7 @@ const EssanceVideo=()=>{
             
             
         } catch (error) {
-            console.log(error);
-            
-            
+            // toast.error("Something went wrong. Please try again.");  
         }
     }
     const deleteEssanceHandler=async()=>{
@@ -43,7 +41,7 @@ const EssanceVideo=()=>{
                 setEssanceModel(false)
                
            } catch (error) {
-               console.log(error);
+             toast.error("Something went wrong. Please try again.");
                
            }
        }

@@ -37,7 +37,7 @@ const CreateNewPromotion=({setOpen,edititem,edit})=>{
           minOrderValue:"" ,
           maxOrderValue:"" ,
           category: "",
-          expiryDate: "2025-12-31",
+          expiryDate: "",
           usageLimit: "",
           banner: "",
           productSKU:[],
@@ -53,20 +53,33 @@ const CreateNewPromotion=({setOpen,edititem,edit})=>{
       setPromotion({...promotion,[name]:value})
       } 
     }
-    const dateHandler=(date)=>{
-      setPromotion({...promotion,expiryDate:isoTODate(date.toISOString())});
-    }
+    const dateHandler = (date) => {
+  if (!date) return;
+
+  // convert to UTC without date shift
+  const utcDate = new Date(Date.UTC(
+    date.year(),
+    date.month(),
+    date.date()
+  ));
+
+  setPromotion({
+    ...promotion,
+    expiryDate: utcDate.toISOString()
+  });
+};
+
 
     const categoryOption=[
-       {label:"Custom",value:"Custom"},
+       {label:"All",value:"Custom"},
        {label:"Birthday",value:"Birthday"},
        {label:"Anniversary",value:"Anniversary"},
     ]
 
 
 const typeOption=[
-  {label:"flat",value:"Flat"},
-  {label:"percentage",value:"Percentage"},
+  {label:"Flat",value:"Flat"},
+  {label:"Percentage",value:"Percentage"},
 
 ]
   
@@ -90,6 +103,17 @@ const typeOption=[
     
 
         const addpromotionHandler=async()=>{
+          if(
+            promotion?.code=="" ||
+            promotion?.type=="" ||
+            promotion?.value=="" ||
+            promotion?.applyOn=="" ||
+            promotion?.minOrderValue=="" ||
+            promotion?.maxOrderValue=="" ||
+            promotion?.category=="" ||
+            promotion?.expiryDate=="" ||
+            promotion?.usageLimit=="" 
+          ) return toast.error("Please enter all fields")
           if(promotion?.value>100 ) return toast.error("Value should be 1-100 ")
             try {
               if(!edit){
@@ -111,7 +135,8 @@ const typeOption=[
                if(res.status=="success"){
                 toast.success(res.message);
                 setOpen(false);
-                dispatch(getAllPromotionAsync({token}));
+                const data={isActive:true}
+                dispatch(getAllPromotionAsync({token,data}));
                 setPromotion({
                    code: "",
                     type: "",
@@ -119,7 +144,7 @@ const typeOption=[
                     minOrderValue:"" ,
                     maxOrderValue:"" ,
                     category: "",
-                    expiryDate: "2025-12-31",
+                    expiryDate: "",
                     usageLimit: "",
                     banner: "",
                     productSKU:[],
@@ -184,8 +209,7 @@ const typeOption=[
               }
               }
             } catch (error) {
-               console.log(error); 
-                toast.error("Something went wrong!")
+                toast.error("Something went wrong. Please try again.");
             }
         }
         const getProducts=async()=>{
@@ -213,28 +237,41 @@ const typeOption=[
                 <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Promo code"}/>
+                        <div className="flex gap-1">
+                      <CustomText  className={"text-[16px] "} value={"Promo code"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
                        <CustomInput name={"code"}  onchange={(e)=>{promotionHandler(e)}} value={promotion?.code} className={"h-[46px]"}/>
                        
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Expiry  Date"}/>
-                      <CustomDate  less onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                    </div>
+                      <CustomDate showTime={true} less onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
                        
                       </div></Col>
                 </Row>
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
+                        <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Type"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
                         <CustomSelect className="!h-[46px]"  name={"type"} onchange={(e)=>{promotionHandler(e,"type")}}  value={promotion?.type}  options={typeOption} />
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Value"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        <CustomInput type={"number"}  name={"value"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.value} className={"h-[46px]"} />
                       </div></Col>
                 </Row>
@@ -242,7 +279,11 @@ const typeOption=[
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
+                        <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Usage Limit"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        <CustomInput type={"number"} name={"usageLimit"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.usageLimit} className={"h-[46px]"}/>
                        
                       </div>
@@ -250,8 +291,10 @@ const typeOption=[
                       <Col span={12}>
                      
                        <div className="flex flex-col gap-3">
-                   
+                   <div className="flex gap-1">
                     <CustomText value={"Range"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                  </div>
                      <div className="flex gap-3">
                     <CustomInput type={"number"}  className={"h-[46px]"} name={"minOrderValue"} value={promotion?.minOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Min Value"}/>
                     <CustomInput  type={"number"} className={"h-[46px]"} name={"maxOrderValue"} value={promotion?.maxOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Max Value"}/>
@@ -263,13 +306,21 @@ const typeOption=[
               <Row gutter={[20,20]}>
                   <Col span={12}>
                   <div className="flex flex-col gap-3">
-                  <CustomText value={"Category"}/>
+                    <div className="flex gap-1">
+                      <CustomText value={"Category"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                   <CustomSelect className="!h-[46px]" name="category" onchange={(e)=>{promotionHandler(e,"category")}} value={promotion?.category} placeholder="Category" options={categoryOption} /> 
                     </div>
                   </Col>
                    <Col span={12}>
                  <div className="flex flex-col gap-3">
+                     <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Product"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        {/* <CustomInput name={"productSKU"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.productSKU} className={"h-[46px]"}/> */}
                       <CustomSelect   className="!h-[44px]" value={promotion?.applyOn} onchange={(e)=>setPromotion({...promotion,applyOn:e})} options={[{label:"All Products",value:"ALL"},{label:"PRODUCTS",value:"PRODUCTS"}]}/>
                       </div>

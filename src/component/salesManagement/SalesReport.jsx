@@ -18,6 +18,7 @@ import ProductSalesChart from "./ProductSalesChart";
 import SalesCard from "./SalesCard";
 import SalesReportTable from "./SalesReportTable";
 import SalesDashboardCard from "./SalesDashboardCard";
+import { toast } from "react-toastify";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const [salesDateOptionValue,setSalesDateOptionValue]=useState({});
@@ -59,14 +60,14 @@ const SalesReport=()=>{
             const data={...salesDateOptionValue}
           const res=await dispatch(getSalesDashboardAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");  
           }
         }
         const getSalesRevenue=async()=>{
             try {
               const res=await dispatch(getSalesTimeAsync({token}))
             } catch (error) {
-              console.log(error);
+              toast.error("Something went wrong. Please try again.");  
               
             }
           }
@@ -118,7 +119,7 @@ const SalesReport=()=>{
         percent: slaesDashboard?.summary?.topCategoryPercentage??0
       },
       {
-        title: "Returning Customers",
+        title: "Returning Order",
         value: slaesDashboard?.summary?.returningCustomers,
         percent:slaesDashboard?.summary?.returningCustomersPercent??0
       }

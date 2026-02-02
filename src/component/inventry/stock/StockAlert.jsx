@@ -11,6 +11,7 @@ import Cookies from "js-cookie"
 import { notifyMeAsync, stockLevelAlertAsync } from "../../../feature/inventaryManagement/inventarySlice";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const StockAlert=()=>{
     const [stockAlerstStatus,setStockAlertStatus]=useState("stock");
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -45,7 +46,7 @@ const StockAlert=()=>{
           const res=await dispatch(notifyMeAsync({token,data})).unwrap();
           setTotal(res?.total)
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
           }
         }
         const getStockAlert=async()=>{
@@ -64,7 +65,7 @@ const StockAlert=()=>{
           setTotal(res?.total)
 
           } catch (error) {
-            console.log(error);
+            //  toast.error("Something went wrong. Please try again.");
           }
         }
 

@@ -1,5 +1,5 @@
 import { Col, Image, Row } from "antd";
-import profile from "../../assets/crm/customerDetail.png"
+import profile from "../../assets/crm/customerDetail.jpg"
 import CustomText from "../common/CustomText";
 import Loader from "../loader/Loader";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ const CrmCustomerDetails=({item,visitors})=>{
             <Col span={6}>
                <div className="flex flex-col ps-[20px] gap-5">
                 <div className="size-[200px] ">
-                    <Image className="h-full w-full object-cover rounded-full" preview={false} src={profile}/>
+                    <Image className="h-full w-full object-fit rounded-full " preview={false} src={profile}/>
                 </div>
                 <div className="flex flex-col gap-1 ps-[10px]">
                     <CustomText className={"!text-[24px] !text-[#214344] font-bold"} value={item?.name}/>
@@ -29,7 +29,7 @@ const CrmCustomerDetails=({item,visitors})=>{
                 <div className="flex gap-10 ">
                 <div className="flex flex-col gap-2">
                     <CustomText className={"!text-[#000] !text-[18px] "}  value={"Email"}/>
-                    <CustomText className={"!text-[#214344] !text-[18px] w-[] "}  value={item?.email}/>
+                    <CustomText className={"!text-[#214344] !text-[18px] w-[] "}  value={item?.email??"-"}/>
                </div>
                 <div className="flex flex-col gap-2">
                     <CustomText className={"!text-[#000] !text-[18px] "}  value={"Phone"}/>

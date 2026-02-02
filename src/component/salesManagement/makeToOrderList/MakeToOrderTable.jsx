@@ -50,7 +50,7 @@ const MakeToOrderTable=({page,setPage})=>{
                 key: "items",
                 align:"center",
                 width: 200,
-                render: (text) =>   <CustomText value={text[0]?.sku}/>
+                render: (text) =>   <CustomText value={text[0]?.sku??"-"}/>
 
               },
               {
@@ -77,7 +77,7 @@ const MakeToOrderTable=({page,setPage})=>{
                 key: "items",
                 width: 150,
                 align:"center",
-                render: (text) =>   <CustomText value={text[0]?.size}/>
+                render: (text) =>   <CustomText value={text[0]?.size??"-"}/>
 
               },
               {
@@ -96,7 +96,7 @@ const MakeToOrderTable=({page,setPage})=>{
                 key: "items",
                 width: 250,
                 align: "center",
-                render: (text) => <CustomText value={`Rs. ${text[0]?.price}`}/>
+                render: (text) => <CustomText value={`Rs. ${text[0]?.price??0}`}/>
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Order Status"}/>),

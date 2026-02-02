@@ -1,9 +1,9 @@
 
 import { DatePicker, Space } from 'antd';
-const CustomDate=({onchange,className,less=false})=>{
+const CustomDate=({onchange,className,less=false,showTime=false})=>{
     return(
         <>
-        <DatePicker disabledDate={(current) => {
+        <DatePicker showTime={showTime} disabledDate={(current) => {
         const today = new Date().setHours(0, 0, 0, 0);
 
         if (!current) return false;

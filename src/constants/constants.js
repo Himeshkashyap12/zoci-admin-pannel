@@ -2,6 +2,7 @@
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useSelector } from "react-redux";
 
 export function isoToIST(isoString) {
   const date = new Date(isoString); // Convert ISO string to Date object
@@ -93,4 +94,17 @@ dayjs.extend(utc);
 export function isoToUTC(isoString) {
   return dayjs(isoString).utc().format("YYYY-MM-DD HH:mm:ss");
 }
+
+
  
+ 
+export function formatDateUTC(isoDate) {
+  const date = new Date(isoDate);
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+

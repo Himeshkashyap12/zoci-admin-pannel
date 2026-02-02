@@ -12,6 +12,7 @@ import { getTotalExpenditureAsync } from "../../../feature/sales/salesSlice";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const TotalExpenditure = () => {
         const [page,setPage]=useState(1);
         const [search,setSearch]=useState("");
@@ -39,7 +40,7 @@ const TotalExpenditure = () => {
               try {
               const res=await dispatch(getTotalExpenditureAsync({token,data})).unwrap();
               } catch (error) {
-                console.log(error);
+                // toast.error("Something went wrong. Please try again.");  
               }
             }
           const totalExpenditureCards=[

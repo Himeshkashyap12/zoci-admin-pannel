@@ -127,7 +127,7 @@ const MakeToOrderTablePage=({page,setPage})=>{
                 key: "orderStatus",
                 width: 250,
                 align: "center",
-                render: (_,text) =><div className="cursor-pointer" onClick={()=>{navigate("/admin/add-order-shiprocket",{state:{item:text,status:"makeToOrder"}})}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
+                render: (_,text) =><div className="cursor-pointer" onClick={()=>{text?.orderStatus=="Ordered" ? navigate("/admin/add-order-shiprocket",{state:{item:text,status:"makeOnlineOrder"}}):toast.error("You are not elligible to create order at shiprocket")}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Ordered Date"}/>),

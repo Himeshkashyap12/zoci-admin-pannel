@@ -7,6 +7,7 @@ import ReturningCustomerDetailsTable from "./ReturningCustomerDetailsTable";
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 import CustomText from "../../../common/CustomText";
+import { toast } from "react-toastify";
 const ReturningCustomerDetails=({id})=>{
     const navigate=useNavigate();
     const [page,setPage]=useState(1)
@@ -21,7 +22,7 @@ const ReturningCustomerDetails=({id})=>{
                 }
               const res=await dispatch(getReturningCustomerDetailsAsync({token,id,data})).unwrap();
               } catch (error) {
-                console.log(error);
+                toast.error("Something went wrong. Please try again.");  
               }
             }
     

@@ -26,7 +26,7 @@ const MenCategory=()=>{
             
             
         } catch (error) {
-            console.log(error);
+        //   toast.error("Something went wrong. Please try again.");
             
             
         }
@@ -45,7 +45,7 @@ const MenCategory=()=>{
    
                
            } catch (error) {
-               console.log(error);
+            toast.error("Something went wrong. Please try again.");
                
            }
        }

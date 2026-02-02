@@ -21,7 +21,8 @@ const AddNewCollection = ({ setOpen,editItem }) => {
                   name: "",
                   description: "",
                   thumbnail: "",
-                  bannerImage:""
+                  bannerImage:"",
+                  mobileImage:""
       });
       
         const {isLoading}=useSelector(state=>state?.ui)
@@ -30,7 +31,8 @@ const AddNewCollection = ({ setOpen,editItem }) => {
         setCollection({...collection,[name]:value})
         };
 
-  const createCollectionHandler=async()=>{
+  const createCollectionHandler=async()=>{    
+    if(collection?.name=="" || collection?.description=="" || collection?.thumbnail=="" || collection?.bannerImage=="" || collection?.mobileImage=="") return toast.error("Please enter all fields")
      try {
       if(!editItem){
          const data={...collection}
@@ -44,7 +46,8 @@ const AddNewCollection = ({ setOpen,editItem }) => {
             name: "",
             description: "",
             thumbnail: "",
-            bannerImage:""
+            bannerImage:"",
+            mobileImage:""
         });
 
       }
@@ -69,7 +72,7 @@ const AddNewCollection = ({ setOpen,editItem }) => {
       }
      
     } catch (error) {
-      console.log(error);
+     toast.error("Something went wrong. Please try again.");  
       setOpen(false);
       toast.error("Something went wrong")
       
@@ -105,10 +108,10 @@ const AddNewCollection = ({ setOpen,editItem }) => {
               }
         };
          const handleBannerImageUpload = async (e) => {      
-        const file = e.target.files[0];
+          const file = e.target.files[0];
           if (!file) return;
                 try {
-                  const WIDTH = 1440;
+                  const WIDTH =1440 ;
                   const HEIGHT = 234;
                   const img = new window.Image();
                    img.src = URL.createObjectURL(file);
@@ -122,6 +125,37 @@ const AddNewCollection = ({ setOpen,editItem }) => {
                 if(res.message){
                     toast.success(res?.message)
                     setCollection({...collection,bannerImage:res?.images[0]}); 
+                } 
+                  } else {
+                    toast.error(`Image dimensions must be at least ${WIDTH}x${HEIGHT}px. Current dimensions: ${width}x${height}px.`);
+                    e.target.value = null; // Clear the input
+                  }
+                  URL.revokeObjectURL(img.src); // Clean up the local URL
+                };
+
+                
+                } catch (err) {
+                console.error(err);
+              }
+        };
+          const handleMobileBannerImageUpload = async (e) => {      
+        const file = e.target.files[0];
+          if (!file) return;
+                try {
+                  const WIDTH = 379;
+                  const HEIGHT = 214;
+                  const img = new window.Image();
+                   img.src = URL.createObjectURL(file);
+                    img.onload = async() => {
+                  const { naturalWidth: width, naturalHeight: height } = img;
+                  
+                  if (width == WIDTH || height ==HEIGHT) {
+                      const formData = new FormData();
+                formData.append("productImages", file);
+                const res=await dispatch(getImageUrlAsync({token,formData})).unwrap();
+                if(res.message){
+                    toast.success(res?.message)
+                    setCollection({...collection,mobileImage:res?.images[0]}); 
                 } 
                   } else {
                     toast.error(`Image dimensions must be at least ${WIDTH}x${HEIGHT}px. Current dimensions: ${width}x${height}px.`);
@@ -207,12 +241,11 @@ const AddNewCollection = ({ setOpen,editItem }) => {
               />
                {isMediaLoading?<ImageLoader/>:<CustomImageUpload  imageUploadHandler={handleUpload} label={
              !collection?.thumbnail?  <div className="flex flex-col gap-3 items-center cursor-pointer ">
-                   <Image preview={false} className="!size-[30px]" src={blogUpload}/>
-                <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
-                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
-                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image Size should be 700px * 438px"}/>
-              
-                </div> :<div className="h-[200px] !w-[200px]"><Image className="!w-[100%] object-cover" preview={false} src={collection?.thumbnail}/>  </div>  
+                  <Image preview={false} className="!size-[30px]" src={blogUpload}/>
+                  <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
+                  <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
+                  <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image Size should be 700px * 438px"}/>
+                  </div> :<div className="h-[200px] !w-[200px]"><Image className="!w-[100%] object-cover" preview={false} src={collection?.thumbnail}/>  </div>  
              }
               />}
              
@@ -231,10 +264,25 @@ const AddNewCollection = ({ setOpen,editItem }) => {
                 <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
                 <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image Size should be 1440px * 238px"}/>
                 </div> :<div className="h-[200px] !w-[200px]"><Image className="!w-[100%] object-cover" preview={false} src={collection?.bannerImage}/>  </div>  
-
              }
               />}
-             
+            </div>
+          </Col>
+           <Col span={24}>
+            <div className="flex flex-col gap-2">
+              <CustomText
+                className={"text-[16px] "}
+                value={"Banner Mobile Image"}
+              />
+               {isMediaLoading?<ImageLoader/>:<CustomImageUpload  imageUploadHandler={handleMobileBannerImageUpload} label={
+             !collection?.mobileImage?  <div className="flex flex-col gap-3 items-center cursor-pointer ">
+                   <Image preview={false} className="!size-[30px]" src={blogUpload}/>
+                <CustomText className={"!text-[#4C7399] !text-[24px] font-bold"} value={"Tap to upload Image"}/>
+                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"JPG, PNG up to 5 MB"}/>
+                <CustomText className={"!text-[#4C7399] text-[16px] "} value={"Image Size should be 379px * 214px"}/>
+                </div> :<div className="h-[200px] !w-[200px]"><Image className="!w-[100%] object-cover" preview={false} src={collection?.mobileImage}/>  </div>  
+             }
+              />}
             </div>
           </Col>
         </Row>

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { getAllPromotionAsync } from "../../../feature/marketing/marketingSlice";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const ActivePromotion=()=>{
     const navigate=useNavigate();
     const token=Cookies.get("token");  
@@ -33,7 +34,7 @@ const ActivePromotion=()=>{
               const res=await dispatch(getAllPromotionAsync({token,data}))?.unwrap();
               
               } catch (error) {
-                console.log(error);
+                // toast.error("Something went wrong. Please try again.");
                
               }
             }
@@ -50,7 +51,7 @@ const ActivePromotion=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Marketing Tools → Active Promotions"}/>
             </div>
             <div>
-                <ActivePromotionFilter setSearch={setSearch} setSort={setSort}  setFilter={setFilter} search={search} activeSort={activeSort} activeFilter={activeFilter}  />
+                <ActivePromotionFilter expired={true} setSearch={setSearch} setSort={setSort}  setFilter={setFilter} search={search} activeSort={activeSort} activeFilter={activeFilter}  />
             </div>
               <div>
                 <ActivePromotionTable page={page} setPage={setPage}/>

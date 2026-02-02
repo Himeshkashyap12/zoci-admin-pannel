@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/axios";
+import { toast } from "react-toastify";
 const initialState = {
   inventaryDashboard:{}, 
   products:{},
@@ -253,7 +254,7 @@ export const createProductHandlerAsync = createAsyncThunk(
       });      
       return res?.data; // No need for `await res.data`
     } catch (error) {
-      console.log(error);
+     toast.error("Something went wrong. Please try again.");
       
       // throw error;
       return error;

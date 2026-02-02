@@ -2,7 +2,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isoToISTDateOnly } from "../../../constants/constants";
+import { formatDateUTC } from "../../../constants/constants";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import Loader from "../../loader/Loader";
@@ -60,11 +60,11 @@ const AnniversaryRemindertable=()=>{
     },
     {
       title: <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Anniversary Date"}/>,
-      dataIndex: "birthdayDate",
-      key: "birthdayDate",
+      dataIndex: "anniversaryDate",
+      key: "anniversaryDate",
       width: 130,
       align:"center",
-      render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
+      render: (text) =>   <CustomText value={formatDateUTC(text)}/>
     }
   ];
     if(isLoading) return <Loader/>;

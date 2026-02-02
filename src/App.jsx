@@ -74,6 +74,7 @@ import LoginPage from "./pages/auth/LoginPage";
 //protected
 import AdminProtectedRoute from "./utils/AdminProtectedRoute";
 import Loader from "./component/loader/Loader";
+import BlogDetailsPage from "./pages/blogPage/BlogDetailsPage";
 
 function App() {
   return (
@@ -141,7 +142,9 @@ function App() {
            
            {/* Blog section route*/}
              <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/>
+             <Route  path="blog/:id" element={ <AdminProtectedRoute>  <BlogDetailsPage />  </AdminProtectedRoute> }/>
              <Route  path="add-new-blog" element={ <AdminProtectedRoute>  <AddNewBlogPage />  </AdminProtectedRoute> }/>
+
 
            {/* ui management route */}
              <Route  path="ui-management" element={ <AdminProtectedRoute>  <UiManagementpage />  </AdminProtectedRoute> }/>

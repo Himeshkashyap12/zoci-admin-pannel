@@ -29,7 +29,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys,setPage,page})=>{
       const data={page:page,limit:10}
     const res=await dispatch(getAllProductAsync({token,data})).unwrap();    
     } catch (error) {
-      console.log(error);
+       toast.error("Something went wrong. Please try again.");
     }
   }
   const confirmationPopUpHandler=async()=>{
@@ -105,7 +105,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys,setPage,page})=>{
       dataIndex: "size",
       key: "size",
       width: 120,
-      render: (text) =>   <CustomText value={text??"Na"}/>
+      render: (text) =>   <CustomText value={text??"-"}/>
     },
     {
       title: (

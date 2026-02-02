@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { generateTokenAsync, getAddressAsync } from "../../../feature/order/orderSlice";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 const AddOrderToShipRocket = () => {
   const navigate = useNavigate();
   const dipspatch=useDispatch();
@@ -32,7 +33,7 @@ const AddOrderToShipRocket = () => {
       }
       const res=await dipspatch(generateTokenAsync({data})).unwrap();  
     } catch (error) {
-      console.log(error); 
+      toast.error("Something went wrong. Please try again.");  
     }
   }
   const getShippingAddress=async()=>{
@@ -43,7 +44,7 @@ const AddOrderToShipRocket = () => {
       }
       const res=await dipspatch(getAddressAsync({data,shipRocketToken})).unwrap();  
     } catch (error) {
-      console.log(error); 
+      toast.error("Something went wrong. Please try again.");  
     }
   }
   useEffect(()=>{

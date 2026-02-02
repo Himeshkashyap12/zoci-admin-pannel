@@ -18,7 +18,7 @@ import "../marketing.css";
 import { activePromotionFilter, activePromotionSort } from "./activePromotionFilterData";
 import { toast } from "react-toastify";
 const { RangePicker } = DatePicker;
-const ActivePromotionFilter=({setSearch,search,setFilter,activeFilter,activeSort,setSort})=>{
+const ActivePromotionFilter=({setSearch,search,setFilter,activeFilter,activeSort,setSort,expired})=>{
          const [newPromotionModel,setPromotionModel]=useState(false);
          const dispatch=useDispatch();
          const token=Cookies.get("token");
@@ -46,7 +46,7 @@ const ActivePromotionFilter=({setSearch,search,setFilter,activeFilter,activeSort
                  
                  <Col span={16}>
                  <div className="flex gap-5 justify-end"> 
-                     <CustomButton onclick={()=>{setPromotionModel(true)}} className={"!text-[#fff]"} value={"Create new Promotion"}/>
+                     {expired && <CustomButton onclick={()=>{setPromotionModel(true)}} className={"!text-[#fff]"} value={"Create new Promotion"}/>}
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
                         <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={activePromotionFilter}/>

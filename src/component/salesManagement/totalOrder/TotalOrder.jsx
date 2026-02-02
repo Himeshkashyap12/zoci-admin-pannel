@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTotalOrderAsync } from "../../../feature/sales/salesSlice";
 import Cookies from "js-cookie";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const TotalOrder = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
@@ -41,7 +42,7 @@ const TotalOrder = () => {
                 if(search && !trimSearch) return;
               const res=await dispatch(getTotalOrderAsync({token,data})).unwrap();
               } catch (error) {
-                console.log(error);
+              //  toast.error("Something went wrong. Please try again.");  
               }
             }
      const totalOrderCard=[

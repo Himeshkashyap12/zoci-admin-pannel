@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getCrmAsync } from "../../feature/crm/crmSlice";
 import CrmCard from "./CrmCard";
 import Loader from "../loader/Loader";
+import { toast } from "react-toastify";
 const CrmManagement=()=>{
       const navigate=useNavigate();
       const token=Cookies.get("token");  
@@ -19,7 +20,7 @@ const CrmManagement=()=>{
           try {
           const res=await dispatch(getCrmAsync({token})).unwrap();
           } catch (error) {
-            console.log(error);
+           toast.error("Something went wrong. Please try again.");
           }
         }
    const cardData=[

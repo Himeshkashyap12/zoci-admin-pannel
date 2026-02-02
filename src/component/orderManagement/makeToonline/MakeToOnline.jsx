@@ -9,6 +9,7 @@ import Cookies from "js-cookie"
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { orderExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const MakeToOnline=()=>{
             const [selectedRowKeys, setSelectedRowKeys] = useState([]);
             const [date,setDate]=useState([]);                              
@@ -34,7 +35,8 @@ const MakeToOnline=()=>{
                 if(search && !trimSearch) return;
                 const res=await dispatch(getManageOnlineOrderAsync({token,data})).unwrap();
                 } catch (error) {
-                  console.log(error);
+                  //  toast.error("Something went wrong. Please try again.");  
+                 
                 }
               } 
             const exportOrderHandler = async () => {

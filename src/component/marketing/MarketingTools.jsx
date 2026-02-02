@@ -9,6 +9,7 @@ import { getMarketingDashboardAsync } from "../../feature/marketing/marketingSli
 import Cookies from "js-cookie"
 import Loader from "../loader/Loader";
 import MarketingCard from "./MarketingCard";
+import { toast } from "react-toastify";
 const MarketingTools=()=>{
     const navigate=useNavigate();
     const token=Cookies.get("token");  
@@ -18,7 +19,8 @@ const MarketingTools=()=>{
           try {
           const res=await dispatch(getMarketingDashboardAsync({token})).unwrap();
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
+
           }
         }
         useEffect(()=>{

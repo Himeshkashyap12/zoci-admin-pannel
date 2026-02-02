@@ -8,12 +8,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       }
       
     ],
@@ -62,17 +62,6 @@ export const totalSaleFilter=[
       {
         value: 'Online/Operational',
         label: 'Online/Operational',
-      }
-    ],
-  },
-   {
-    label:"Sub Category",
-    value:"subCategory",
-    children: [
-      {
-        value: 'Stall',
-        label: 'Stall',
-      
       }
     ],
   }

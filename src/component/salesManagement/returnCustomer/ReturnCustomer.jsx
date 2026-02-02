@@ -13,6 +13,7 @@ import CustomText from "../../common/CustomText";
 import SalesCard from "../SalesCard";
 import ReturningCustomerFilter from "./ReturningCustomerFilter";
 import ReturningCustomerTable from "./ReturningCustomerTable";
+import { toast } from "react-toastify";
 const ReturnCustomer = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
@@ -38,7 +39,7 @@ const ReturnCustomer = () => {
                 if(search && !trimSearch) return;
               const res=await dispatch(getReturningCustomerAsync({token,data})).unwrap();
               } catch (error) {
-                console.log(error);
+              //  toast.error("Something went wrong. Please try again.");  
               }
             }
             const totalReturnCards=[

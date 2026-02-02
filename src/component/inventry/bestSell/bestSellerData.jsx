@@ -1,3 +1,5 @@
+ 
+ 
  export const bestSellerSort=[
   {
     label:"Sort Order",
@@ -5,12 +7,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       
       },
     ],
@@ -49,32 +51,7 @@
   ];
  
 export const bestSellerFilter=[
-  {
-    label:"Category",
-    value:"category",
-    children: [
-      {
-        value: 'Rings',
-        label: 'Rings',
-      
-      },
-      {
-        value: 'Necklaces',
-        label: 'Necklaces',
-      
-      },
-      {
-        value: 'Bracelets',
-        label: 'Bracelets',
-      
-      },
-      {
-        value: 'Earrings',
-        label: 'Earrings',
-      
-      }
-    ],
-  },
+  
   {
     label:"Metal Type",
     value:"metalType",
@@ -87,6 +64,11 @@ export const bestSellerFilter=[
       {
         value: 'Gold',
         label: 'Gold',
+      
+      },
+      {
+        value: 'Platinum',
+        label: 'Platinum',
       
       }
     ],

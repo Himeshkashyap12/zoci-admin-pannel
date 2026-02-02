@@ -28,7 +28,7 @@ const WoMenCategory=()=>{
             const res=await dispatch(getWomenCategoryHandlerAsync({token,data})).unwrap();
             
         } catch (error) {
-            console.log(error);
+        //    toast.error("Something went wrong. Please try again.");
             
         }
     }
@@ -46,7 +46,7 @@ const WoMenCategory=()=>{
 
             } 
         } catch (error) {
-            console.log(error);
+           toast.error("Something went wrong. Please try again.");
             
         }
     }

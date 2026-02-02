@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { anniversaryPromotionHandler, birthdayPromotionHandler } from "../exportMarketing";
+import { toast } from "react-toastify";
 const BirthdayPromotion=()=>{
           const [birthdayPromotion,setBirthdayPromotion]=useState(false);
           const [selectedRowKeys,setSelectedRowKeys]=useState([]);
@@ -42,7 +43,8 @@ const BirthdayPromotion=()=>{
                     try{
                     const res=await dispatch(getAllBirthdayPromotion({token,data})).unwrap();
                     } catch (error) {
-                        console.log(error);
+                     toast.error("Something went wrong. Please try again.");
+                       
                     }
                     }
                  const getAnniversayPromotion=async()=>{
@@ -61,7 +63,7 @@ const BirthdayPromotion=()=>{
                             try{
                       const res=await dispatch(getAllAnniversaryAsync({token,data})).unwrap();
                       } catch (error) {
-                        console.log(error);
+                        // toast.error("Something went wrong. Please try again.");  
                       }
                     }
 

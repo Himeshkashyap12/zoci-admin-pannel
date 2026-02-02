@@ -2,7 +2,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isoToISTDateOnly } from "../../../constants/constants";
+import { formatDateUTC } from "../../../constants/constants";
 import CustomPagination from "../../common/CustomPagination";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
@@ -62,7 +62,7 @@ const BirthdayReminderTable=({page,setPage})=>{
       dataIndex: "address",
       key: "address",
       width: 250,
-      render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
+      render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.length>30?text?.slice(0, 30) + "...":text}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
 
     },
     {
@@ -71,7 +71,7 @@ const BirthdayReminderTable=({page,setPage})=>{
       key: "birthdayDate",
       width: 130,
       align:"center",
-      render: (text) =>   <CustomText value={isoToISTDateOnly(text)}/>
+      render: (text) =>   <CustomText value={formatDateUTC(text)}/>
     }
    
   ];

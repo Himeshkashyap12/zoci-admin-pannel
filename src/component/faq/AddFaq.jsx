@@ -35,8 +35,7 @@ const AddFaq=({setFaqModel,editItem})=>{
                 dispatch(fetchFaqAsync({token}))
             }
            } catch (error) {
-            console.log(error);
-            toast.error("Something Went Wrong")
+             toast.error("Something went wrong. Please try again.");
             setFaqModel(false)
             
            }
@@ -51,8 +50,7 @@ const AddFaq=({setFaqModel,editItem})=>{
                 dispatch(fetchFaqAsync({token}))
             }
            } catch (error) {
-            console.log(error);
-            toast.error("Something Went Wrong")
+            toast.error("Something went wrong. Please try again.");
             setFaqModel(false)
             
            }

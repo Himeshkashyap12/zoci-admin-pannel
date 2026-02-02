@@ -28,6 +28,7 @@ const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {
   });
  
  const CreateCategoryHandler=async()=>{
+  if(category?.title==""  || category?.images?.categoryImage=="") return toast.error("Please enter all field")
        try {
         if(!editData){
          const data={...category,madeFor:madeFor}
@@ -59,9 +60,8 @@ const CreateCategory = ({ setOpen,madeFor,editData,setEditData}) => {
         }
       
        } catch (error) {
-        console.log(error);
+        toast.error("Something went wrong. Please try again.");
         setOpen(false);
-        toast.error("Something Went Wrong`!") 
        }
  }
  
@@ -79,7 +79,8 @@ const handleUpload = async (e) => {
                
             }
             } catch (err) {
-            console.error(err);
+               throw error;
+
           }
     };
        

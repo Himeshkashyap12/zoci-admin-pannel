@@ -1,7 +1,7 @@
   
  export const sortOption=[
-    {label:"Price-High to Low",value:"priceDesc"},
-    {label:"Price-Low to High",value:"priceAsc"},
+    {label:"Price-Descending",value:"priceDesc"},
+    {label:"Price-Ascending",value:"priceAsc"},
      {label:"Rating",value:"rating"},
     {label:"Newest",value:"newest"},
      {label:"Oldest",value:"oldest"},
@@ -51,16 +51,10 @@
     label:"Stone Type",
     value:"stoneType",
     children: [
-      {
-        value: 'Natural Diamond',
-        label: 'Natural Diamond',
-      
-      },
-      {
-        value: 'Lab Grown Diamond',
-        label: 'Lab Grown Diamond',
-      
-      },
+       {label:"Natural Diamond",value:"Natural Diamond"},
+    {label:"Lab Grown Diamond",value:"Lab Grown Diamond"},
+    {label:"Gemstone",value:"Gemstone"},
+    {label:"Synthetic",value:"Synthetic"}
       
     ],
   },
@@ -83,3 +77,53 @@
   }
   
 ];
+
+
+
+
+
+export const subCategoryOption = {
+  Earrings: [
+    { label: "Hoop", value: "Hoop" },
+    { label: "Studs", value: "Studs" },
+    { label: "Fashion", value: "Fashion" },
+  ],
+
+  Rings: [
+    { label: "Signet", value: "Signet" },
+    { label: "Bridal", value: "Bridal" },
+    { label: "Bypass", value: "Bypass" },
+    { label: "Cocktail", value: "Cocktail" },
+    { label: "Band", value: "Band" },
+    { label: "Fashion", value: "Fashion" },
+  ],
+
+  Pendant: [
+    { label: "Mangalsutra", value: "Mangalsutra" },
+    { label: "Bar", value: "Bar" },
+    { label: "Solitaire", value: "Solitaire" },
+    { label: "Fashion", value: "Fashion" },
+  ],
+
+  Necklaces: [
+    { label: "Lariat", value: "Lariat" },
+    { label: "Chains", value: "Chains" },
+    { label: "Tennis", value: "Tennis" },
+    { label: "Layered", value: "Layered" },
+    { label: "Fashion", value: "Fashion" },
+  ],
+
+  Bracelets: [
+    { label: "Tennis", value: "Tennis" },
+    { label: "Bolo", value: "Bolo" },
+    { label: "Fashion", value: "Fashion" },
+  ]
+};
+
+
+
+export const metalColor=[
+  {label:"Yellow",value:"yellow"},
+  {label:"White",value:"White"},
+  {label:"Rose",value:"Rose"}
+]

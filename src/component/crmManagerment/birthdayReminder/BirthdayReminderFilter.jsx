@@ -21,7 +21,7 @@ const BirthdayReminderFilter=({search,setSearch,setSortKey,setDate,setPage,sortK
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search your orders"} />
+                   <CustomInput search onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search your Customer"} />
                    </div>
                  </Col>
                  
@@ -32,12 +32,12 @@ const BirthdayReminderFilter=({search,setSearch,setSortKey,setDate,setPage,sortK
                       return current && current > new Date().setHours(0, 0, 0, 0);
                     }}
                     onChange={(i,value)=>{setPage(1),setDate(value)}} />   
-                  <CustomButton value={<div className="flex items-center gap-2">
+                  {/* <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
                     <CustomMultipleFilter value={sortKey}  placeholder={"Sort"}  option={birthdayCrmSort}   onchange={(value)=>{setPage(1),setSortKey(value)}} />
 
 
-                  </div>}/>
+                  </div>}/> */}
                  
                   </div>
               </Col>

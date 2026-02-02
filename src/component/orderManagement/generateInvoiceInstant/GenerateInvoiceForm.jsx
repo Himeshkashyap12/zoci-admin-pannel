@@ -33,6 +33,7 @@ import CustomSelect from "../../common/CustomSelect";
 import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import Loader from "../../loader/Loader";
+
 const GenerateInvoiceForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -108,10 +109,9 @@ const GenerateInvoiceForm = () => {
   };
 
   const quantityHandler = (record, item) => {
-    if 
-    (record?.quantity == record?.stock ||
-      (record?.quantity == 1 && item === "minus") ||
-      (record?.quantity >= record?.stock && item === "plus")
+    if (
+      (item === "minus" && record?.quantity <= 1) ||
+      (item === "plus" && record?.quantity >= record?.stock)
     ) {
       return;
     } else {
@@ -139,7 +139,7 @@ const GenerateInvoiceForm = () => {
       const data = { sku: trimSearch };
       const res = await dispatch(productBySkuAsync({ data })).unwrap();
     } catch (error) {
-      console.log(error);
+          // toast.error("Something went wrong. Please try again.");  
     }
   };
 
@@ -163,12 +163,13 @@ const GenerateInvoiceForm = () => {
       const res = await previewPdfHandler(data);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again."); 
       setIsLoading(false);
     }
   };
 
   const addSkuHandler = (item) => {
+    setSearch("");
     const data = { ...item, quantity: 1 };
     if (
       invoiceInputHandler.invoiceData.some(
@@ -181,8 +182,6 @@ const GenerateInvoiceForm = () => {
         ...invoiceInputHandler,
         invoiceData: [...invoiceInputHandler?.invoiceData, data],
       });
-
-
       dispatch(addSku([]));
     }
   };
@@ -198,8 +197,8 @@ const GenerateInvoiceForm = () => {
       invoiceInputHandler?.paymentMethod == "" ||
       invoiceInputHandler?.invoiceData?.length == 0
     ) {
-      toast.error("please Enter all required field");
       setIsLoading(false);
+     return toast.error("please Enter all required field");
     }
     try {
       const item = invoiceInputHandler?.invoiceData?.map((item) => {
@@ -257,7 +256,8 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getPreviousAddressAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");  
+
     }
   };
   const getexhibitionPlace = async () => {
@@ -267,7 +267,8 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getPreviousBillingPlaceAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+           toast.error("Something went wrong. Please try again.");  
+;
     }
   };
   const getEventType = async () => {
@@ -277,7 +278,7 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getEventTypeAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+        toast.error("Something went wrong. Please try again.");  
     }
   };
   const columns = [
