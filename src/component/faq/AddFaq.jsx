@@ -1,14 +1,13 @@
 import { Button, Col, Row, Skeleton } from "antd"
-import CustomText from "../common/CustomText"
 import TextArea from "antd/es/input/TextArea"
-import CustomButton from "../common/CustomButton"
+import Cookies from "js-cookie"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import Cookies from "js-cookie"
-import { createFaqAsync, editFaqAsync, fetchFaqAsync } from "../../feature/faq/faqSlice"
 import { toast } from "react-toastify"
-import { specialChar } from "../../constants/regex"
 import { compareNewAndOldObject } from "../../constants/constants"
+import { createFaqAsync, editFaqAsync, fetchFaqAsync } from "../../feature/faq/faqSlice"
+import CustomButton from "../common/CustomButton"
+import CustomText from "../common/CustomText"
 const AddFaq=({setFaqModel,editItem})=>{    
     const dispatch=useDispatch();
     const token=Cookies.get("token");
@@ -36,8 +35,7 @@ const AddFaq=({setFaqModel,editItem})=>{
                 dispatch(fetchFaqAsync({token}))
             }
            } catch (error) {
-            console.log(error);
-            toast.error("Something Went Wrong")
+             toast.error("Something went wrong. Please try again.");
             setFaqModel(false)
             
            }
@@ -52,8 +50,7 @@ const AddFaq=({setFaqModel,editItem})=>{
                 dispatch(fetchFaqAsync({token}))
             }
            } catch (error) {
-            console.log(error);
-            toast.error("Something Went Wrong")
+            toast.error("Something went wrong. Please try again.");
             setFaqModel(false)
             
            }

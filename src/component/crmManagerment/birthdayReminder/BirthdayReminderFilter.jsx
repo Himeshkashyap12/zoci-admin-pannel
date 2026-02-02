@@ -15,13 +15,13 @@ import { birthdayCrmSort } from "./birthdayData";
 import "../allVisitors.css";
 const { RangePicker } = DatePicker ;
 
-const BirthdayReminderFilter=({search,setSearch,setSortKey,setDate})=>{
+const BirthdayReminderFilter=({search,setSearch,setSortKey,setDate,setPage,sortKey})=>{
     return(
         <div className="visitors">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your orders"} />
+                   <CustomInput search onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search your Customer"} />
                    </div>
                  </Col>
                  
@@ -31,17 +31,13 @@ const BirthdayReminderFilter=({search,setSearch,setSortKey,setDate})=>{
                     disabledDate={(current) => {
                       return current && current > new Date().setHours(0, 0, 0, 0);
                     }}
-                    onChange={(i,value)=>{setDate(value)}} />   
+                    onChange={(i,value)=>{setPage(1),setDate(value)}} />   
                   {/* <CustomButton value={<div className="flex items-center gap-2">
-                    <Image preview={false} className="!size-[16px]" src={filter}/>
-                    <CustomText className={"!text-[#fff]"} value={"Filter"}/>
-                       </div>}/> */}
-                  <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter  placeholder={"Sort"}  option={birthdayCrmSort}   onchange={(value)=>{setSortKey(value)}} />
+                    <CustomMultipleFilter value={sortKey}  placeholder={"Sort"}  option={birthdayCrmSort}   onchange={(value)=>{setPage(1),setSortKey(value)}} />
 
 
-                  </div>}/>
+                  </div>}/> */}
                  
                   </div>
               </Col>

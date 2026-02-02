@@ -3,22 +3,25 @@ import CustomTable from "../../common/CustomTable";
 import CustomText from "../../common/CustomText";
 import {  useSelector } from "react-redux";
 import Loader from "../../loader/Loader";
-import { CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Image } from "antd";
 import { toast } from "react-toastify";
 import CustomPagination from "../../common/CustomPagination.jsx"
-const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>{
+import { useNavigate } from "react-router-dom";
+import { isoToIST } from "../../../constants/constants.js";
+const MakeToOrderTablePage=({page,setPage})=>{
       const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);
-         const copyTextHandler=async(text)=>{
+      console.log(makeOnlineOrders);
+      
+      const navigate=useNavigate();
+      const copyTextHandler=async(text)=>{
                   try {
                       await navigator.clipboard.writeText(text);
                       toast.success("Address copied successfully");
                     } catch (err) {
                       console.error('Failed to copy text: ', err);
                     }
-                  
                 }
-        
               const columns = [
                   {
                 title: (
@@ -30,16 +33,15 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
                 align:"center",
                 render: (_,text,idx) => <CustomText  value={idx+1}/>
               },
-              
               {
                 title: (
                   <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Pic"}/>
                 ),
-                dataIndex: "image",
-                key: "image",
+                dataIndex: "items",
+                key: "items",
                 align:"center",
                 width: 200,
-                render: (text) => <div className="flex justify-center"> <div className="size-[70px] "><Image className="h-full w-full object-cover" src={text}/></div></div>
+                render: (_,text) => <div className="flex justify-center"> <div className="size-[70px] "><Image className="h-full w-full object-cover" src={text?.items[0]?.image}/></div></div>
               },
                 {
                 title: (
@@ -47,25 +49,25 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
                 dataIndex: "orderId",
                 key: "orderId",
                 align:"center",
-                width: 200,
+                width: 250,
                 render: (text) =>  <CustomText value={text}/>
               },
               {
                 title: (
                 <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"SKU"}/> ),
-                dataIndex: "sku",
-                key: "sku",
+                dataIndex: "items",
+                key: "items",
                 align:"center",
                 width: 200,
-                render: (text) =>   <CustomText value={text}/>
+                render: (_,text) =>   <CustomText value={text?.items?.[0]?.sku??"-"}/>
               }, 
               {
                 title:        <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Size"}/>,
-                dataIndex: "size",
-                key: "size",
+                dataIndex: "items",
+                key: "items",
                 width: 200,
                 align:"center",
-                render: (text) =>   <CustomText value={text}/>
+                render: (_,text) =>   <CustomText value={text?.items?.[0]?.size??"-"}/>
               },
               {
                 title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Customer Name"}/>),
@@ -77,8 +79,8 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Contact No."}/>),
-                dataIndex: "mobile",
-                key: "mobile",
+                dataIndex: "customerMobile",
+                key: "customerMobile",
                 width: 250,
                 align: "start",
                 render: (text) => <CustomText value={text}/>
@@ -87,11 +89,10 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
               {
                 title: (
                 <CustomText className="!text-[14px] !text-[#fff] font-semibold" value={"Address"}/> ),
-                dataIndex: "address",
-                key: "address",
+                dataIndex: "customerAddress",
+                key: "customerAddress",
                 width: 350,
-                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.length<=20?text:text?.slice(0,30)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
-
+                render: (text) =>  <div className="flex justify-between items-center" > <CustomText value={text?.length<=20?text:text?.slice(0,20)+"..."}/><div className="!bg-[#214344] flex justify-center items-center p-2 rounded-full" onClick={()=>{copyTextHandler(text)}}><CopyOutlined style={{fontSize:"16px" ,color:"#F0D5A0"}} /></div></div>
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Price"}/>),
@@ -99,53 +100,53 @@ const MakeToOrderTablePage=({page,setPage,selectedRowKeys,setSelectedRowKeys})=>
                 key: "price",
                 width: 300,
                 align: "center",
-                render: (text) => <CustomText value={`Rs. ${text}`}/>
+                render: (_,text) => <CustomText value={`Rs. ${text?.items?.[0]?.price??"-"}`}/>
               },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Ordered Status"}/>),
-                dataIndex: "status",
-                key: "status",
+                dataIndex: "orderStatus",
+                key: "orderStatus",
                 width: 250,
                 align: "center",
                 render: (_,text) => {
                   return(  <CustomText 
                      className={`font-semibold
-                      ${text?.status=="Ordered" && "!text-[#214344]" }
-                      ${text?.status=="Pending" && "!text-[#FFB23E]" }
-                      ${text?.status=="Delivered" && "!text-[#5AA53C]" }
-                      ${text?.status=="Cancelled" && "!text-[#f44336]" }
-                      ${text?.status=="Confirmed" && "!text-[#5AA53C]" }
+                      ${text?.orderStatus=="Ordered" && "!text-[#214344]" }
+                      ${text?.orderStatus=="Pending" && "!text-[#FFB23E]" }
+                      ${text?.orderStatus=="Delivered" && "!text-[#5AA53C]" }
+                      ${text?.orderStatus=="Cancelled" && "!text-[#f44336]" }
+                      ${text?.orderStatus=="Confirmed" && "!text-[#5AA53C]" }
                      `}
-                    value={text?.status}/>  )
+                    value={text?.orderStatus}/>  )
                 
                   }
               },
+               {
+                title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Add to shiprocket"}/>),
+                dataIndex: "orderStatus",
+                key: "orderStatus",
+                width: 250,
+                align: "center",
+                render: (_,text) =><div className="cursor-pointer" onClick={()=>{text?.orderStatus=="Ordered" ? navigate("/admin/add-order-shiprocket",{state:{item:text,status:"makeOnlineOrder"}}):toast.error("You are not elligible to create order at shiprocket")}}> <PlusCircleOutlined style={{color:"#214345",fontSize:"24px"}} /></div>
+              },
               {
                 title: ( <CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Ordered Date"}/>),
-                dataIndex: "date",
-                key: "date",
+                dataIndex: "createdAt",
+                key: "createdAt",
                 width: 300,
                 align: "center",
                 render: (_,text) => {
-                  return(  <CustomText value={text?.date}/>  )
-                
-                      }
+                  return(  <CustomText value={isoToIST(text?.createdAt)}/>  )
+                }
               }
             ];
 
-          const onSelectChange = newSelectedRowKeys => {
-              setSelectedRowKeys(newSelectedRowKeys);
-            };
-          const rowSelection = {
-              selectedRowKeys,
-              onChange: onSelectChange,
-            };
+        
         if(isLoading) return <Loader/>;
     return(
         <>
-              <CustomTable scroll={{x:1800}}  dataSource={makeOnlineOrders?.orders} columns={columns}/>
+         <CustomTable scroll={{x:2000}}  dataSource={makeOnlineOrders?.data} columns={columns}/>
          <CustomPagination pageNumber={page} total={makeOnlineOrders?.total} onchange={(e)=>{setPage(e)}}/>
-
         </>
     )
 }

@@ -17,6 +17,8 @@ import MonthlySalesChart from "./MonthLySalesChart";
 import ProductSalesChart from "./ProductSalesChart";
 import SalesCard from "./SalesCard";
 import SalesReportTable from "./SalesReportTable";
+import SalesDashboardCard from "./SalesDashboardCard";
+import { toast } from "react-toastify";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const [salesDateOptionValue,setSalesDateOptionValue]=useState({});
@@ -58,14 +60,14 @@ const SalesReport=()=>{
             const data={...salesDateOptionValue}
           const res=await dispatch(getSalesDashboardAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");  
           }
         }
         const getSalesRevenue=async()=>{
             try {
               const res=await dispatch(getSalesTimeAsync({token}))
             } catch (error) {
-              console.log(error);
+              toast.error("Something went wrong. Please try again.");  
               
             }
           }
@@ -84,43 +86,42 @@ const SalesReport=()=>{
       {
         title: "Total Sales",
         value: slaesDashboard?.summary?.totalSales,
-        percent: "+12%"
+        percent:slaesDashboard?.summary?.totalSalesPercent??0
       },
       {
         title: "Total Expenditure",
         value: slaesDashboard?.summary?.totalExpenditure,
-        percent: "+8%"
+        percent: slaesDashboard?.summary?.totalExpenditurePercent??0
       },
       {
         title: "Net Profit",
         value: slaesDashboard?.summary?.netProfit,
-        percent: "-3%"
+        percent:slaesDashboard?.summary?.netProfitPercent??0
       },
       {
         title: "Total Orders",
         value: slaesDashboard?.summary?.totalOrders,
-        percent: "+1.5%"
+        percent:slaesDashboard?.summary?.totalOrdersPercent??0
       },
       {
         title: "Total Orders Value",
         value: slaesDashboard?.summary?.totalOrderValue??0,
-        percent: "+12%"
+        percent: slaesDashboard?.summary?.totalOrderAmountPercent??0
       },
       {
         title: "Average Order Value",
         value: slaesDashboard?.summary?.avgOrderValue,
-        percent: "+8%"
+        percent: slaesDashboard?.summary?.avgOrderValuePercent??0
       },
       {
         title: "Top-Selling Category",
-        value: slaesDashboard?.summary?.topCategory
-    ,
-        percent: "+12%"
+        value: slaesDashboard?.summary?.topCategory,
+        percent: slaesDashboard?.summary?.topCategoryPercentage??0
       },
       {
-        title: "Returning Customers",
+        title: "Returning Order",
         value: slaesDashboard?.summary?.returningCustomers,
-        percent: "+1.5%"
+        percent:slaesDashboard?.summary?.returningCustomersPercent??0
       }
     ];
 
@@ -132,7 +133,7 @@ if(isLoading ) return <Loader/>
             <Col span={12}>
             <div className="w-auto">
                 {/* {isDashboardLoading?<Skeleton.Node active style={{ width: 680,height:430 }} /> */}
-<MonthlySalesChart salesChartValue={salesChartValue} handleSalesReport={handleSalesReport}  item={slaesDashboard?.monthlySales}/>
+         <MonthlySalesChart salesChartValue={salesChartValue} handleSalesReport={handleSalesReport}  item={slaesDashboard?.monthlySales}/>
           </div>
             </Col>
             <Col span={12}>
@@ -142,9 +143,7 @@ if(isLoading ) return <Loader/>
             </Col>
           </Row>
           <Row gutter={[20,20]}>
-           {dashboardData.map((item,idx)=>{
-            console.log(item);
-            
+           {dashboardData.map((item,idx)=>{            
               return(
                  <Col span={6}>
                     <Link to={
@@ -157,7 +156,8 @@ if(isLoading ) return <Loader/>
                         idx==6 && "/admin/sales" || 
                         idx==7 && "/admin/returning-customer" 
                         }>
-                    <SalesCard item={item} />
+                          
+                    <SalesDashboardCard item={item} />
                     </Link>
                   </Col>
               )
@@ -168,7 +168,7 @@ if(isLoading ) return <Loader/>
           {slaesDashboard?.events?.length>0 &&  <EventSales item={slaesDashboard?.events}/>}
              </Col>
           </Row>
-         <div className="flex justify-between">
+         <div className="flex flex-wrap justify-between gap-5">
             <CustomButton onclick={()=>{navigate("/admin/online-sales")}}  className={"!text-[#fff] !w-[250px] !h-[60px]"} value={"Online Sales List"}/>
             <CustomButton onclick={()=>{navigate("/admin/make-order-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Make To Order List "}/>
             <CustomButton onclick={()=>{navigate("/admin/offline-sales-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Offline Sales List"}/>

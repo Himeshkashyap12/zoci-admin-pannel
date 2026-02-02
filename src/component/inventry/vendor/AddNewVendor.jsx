@@ -7,22 +7,21 @@ import { useState } from "react";
 import {toast} from "react-toastify";
 import Cookies from "js-cookie"
 import { createVendorAsync, vendorPerformanceAnalysis } from "../../../feature/inventaryManagement/inventarySlice";
-import Loader from "../../loader/Loader";
 import { gstRegex, specialChar } from "../../../constants/regex";
 const AddNewVendor=({setOpen})=>{
-    const dispatch=useDispatch();
-    const token=Cookies.get("token");
-  const [gstErrorMessage,setGstErrorMessage]=useState("")
-  const [venderInput,setVenderInput]=useState({
+   const dispatch=useDispatch();
+   const token=Cookies.get("token");
+   const [gstErrorMessage,setGstErrorMessage]=useState("");
+   const {isLoading} =useSelector(state=>state?.inventary)
+   const [venderInput,setVenderInput]=useState({
           companyName: "",
           vendorName: "",
           address: "",
           gst: "",
           phoneNumber: ""
         })
-        const {isLoading} =useSelector(state=>state?.inventary)
         
-  const vendorInputHandler=(e)=>{
+    const vendorInputHandler=(e)=>{
        const {name,value}=e.target;
        if(specialChar?.test(value)) return ;
        if(name=="phoneNumber" && value?.length>10  ) return; 

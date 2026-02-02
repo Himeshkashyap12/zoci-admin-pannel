@@ -11,6 +11,7 @@ import { isoToIST } from "../../../../constants/constants";
 import { useDebounce } from "../../../../hooks/UseDebounce";
 import CustomPagination from "../../../common/CustomPagination";
 import Loader from "../../../loader/Loader";
+import { toast } from "react-toastify";
 const OrderHistoryTable=({id,setCustomerDetails})=>{
       const [search,setSearch]=useState("");
       const [page,setPage]=useState(1)
@@ -34,7 +35,7 @@ const OrderHistoryTable=({id,setCustomerDetails})=>{
           try {
           const res=await dispatch(CustomerOrderHistoryAsync({token,id,data})).unwrap();
           } catch (error) {
-            console.log(error);
+             toast.error("Something went wrong. Please try again.");;
           }
         }
 

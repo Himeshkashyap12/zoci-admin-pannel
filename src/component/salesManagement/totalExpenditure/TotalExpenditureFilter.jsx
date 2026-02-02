@@ -8,34 +8,42 @@ import CustomInput from "../../common/CustomInput";
 import CustomMultipleFilter from "../../common/CustumMultipleFilter";
 import "../sales.css"
 import { totalSaleFilter, totalSaleSort } from "./totalExpenditureData";
+import { useSelector } from "react-redux";
 const { RangePicker } = DatePicker;
 
-const OnlineSalesFilter=({setSearch,setFilter,setSort,search,setDate})=>{
+const OnlineSalesFilter=({setSearch,setFilter,setSort,search,setDate,setPage,filterKey,sortKey})=>{
+   const {category}=useSelector(state=>state?.ui);
+  const filteredCategory=category?.categories?.map((item)=>{
+    return { label:item?.title,value:item?.title}
+  });
+  const filtedCategoryExpenditure={
+    label:"Category",
+    value:"category",
+    children: filteredCategory
+  
+  }
     return(
         <div className="sales">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search value={search}  onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search your Sales"} />
+                   <CustomInput search value={search}  onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search your Sales"} />
                    </div>
                  </Col>
-                 
                  <Col span={16}>
                  <div className="flex gap-5 justify-end"> 
                    <RangePicker
                    disabledDate={(current) => {
                       return current && current > new Date().setHours(0, 0, 0, 0);
                     }}
-                   onChange={(i,value)=>{setDate(value)}} />  
+                   onChange={(i,value)=>{setPage(1),setDate(value)}} />  
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
-                   <CustomMultipleFilter  placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={totalSaleSort}/>
+                   <CustomMultipleFilter value={sortKey}  placeholder={"Sort"} onchange={(value)=>{setPage(1),setSort(value)}} option={totalSaleSort}/>
                        </div>}/>
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                    <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={totalSaleFilter}/>
-
-
+                    <CustomMultipleFilter value={filterKey} placeholder={"Filter"} onchange={(value)=>{setPage(1),setFilter(value)}} option={[filtedCategoryExpenditure]}/>
                   </div>}/>
                  
                   </div>

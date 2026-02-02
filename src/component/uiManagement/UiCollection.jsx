@@ -35,14 +35,13 @@ const UiCollection=({setCollectionId,collectionId,setDeleteStatus,sentinelRef})=
                         setDeleteStatus(true);
                     }
                 } catch (error) {
-                    console.log(error);
+                    toast.error("Something went wrong. Please try again.");  
                     setCollectionModel(false);
-                    toast.error("Something Went Wrong!")
             }
         }
      if(isCollectionLoading) return <ImageLoader/>      
     return(
-        <div className="bg-[#EFE6DC]">
+        <div className="bg-[#EFE6DC] shadow-xl">
         <div className="flex gap-2 px-[20px] bg-[#fff] py-[20px] cursor-pointer" onClick={()=>{setCollectionModel(true),setItemEdit(null),setDeletedId(null)}}>
             <PlusOutlined style={{fontSize:"18px" }}/>
             <CustomText className={"text-[16px] font-semibold !text-[#214344] "} value={"Add Collection"}/>

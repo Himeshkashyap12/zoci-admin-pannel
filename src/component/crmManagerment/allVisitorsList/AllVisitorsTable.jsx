@@ -33,7 +33,7 @@ const AllVisitorsTable=({page,setPage})=>{
           dataIndex: "name",
           key: "name",
           width: 200,
-          render: (text) =>  <CustomText value={text??"NA"}/>
+          render: (text) =>  <CustomText value={text??"-"}/>
         },
           {
           title: (
@@ -79,8 +79,8 @@ const AllVisitorsTable=({page,setPage})=>{
           key: "wishlist",
           width: 300,
           align: "start",
-           render: (text) => ( text?.length==0?"-": text?.map((item)=>{     
-              return (<CustomText value={item}/>)
+           render: (text) => ( text?.length==0?"-": text?.map((item,idx)=>{     
+              return `${item}${text.length-1==idx?"":", "}`
           }))
         },
         {
@@ -91,8 +91,8 @@ const AllVisitorsTable=({page,setPage})=>{
           key: "bag",
           width: 300,
           align: "start",
-          render: (text) =>  ( text?.length==0?"-":text?.map((item)=>{
-              return (<CustomText value={item}/>)
+          render: (text) =>  ( text?.length==0?"-":text?.map((item,idx)=>{
+              return `${item}${text.length-1==idx?"":", "}`
           }  ))
         },
         {

@@ -9,6 +9,7 @@ import { getMakeToOrderAsync } from "../../../feature/sales/salesSlice";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { makeToOrderSalesExport } from "../constants";
+import { toast } from "react-toastify";
 const MakeToOrderList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -35,7 +36,7 @@ const MakeToOrderList = () => {
       if (search && !trimSearch) return;
       const res = await dispatch(getMakeToOrderAsync({ token, data })).unwrap();
     } catch (error) {
-      console.log(error);
+      // toast.error("Something went wrong. Please try again.");  
     }
   };
 
@@ -83,6 +84,10 @@ const MakeToOrderList = () => {
           setFilter={setFilter}
           setSearch={setSearch}
           setSort={setSort}
+          setPage={setPage} 
+          filterKey={filter} 
+          sortKey={sort}
+
         />
       </div>
       <div>

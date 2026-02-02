@@ -10,7 +10,6 @@ const CustomModal = ({footer,open,setOpen,value,modalBody,width,closeIcon}) => {
       setConfirmLoading(false);
     }, 2000);
   };
-
   return (
     <div>
      

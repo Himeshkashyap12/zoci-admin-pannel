@@ -8,12 +8,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       }
       
     ],
@@ -120,26 +120,6 @@
       
     
   },
-  {
-    label:"Is Active",
-    value:"isActive",
-    children: [
-      {
-        value: true,
-        label: 'True',
-      
-      },
-      {
-        value: false,
-        label: 'False',
-      
-      }
-      
-    ],
   
-  
-      
-    
-  }
   
 ];

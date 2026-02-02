@@ -23,12 +23,12 @@
     children: [
       {
         value: 'asc',
-        label: 'High To Low',
+        label: 'Descending',
       
       },
       {
         value: 'desc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       }
       

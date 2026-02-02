@@ -18,8 +18,9 @@ import { getImageUrlAsync } from "../../feature/media/mediaSlice";
 import { toast } from "react-toastify";
 import Loader from "../loader/Loader";
 import { createProductHandlerAsync, getAllProductByIdAsync, updateProductAsync } from "../../feature/inventaryManagement/inventarySlice";
-import { compareNewAndOldObject } from "../../constants/constants";
+import { compareNewAndOldObject, generate4DigitRandomNumber } from "../../constants/constants";
 import { specialChar } from "../../constants/regex";
+import { metalColor, subCategoryOption } from "./inventaryFilterData";
 const CreateNewProduct = () => {
   const {state}=useLocation();  
   const navigate = useNavigate();
@@ -32,17 +33,16 @@ const CreateNewProduct = () => {
     title: "",
     description: "",
     price: null,
-    sku: "",
     otherCharges: null,
     productionSource:"",
     category: "",
     subCategory: "",
-    yearOfDesign: 2025,
+    yearOfDesign: new Date().getFullYear(),
     collection: "",
     baseMetalType: "",
     metalColor: "",
     stone: "",
-    designTags:"",
+    designTags:[],
     weight: null,
     size: "",
     quantity: null,
@@ -68,6 +68,30 @@ const CreateNewProduct = () => {
     { label: "Yes", value: true },
     { label: "No", value: false },
   ];
+  const metalTypeOption=[
+    {label:"Natural Diamond",value:"Natural Diamond"},
+    {label:"Lab Grown Diamond",value:"Lab Grown Diamond"},
+    {label:"Gemstone",value:"Gemstone"},
+    {label:"Synthetic",value:"Synthetic"}
+  ]
+
+  const tagOptions=[
+  { label: "Gold", value: "gold" },
+  { label: "Lariat", value: "lariat" },
+  { label: "Necklace", value: "necklace" },
+  { label: "Premium", value: "premium" },
+  { label: "Exclusive", value: "exclusive" },
+  { label: "Women", value: "women" },
+  { label: "Jewelry", value: "jewelry" },
+  { label: "Fashion", value: "fashion" },
+  { label: "Luxury", value: "luxury" },
+  { label: "Handmade", value: "handmade" },
+  { label: "Yellow", value: "yellow" },
+  { label: "Elegant", value: "elegant" },
+  { label: "Party", value: "party" },
+  { label: "Gift", value: "gift" },
+  { label: "Durable", value: "durable" }
+]
   const categoryData=category?.categories?.map((item)=>{
     return {label:item?.title,value:item?.title}
   });
@@ -80,15 +104,7 @@ const CreateNewProduct = () => {
       setProductInput({...productInput,[name]:value})
    }
   
-  const getCategoryHandler=async()=>{
-    try {
-      const res=await dispatch(getCategoryAsync(token))
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
+
 
 
    const handleUpload = async (e,status) => {    
@@ -115,15 +131,31 @@ const CreateNewProduct = () => {
                            break;
                  case "video":
                            setProductInput({...productInput,video:res?.images})
-                           break;
-                      
+                           break;   
                  }
               }
-              } catch (err) {
-              console.error(err);
+              } catch (error) {                
+                 toast.error("Something went wrong !")
             }
       };
   const createProductHandler=async()=>{
+    if(
+      !productInput?.productionSource ||
+      !productInput?.category ||
+      !productInput?.subCategory ||
+      !productInput?.yearOfDesign ||
+      !productInput?.baseMetalType ||
+      !productInput?.metalColor || 
+      !productInput?.quantity || 
+      !productInput?.price || 
+      !productInput?.madefor || 
+      !productInput?.exclusive || 
+      !productInput?.images?.productImage || 
+      !productInput?.images?.modalImage ||
+      !productInput?.title  ||
+      !productInput?.description 
+    ) return toast.error("Please fill all field")
+    if((productInput?.category=="Rings" || productInput?.category=="Bracelets") && productInput?.size=="") return toast.error("Please enter size")
    try {
     if(!state){
     const data={...productInput}
@@ -134,21 +166,18 @@ const CreateNewProduct = () => {
         }else{
       {res?.response?.data?.errors.map((item)=>{
         return( toast.error(item))
-      })}
-      
+      })} 
     }
-    
     }else{
       const updatedData=compareNewAndOldObject({oldObj:productById?.product,newObj:productInput})
        const res=await dispatch(updateProductAsync({token,data:updatedData,id:productById?.product?._id})).unwrap();
        if(res.status){
           toast.success(res.message);
           navigate("/admin/inventary")
-    }
+      }
     }
    } catch (error) {
-    console.log(error);
-    toast.error("Something went wrong!");
+     toast.error("Something went wrong. Please try again.");
    }
     
   }
@@ -164,17 +193,20 @@ const CreateNewProduct = () => {
       }
    }
      catch (error) {
-      console.log(err);
+       toast.error("Something went wrong. Please try again.");
       
     }
   }
+  
   useEffect(()=>{
+    if(state){
    getProductByIdData();
+    }
   },[])
 
-  useEffect(()=>{
-     getCategoryHandler()
-  },[])
+
+
+
   if(isMediaLoading || isCreateProductLoading) return <Loader/>
   return (
     <>
@@ -209,13 +241,13 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
-                   <CustomLabel required value={"Prodution Source"} />
-                   <CustomSelect value={productInput?.productionSource} onchange={(e)=>{setProductInput({...productInput,productionSource:e})}} options={[{label:"Company Custom",value:"Company Custom"},{label:"Vendor Custom",value:"Vendor Custom"}]} className="!rounded-full" />
+                   <CustomLabel required value={"Product Source"} />
+                   <CustomSelect value={productInput?.productionSource} onchange={(e)=>{setProductInput({...productInput,productionSource:e})}} options={[{label:"Company Custom",value:"Company Custom"},{label:"Procured",value:"Vendor Custom"}]} className="!rounded-full" />
                 </div>
               </Col>
               <Col xxl={12} xl={12} md={12} sm={24} xs={24}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"Prodution Category"} />
+                  <CustomLabel required value={"Product Category"} />
                   <CustomSelect value={productInput?.category} onchange={(e)=>{setProductInput({...productInput,category:e})}} options={categoryData} className="!rounded-full" />
                 </div>
               </Col>
@@ -224,8 +256,8 @@ const CreateNewProduct = () => {
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Sub Category"} />
-                   <CustomInput name={"subCategory"} value={productInput?.subCategory} onchange={(e)=>{productInputHandler(e)}}  className="!rounded-full" />
-
+                  <CustomSelect value={productInput?.subCategory} onchange={(e)=>{setProductInput({...productInput,subCategory:e})}} options={subCategoryOption[productInput?.category]} className="!rounded-full" />
+                   {/* <CustomInput name={"subCategory"} value={productInput?.subCategory} onchange={(e)=>{productInputHandler(e)}}  className="!rounded-full" /> */}
                 </div>
               </Col>
               <Col span={12}>
@@ -255,11 +287,14 @@ const CreateNewProduct = () => {
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Metal Color"} />
-                  <CustomInput 
+                  {/* <CustomInput 
                    name="metalColor"
                     value={productInput.metalColor}
                     onchange={productInputHandler}
-                      className="!rounded-full" />
+                      className="!rounded-full" /> */}
+
+                   <CustomSelect value={productInput?.metalColor} onchange={(e)=>{setProductInput({...productInput,metalColor:e})}} options={metalColor} className="!rounded-full" />
+
                 </div>
               </Col>
             </Row>
@@ -267,16 +302,18 @@ const CreateNewProduct = () => {
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel value={"Stone(if Any)"} />
-                  <CustomInput name="stone"
+                  {/* <CustomInput name="stone"
                     value={productInput.stone}
                     onchange={productInputHandler} 
-                    className="!rounded-full" />
+                    className="!rounded-full" /> */}
+                   <CustomSelect value={productInput?.stone} onchange={(e)=>{setProductInput({...productInput,stone:e})}} options={metalTypeOption} className="!rounded-full" />
+
 
                 </div>
               </Col>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"Size"} />
+                  <CustomLabel required={(productInput?.category=="Rings" || productInput?.category=="Bracelets" )?true:false}  value={"Size"} />
                   <CustomInput
                   type={"number"}
                   name="size"
@@ -334,26 +371,14 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"HUD No."} />
+                  <CustomLabel  value={"HUID No."} />
                     <CustomInput name="hudNo"
                         value={productInput.hudNo}
                         onchange={productInputHandler}
                         className="!rounded-full" />
                 </div>
               </Col>
-              <Col span={12}>
-                <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"SKU ID"} />
-                    <CustomInput 
-                    name="sku"
-                  value={productInput.sku}
-                  onchange={productInputHandler} className="!rounded-full" />
-
-                </div>
-              </Col>
-            </Row>
-            <Row gutter={[40, 40]}>
-              <Col span={12}>
+                <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel value={"Other charges (If any)"} />
                   <CustomInput 
@@ -365,7 +390,9 @@ const CreateNewProduct = () => {
                   />
                 </div>
               </Col>
+             
             </Row>
+          
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
@@ -375,7 +402,7 @@ const CreateNewProduct = () => {
               </Col>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel value={"Exclusive"} />
+                  <CustomLabel required={true} value={"Exclusive"} />
                   <CustomRadio name={"exclusive"} value={productInput?.exclusive} defaultValue={true} onchange={productInputHandler} options={exclusiveSelect} />
                 </div>
               </Col>
@@ -496,7 +523,6 @@ const CreateNewProduct = () => {
                                 <source src={productInput?.video[0]} type="video/mp4" />
                                 Your browser does not support the video tag.
                               </video>)
-                      
                       }
                     />
                   </div>
@@ -506,10 +532,10 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel required value={"Prodution Name"} />
+                  <CustomLabel required value={"Product Name"} />
                   <div className="relative">
                     <CustomInput 
-                     name="title"
+                        name="title"
                         value={productInput?.title}
                         onchange={productInputHandler}
                     className="!rounded-full" />
@@ -524,23 +550,16 @@ const CreateNewProduct = () => {
                 </div>
               </Col>
               <Col span={12}>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 relative">
                   <CustomLabel required value={"Design Tags "} />
-                  {/* <CustomInput className="!rounded-full" /> */}
-                   <div className="relative">
-                    <CustomInput 
-                    name="designTags"
-                        value={productInput?.designTags}
-                        onchange={productInputHandler}
-                    className="!rounded-full" />
-                    <div className="absolute top-1 right-1">
+                   <CustomSelect mode={"tags"} value={productInput?.designTags} onchange={(e)=>{setProductInput({...productInput,designTags:e})}} options={tagOptions} className="!rounded-full" />
+                    <div className="absolute top-8.5 right-1">
                       <CustomButton
                       onclick={()=>{setProductInput({...productInput,designTags:null})}}
                         className={"!text-[#fff] !h-[24px] "}
                         value={"Refresh"}
                       />
                     </div>
-                  </div>
                 </div>
               </Col>
             </Row>

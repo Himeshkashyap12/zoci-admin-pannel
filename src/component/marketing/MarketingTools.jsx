@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMarketingDashboardAsync } from "../../feature/marketing/marketingSlice";
 import Cookies from "js-cookie"
 import Loader from "../loader/Loader";
+import MarketingCard from "./MarketingCard";
+import { toast } from "react-toastify";
 const MarketingTools=()=>{
     const navigate=useNavigate();
     const token=Cookies.get("token");  
@@ -17,7 +19,8 @@ const MarketingTools=()=>{
           try {
           const res=await dispatch(getMarketingDashboardAsync({token})).unwrap();
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
+
           }
         }
         useEffect(()=>{
@@ -43,8 +46,8 @@ if(isLoading) return <Loader/>;
           <Row gutter={[20,20]}>
            {dashboardData?.map((item,idx)=>{
               return(
-                 <Col span={8}>  
-                    <SalesCard item={item} />
+                 <Col span={8} key={idx}>  
+                    <MarketingCard item={item} />
                   </Col>
               )
            })}

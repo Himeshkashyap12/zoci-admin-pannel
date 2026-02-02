@@ -75,17 +75,16 @@ const MonthlySalesChart = ({item,handleSalesReport,salesChartValue}) => {
        <CustomButton value={<div className="flex gap-2 items-center">
        {salesChart &&  <CustomSelect  className="!w-[150px] !text-[#fff]" value={salesChartValue} options={salesDateOption} onchange={(e)=>{handleSalesReport(e)}} />}
        <div className="flex justify-center items-center" onClick={()=>{setSalesChart(()=>salesChart?false:true)}}> <Image preview={false} className="!size-[16px] object-cover"  src={calender}/></div>
-        {/* <CustomText className={"!text-[#fff]"} value={"Last 7 days"}/> */}
         </div>}/>
     </div>
-      <div className="flex flex-col gap-4">
+    {isDashboardLoading? <Skeleton.Node active  className="!w-full" />: <div className="flex flex-col gap-4">
        <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={`Rs. ${item?.last30DaysSales}`}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
        <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={`Rs. ${item?.last30DaysSales}`}/>
     </div>
 
-    </div>
+    </div>}
     <div >
 
   {isDashboardLoading?

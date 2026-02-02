@@ -39,12 +39,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Asc',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'Desc',
+        label: 'Descending',
       }
       
     ],

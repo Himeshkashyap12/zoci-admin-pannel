@@ -14,13 +14,12 @@ import Loader from "../loader/Loader";
 import { useNavigate } from "react-router-dom";
 import CustomPagination from "../common/CustomPagination";
 
-const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
+const InventaryTable=({setSelectedRowKeys,selectedRowKeys,setPage,page})=>{
   const [deleteConfirm,setDeleteConfirm]=useState();
   const [deleteId,setDeleteId]=useState(null);
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
   const navigate=useNavigate();
-  const [page,setPage]=useState(1);
   const {products,isLoading}=useSelector(state=>state?.inventary);  
   const productData=products?.products?.map((item)=>{
     return {...item,key:item?._id}
@@ -30,7 +29,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       const data={page:page,limit:10}
     const res=await dispatch(getAllProductAsync({token,data})).unwrap();    
     } catch (error) {
-      console.log(error);
+       toast.error("Something went wrong. Please try again.");
     }
   }
   const confirmationPopUpHandler=async()=>{
@@ -41,31 +40,19 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       }
       if(res?.success){
         toast.success(res?.message);
-        setDeleteConfirm(false)
-
+        setDeleteConfirm(false);
       }else{
         toast.error(res?.message);
-        setDeleteConfirm(false)
-
-
+        setDeleteConfirm(false);
       }
-
-      
-      
     } catch (error) {
-      console.log(error);
         toast.error(error?.message);
-
         setDeleteConfirm(false)
-
-      
     }
      
   }
  
-  useEffect(()=>{
-   getAllProducts();
-  },[page])
+
 
 
   
@@ -118,7 +105,7 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       dataIndex: "size",
       key: "size",
       width: 120,
-      render: (text) =>   <CustomText value={text??"Na"}/>
+      render: (text) =>   <CustomText value={text??"-"}/>
     },
     {
       title: (
@@ -160,8 +147,22 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
       key: "quantity",
       width: 180,
       render: (text) =>  <CustomText value={text!=0?"In Stock":"Out Of Stock"}/>
-
-     
+    },
+    {
+      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Rating"}/>),
+      dataIndex: "totalrating",
+      align: "center",
+      key: "totalrating",
+      width: 180,
+      render: (text) =>  <CustomText value={text}/>
+    },
+    {
+      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Category"}/>),
+      dataIndex: "category",
+      align: "center",
+      key: "category",
+      width: 180,
+      render: (text) =>  <CustomText value={text}/>
     },
      {
       title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
@@ -202,8 +203,8 @@ const InventaryTable=({setSelectedRowKeys,selectedRowKeys})=>{
     return(
         <>
         <CustomTable   scroll={{x:1400}} rowSelection={rowSelection}  dataSource={productData} columns={columns}/>
-         <CustomPagination pageNumber={page} total={products?.totalProducts} onchange={(e)=>{setPage(e)}}/>
-         <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
+        <CustomPagination pageNumber={page} total={products?.totalProducts} onchange={(e)=>{setPage(e)}}/>
+        <CustomModal  footer={false} setOpen={setDeleteConfirm} open={deleteConfirm} modalBody={<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setDeleteConfirm} />} width={"552px"} align={"center"}/>
         
         </>
     )

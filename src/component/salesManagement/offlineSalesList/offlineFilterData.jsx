@@ -8,12 +8,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       }
       
     ],
@@ -59,14 +59,30 @@ export const offlineSalesFilter=[
     label:"Category",
     value:"category",
     children: [
-      {
+   {
         value: 'Rings',
         label: 'Rings',
       
       },
       {
-        value: 'Necklace',
-        label: 'Necklace',
+        value: 'Necklaces',
+        label: 'Necklaces',
+      
+      },
+      {
+        value: 'Bracelets',
+        label: 'Bracelets',
+      
+      },
+      {
+        value: 'Earrings',
+        label: 'Earrings',
+      
+      },
+      {
+        value: '',
+        label: 'Others',
+      
       }
       
     ],

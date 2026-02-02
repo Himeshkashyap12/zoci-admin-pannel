@@ -18,7 +18,7 @@ const BirthdayPromotionFilter=({setSearch,search,setSort,setFilter,exportOrderHa
                  </Col>
                  
                  <Col span={16}>
-                 <div className="flex gap-5 justify-end"> 
+                 {/* <div className="flex gap-5 justify-end"> 
                   
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
@@ -35,7 +35,7 @@ const BirthdayPromotionFilter=({setSearch,search,setSort,setFilter,exportOrderHa
                     <Image preview={false} className="!size-[16px]" src={exports}/>
                     <CustomText className={"!text-[#fff]"} value={"Export in Excel"}/>
                   </div>}/>
-                  </div>
+                  </div> */}
               </Col>
             </Row>
         </div>

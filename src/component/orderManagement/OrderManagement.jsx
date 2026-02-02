@@ -8,6 +8,7 @@ import Cookies from "js-cookie"
 import { useEffect } from "react";
 import {  getOrderManagementDashboardAsync } from "../../feature/order/orderSlice";
 import Loader from "../loader/Loader";
+import { toast } from "react-toastify";
 const OrderManagement=()=>{
       const token=Cookies.get("token");  
       const dispatch=useDispatch();
@@ -16,7 +17,7 @@ const OrderManagement=()=>{
           try {
           const res=await dispatch(getOrderManagementDashboardAsync({token})).unwrap();
           } catch (error) {
-            console.log(error);
+          toast.error("Something went wrong. Please try again."); 
           }
         }
         useEffect(()=>{

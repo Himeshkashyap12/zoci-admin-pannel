@@ -1,11 +1,9 @@
 
 
-import { Avatar, Button, Image, Typography } from "antd"
-import blog from "../../assets/blog/blog.jpg";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { Image, Typography } from "antd";
 import blogIcon from "../../assets/blog/blogIcon2.png";
-import { CloseCircleOutlined} from "@ant-design/icons";
 import CustomText from "../common/CustomText";
-import { blogDateConverter } from "../../constants/constants";
 const BlogPreviewModel=({newBlogInput,setPreviewModel})=>{
   const date = new Date();
   

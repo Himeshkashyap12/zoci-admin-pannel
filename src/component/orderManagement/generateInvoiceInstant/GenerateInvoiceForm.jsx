@@ -1,39 +1,39 @@
+import { DeleteOutlined, LeftOutlined } from "@ant-design/icons";
 import {
   Avatar,
+  Button,
   Col,
   DatePicker,
-  Empty,
+  Form,
   Row,
   Select,
-  Table,
-  Typography,
+  Typography
 } from "antd";
-import { Button, Form } from "antd";
+import dayjs from "dayjs";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { specialChar } from "../../../constants/regex";
 import {
   generateInvoice,
   previewPdfHandler,
 } from "../../../feature/admin/adminApi";
 import { addSku } from "../../../feature/admin/adminSlice";
-import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
-import { DeleteOutlined, EditOutlined, LeftOutlined } from "@ant-design/icons";
-import CustomTable from "../../common/CustomTable";
-import CustomText from "../../common/CustomText";
-import Loader from "../../loader/Loader";
-import CustomInput from "../../common/CustomInput";
-import { specialChar } from "../../../constants/regex";
-import { useDebounce } from "../../../hooks/UseDebounce";
 import { productBySkuAsync } from "../../../feature/inventaryManagement/inventarySlice";
-import CustomSelect from "../../common/CustomSelect";
 import {
   getEventTypeAsync,
   getPreviousAddressAsync,
   getPreviousBillingPlaceAsync,
 } from "../../../feature/order/orderSlice";
-import Cookies from "js-cookie";
+import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomInput from "../../common/CustomInput";
+import CustomSelect from "../../common/CustomSelect";
+import CustomTable from "../../common/CustomTable";
+import CustomText from "../../common/CustomText";
+import Loader from "../../loader/Loader";
+
 const GenerateInvoiceForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const GenerateInvoiceForm = () => {
   const skuFilteredData = productBySku.filter((item) => item?.stock > 0);
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState();
-  const debounceSearch = useDebounce(search, 500);
+  const debounceSearch = useDebounce(search, 500);  
   const previosAddressDataOption = previosAddressData?.data?.map((item) => {
     return { label: item, value: item };
   });
@@ -109,10 +109,9 @@ const GenerateInvoiceForm = () => {
   };
 
   const quantityHandler = (record, item) => {
-    if 
-    (record?.quantity == record?.stock ||
-      (record?.quantity == 1 && item === "minus") ||
-      (record?.quantity >= record?.stock && item === "plus")
+    if (
+      (item === "minus" && record?.quantity <= 1) ||
+      (item === "plus" && record?.quantity >= record?.stock)
     ) {
       return;
     } else {
@@ -140,7 +139,7 @@ const GenerateInvoiceForm = () => {
       const data = { sku: trimSearch };
       const res = await dispatch(productBySkuAsync({ data })).unwrap();
     } catch (error) {
-      console.log(error);
+          // toast.error("Something went wrong. Please try again.");  
     }
   };
 
@@ -164,12 +163,13 @@ const GenerateInvoiceForm = () => {
       const res = await previewPdfHandler(data);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again."); 
       setIsLoading(false);
     }
   };
 
   const addSkuHandler = (item) => {
+    setSearch("");
     const data = { ...item, quantity: 1 };
     if (
       invoiceInputHandler.invoiceData.some(
@@ -182,8 +182,6 @@ const GenerateInvoiceForm = () => {
         ...invoiceInputHandler,
         invoiceData: [...invoiceInputHandler?.invoiceData, data],
       });
-
-
       dispatch(addSku([]));
     }
   };
@@ -199,8 +197,8 @@ const GenerateInvoiceForm = () => {
       invoiceInputHandler?.paymentMethod == "" ||
       invoiceInputHandler?.invoiceData?.length == 0
     ) {
-      toast.error("please Enter all required field");
       setIsLoading(false);
+     return toast.error("please Enter all required field");
     }
     try {
       const item = invoiceInputHandler?.invoiceData?.map((item) => {
@@ -258,7 +256,8 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getPreviousAddressAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");  
+
     }
   };
   const getexhibitionPlace = async () => {
@@ -268,7 +267,8 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getPreviousBillingPlaceAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+           toast.error("Something went wrong. Please try again.");  
+;
     }
   };
   const getEventType = async () => {
@@ -278,7 +278,7 @@ const GenerateInvoiceForm = () => {
       };
       const res = await dispatch(getEventTypeAsync({ token, data }));
     } catch (error) {
-      console.log(error);
+        toast.error("Something went wrong. Please try again.");  
     }
   };
   const columns = [
@@ -661,6 +661,7 @@ const GenerateInvoiceForm = () => {
         <Row>
           <Col span={24}>
             <CustomTable
+            scroll={{x:1200}}
               pagination={false}
               columns={columns}
               dataSource={invoiceInputHandler?.invoiceData}

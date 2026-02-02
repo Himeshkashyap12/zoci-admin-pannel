@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie"
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { onlineSalesExport } from "../constants";
+import { toast } from "react-toastify";
 const OnlineSaleList = () => {
       const navigate = useNavigate();
       const token=Cookies.get("token");  
@@ -43,7 +44,7 @@ const OnlineSaleList = () => {
             if(search && !trimSearch) return ;
           const res=await dispatch(getOnlineSalesList({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            // toast.error("Something went wrong. Please try again.");  
           }
         }
 
@@ -83,7 +84,7 @@ const OnlineSaleList = () => {
       </div>
      
       <div>
-        <OnlineSalesFilter exportOnlineSales={exportOnlineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
+        <OnlineSalesFilter setPage={setPage} filterKey={filter} sortKey={sort} exportOnlineSales={exportOnlineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort} />
       </div>
       <div>
         <OnlineSalesTable onlineSales={onlineSales} page={page} setPage={setPage} />

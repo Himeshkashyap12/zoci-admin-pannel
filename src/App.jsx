@@ -1,58 +1,87 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { lazy, Suspense } from "react";
-import AdminProtectedRoute from "./utils/AdminProtectedRoute";
 const AdminLayout = lazy(() => import("./component/layout/AdminLayout"));
+
+// CRM
+const CrmPage = lazy(() => import("./pages/crmPage/CrmPage"));
+const AllVisitorsListPage = lazy(() => import("./pages/crmPage/AllvisitorsPage"));
+const AllVisitorsDetails = lazy(() =>
+  import("./component/crmManagerment/allVisitorsList/allVisitorsDetails.jsx/AllVisitorsDetails")
+);
+const CustomerListPage = lazy(() => import("./pages/crmPage/CustomerListPage"));
+const CustomerListDetails = lazy(() =>
+  import("./component/crmManagerment/customerList/customerListDetails/CustomerListDetails")
+);
+const BirthdayReminderPage = lazy(() => import("./pages/crmPage/BirthdayReminderPage"));
+const BirthdayReminderDetails = lazy(() =>
+  import("./component/crmManagerment/birthdayReminder/birthdayReminderDetails/BirthdayReminderDetails")
+);
+const AnniversaryReminderpage = lazy(() => import("./pages/crmPage/AnniversaryReminderPage"));
+
+// Inventory
+const InventaryPage = lazy(() => import("./pages/inventaryPage/InventaryPage"));
+const CreateNewProductPage = lazy(() => import("./pages/inventaryPage/CreateNewProduct"));
+const StockAlertPage = lazy(() => import("./pages/inventaryPage/StockAlertPage"));
+const BestSellerPage = lazy(() => import("./pages/inventaryPage/BestSellerPage"));
+const VendorPerformancePage = lazy(() => import("./pages/inventaryPage/VendorPerformancePage"));
+const VendorPerformanceAnalysisDetailsPage = lazy(() =>
+  import("./pages/inventaryPage/VendorPerformanceAnalysisDetailsPage")
+);
+
+// Marketing
+const MarketingToolsPage = lazy(() => import("./pages/marketinToolsPage/MarketingToolPage"));
+const ActivePromotionPage = lazy(() => import("./pages/marketinToolsPage/ActivePromotionPage"));
+const ExpiredPromotionPage = lazy(() => import("./pages/marketinToolsPage/ExpiredPromotionPage"));
+const BirthdayPromotionPage = lazy(() => import("./pages/marketinToolsPage/BirthdayPromotionPage"));
+
+// Order Management
+const OrderManagementPage = lazy(() => import("./pages/orderManagementPage/OrderManagementPage"));
+const AddNewOrderPage = lazy(() => import("./pages/orderManagementPage/AddNewOrderPage"));
+const MakeOnlineOrderPage = lazy(() => import("./pages/orderManagementPage/MakeOnlineOrderPage"));
+const AddOrderToShipRocketPage = lazy(() =>import("./pages/orderManagementPage/AddOrderToShipRocketPage"));
+const GenerateInvoicePage = lazy(() =>import("./pages/orderManagementPage/GenerateInstantInvoicePage")
+);
+const ProductExchangePage = lazy(() => import("./pages/orderManagementPage/ProductExhangePage"));
+const ProductReturnedPage = lazy(() => import("./pages/orderManagementPage/ProductReturnedPage"));
+
+// Sales
+const SalesPage = lazy(() => import("./pages/salesPage/SalesPage"));
+const OnlineSalesListPage = lazy(() => import("./pages/salesPage/OnlineSalesListPage"));
+const OfflineSalesListPage = lazy(() => import("./pages/salesPage/OfflineSalesListPage"));
+const TotalSalesPage = lazy(() => import("./pages/salesPage/TotalSalesPage"));
+const TotalOrderPage = lazy(() => import("./pages/salesPage/TotalOrderPage"));
+const NetProfitPage = lazy(() => import("./pages/salesPage/NetProfitPage"));
+const TotalExpenditurePage = lazy(() => import("./pages/salesPage/TotalExpenditurePage"));
+const ReturningCustomerPage = lazy(() => import("./pages/salesPage/ReturningCustomerPage"));
+const ReturningCustomerDetailsPage = lazy(() =>import("./pages/salesPage/ReturningCustomerDetailsPage"));
+const MakeToOrderPage = lazy(() => import("./pages/salesPage/MakeToOrderPage"));
+const MakeToOrderList = lazy(() =>import("./component/salesManagement/makeToOrderList/MakeToOrderList"));
+
+// Blog
+const BlogManagementPage = lazy(() => import("./pages/blogPage/BlogManagementPage"));
+const AddNewBlogPage = lazy(() => import("./pages/blogPage/AddNewBlogPage"));
+
+// UI Management
+const UiManagementpage = lazy(() => import("./pages/uiManagementPage/UiManagementpage"));
+
+// FAQ
+const FaqPage = lazy(() => import("./pages/faqPage/FaqPage"));
+
+//Login
 import LoginPage from "./pages/auth/LoginPage";
-import InventaryPage from "./pages/inventaryPage/InventaryPage";
-import OrderManagementPage from "./pages/orderManagementPage/OrderManagementPage";
-import SalesPage from "./pages/salesPage/SalesPage";
-import CrmPage from "./pages/crmPage/CrmPage";
-import MarketingToolsPage from "./pages/marketinToolsPage/MarketingToolPage";
-import UiManagementpage from "./pages/uiManagementPage/UiManagementpage";
-import StockAlertPage from "./pages/inventaryPage/StockAlertPage";
-import VendorPerformancePage from "./pages/inventaryPage/VendorPerformancePage";
-import BestSellerPage from "./pages/inventaryPage/BestSellerPage";
-import MakeOnlineOrderPage from "./pages/orderManagementPage/MakeOnlineOrderPage";
-import ProductExchangePage from "./pages/orderManagementPage/ProductExhangePage";
-import ProductReturnedPage from "./pages/orderManagementPage/ProductReturnedPage";
-import GenerateInvoicePage from "./pages/orderManagementPage/GenerateInstantInvoicePage";
-import TotalSalesPage from "./pages/salesPage/TotalSalesPage";
-import TotalExpenditurePage from "./pages/salesPage/TotalExpenditurePage";
-import NetProfitPage from "./pages/salesPage/NetProfitPage";
-import TotalOrderPage from "./pages/salesPage/TotalOrderPage";
-import ReturningCustomerPage from "./pages/salesPage/ReturningCustomerPage";
-import OnlineSalesListPage from "./pages/salesPage/OnlineSalesListPage";
-import MakeToOrderPage from "./pages/salesPage/MakeToOrderPage";
-import MakeToOrderList from "./component/salesManagement/makeToOrderList/MakeToOrderList";
-import OfflineSalesListPage from "./pages/salesPage/OfflineSalesListPage";
-import AllVisitorsListPage from "./pages/crmPage/AllvisitorsPage";
-import AnniversaryReminderpage from "./pages/crmPage/AnniversaryReminderPage";
-import CustomerListPage from "./pages/crmPage/CustomerListPage";
-import BirthdayReminderPage from "./pages/crmPage/BirthdayReminderPage";
-import AllVisitorsDetails from "./component/crmManagerment/allVisitorsList/allVisitorsDetails.jsx/AllVisitorsDetails";
-import BirthdayReminderDetails from "./component/crmManagerment/birthdayReminder/birthdayReminderDetails/BirthdayReminderDetails";
-import CustomerListDetails from "./component/crmManagerment/customerList/customerListDetails/CustomerListDetails";
-import ActivePromotionPage from "./pages/marketinToolsPage/ActivePromotionPage";
-import ExpiredPromotionPage from "./pages/marketinToolsPage/ExpiredPromotionPage";
-import BirthdayPromotionPage from "./pages/marketinToolsPage/BirthdayPromotionPage";
-import BlogManagementPage from "./pages/blogPage/BlogManagementPage";
-import AddNewBlogPage from "./pages/blogPage/AddNewBlogPage";
-import ReturningCustomerDetailsPage from "./pages/salesPage/ReturningCustomerDetailsPage";
-import CreateNewProductPage from "./pages/inventaryPage/CreateNewProduct";
-import VendorPerformanceAnalysisDetailsPage from "./pages/inventaryPage/VendorPerformanceAnalysisDetailsPage";
-import FaqPage from "./pages/faqPage/FaqPage";
-import AddNewOrderPage from "./pages/orderManagementPage/AddNewOrderPage";
-import AddOrderToShipRocketPage from "./pages/orderManagementPage/AddOrderToShipRocketPage";
+//protected
+import AdminProtectedRoute from "./utils/AdminProtectedRoute";
+import Loader from "./component/loader/Loader";
+import BlogDetailsPage from "./pages/blogPage/BlogDetailsPage";
+
 function App() {
-
-
   return (
     <>
       <ToastContainer />
       {/* <ApiLoader /> */}
-      <Suspense >
+      <Suspense  fallback={<Loader/>} >
       {/* <Suspense fallback={<Loading />}> */}
         <Routes>
         <Route path="/login"element={<LoginPage /> }/>
@@ -89,6 +118,8 @@ function App() {
              <Route  path="crm-birthday-reminder" element={ <AdminProtectedRoute>  <BirthdayReminderPage />  </AdminProtectedRoute> }/>
              <Route  path="crm-birthday-reminder/:id" element={ <AdminProtectedRoute>  <BirthdayReminderDetails />  </AdminProtectedRoute> }/>
              <Route  path="crm-anniversary-reminder" element={ <AdminProtectedRoute>  <AnniversaryReminderpage />  </AdminProtectedRoute> }/>
+            
+            
              {/* crm route */}
              
              {/* Sales route */}
@@ -111,7 +142,9 @@ function App() {
            
            {/* Blog section route*/}
              <Route  path="blog" element={ <AdminProtectedRoute>  <BlogManagementPage />  </AdminProtectedRoute> }/>
+             <Route  path="blog/:id" element={ <AdminProtectedRoute>  <BlogDetailsPage />  </AdminProtectedRoute> }/>
              <Route  path="add-new-blog" element={ <AdminProtectedRoute>  <AddNewBlogPage />  </AdminProtectedRoute> }/>
+
 
            {/* ui management route */}
              <Route  path="ui-management" element={ <AdminProtectedRoute>  <UiManagementpage />  </AdminProtectedRoute> }/>

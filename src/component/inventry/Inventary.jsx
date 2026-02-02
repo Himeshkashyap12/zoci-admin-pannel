@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getInventaryDashbordAsync } from "../../feature/inventaryManagement/inventarySlice.js";
+import { getAllProductAsync, getInventaryDashbordAsync } from "../../feature/inventaryManagement/inventarySlice.js";
 import Loader from "../loader/Loader.jsx";
 import { dataExportInExcelHandler } from "./constants.jsx";
 import InventaryCountCards from "./InventaryCountCards.jsx";
@@ -11,10 +11,17 @@ import InventaryTopButton from "./InventaryTopButton";
 import ProductList from "./ProductList.jsx";
 import UnitSoldByCategary from "./UnitSoldByCategary";
 import UnitSoldChart from "./UnitSoldChart";
+import { useDebounce } from "../../hooks/UseDebounce.jsx";
+import { toast } from "react-toastify";
 
 const Inventary=()=>{
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const token=Cookies.get("token");  
+  const token=Cookies.get("token");
+  const [search,setSearch]=useState("");
+  const [filterKey,setFilter]=useState([])
+  const [sortKey,setSort]=useState([]);
+  const [page,setPage]=useState(1)
+  const debouncedText = useDebounce(search, 500);  
   const dispatch=useDispatch();
   const {inventaryDashboard,isDashboardLoading}=useSelector(state=>state?.inventary);
   
@@ -22,7 +29,7 @@ const Inventary=()=>{
     try {
     const res=await dispatch(getInventaryDashbordAsync({token})).unwrap();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");
     }
   }
 
@@ -32,6 +39,28 @@ const exportProductHandler = async () => {
 };
 
 
+ const getAllProducts=async()=>{
+  const trimSearch=search.trim();
+  const data={
+    page:page,
+       ...(trimSearch && { search:trimSearch }),
+       ...(sortKey?.length>0 && { sort:sortKey[0] }),
+       ...(filterKey?.length>0 && { [filterKey[0]]:filterKey[1] }),
+  }
+  if (search && !trimSearch) {
+    return; 
+  }
+    try {
+    const res=await dispatch(getAllProductAsync({token,data})).unwrap();
+    } catch (error) {
+      //  toast.error("Something went wrong. Please try again.");
+
+    }
+  }
+  
+  useEffect(() => {
+   getAllProducts();
+}, [debouncedText,filterKey,sortKey,page]);
   useEffect(()=>{
      getInventary();
   },[])
@@ -52,9 +81,8 @@ const exportProductHandler = async () => {
             </Col>
           </Row>
           <InventaryCountCards cardData={inventaryDashboard?.cards}/>
-          <ProductList exportProductHandler={exportProductHandler}/>
-          <InventaryTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>
-          
+          <ProductList setPage={setPage} filterKey={filterKey} sortKey={sortKey} setFilter={setFilter} setSearch={setSearch} setSort={setSort} exportProductHandler={exportProductHandler}/>
+          <InventaryTable setPage={setPage} page={page} selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys}/>
         </div>
     )
 }

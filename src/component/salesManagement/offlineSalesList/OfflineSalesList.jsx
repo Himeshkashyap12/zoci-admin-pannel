@@ -16,11 +16,11 @@ import { useEffect, useState } from "react";
 import CustomPagination from "../../common/CustomPagination";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { offlineSalesExport } from "../constants";
+import { toast } from "react-toastify";
 const OfflineSalesList = () => {
   const navigate = useNavigate();
   const token=Cookies.get("token");  
       const dispatch=useDispatch();
-      const {offlineOrder,isLoading}=useSelector(state=>state?.sales);
        const [page,setPage]=useState(1);
       const [date,setDate]=useState([]); 
              const [search,setSearch]=useState("");
@@ -39,11 +39,10 @@ const OfflineSalesList = () => {
 
           }
              if(search && !trimSearch) return ;
-
           try {
           const res=await dispatch(getOfflineListAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            // toast.error("Something went wrong. Please try again.");  
           }
         }
          const exportOfflineSales = async () => {
@@ -80,7 +79,7 @@ const OfflineSalesList = () => {
       </div>
      
       <div>
-        <OfflineSalesFilter exportOfflineSales={exportOfflineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
+        <OfflineSalesFilter setPage={setPage} filterKey={filter} sortKey={sort}  exportOfflineSales={exportOfflineSales} setDate={setDate} date={date} setSearch={setSearch} setFilter={setFilter} setSort={setSort}/>
       </div>
       <div>
         <OfflineSalesTable page={page} setPage={setPage} />

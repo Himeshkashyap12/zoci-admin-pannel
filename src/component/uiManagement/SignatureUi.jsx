@@ -12,7 +12,6 @@ import AddNewSignature from "./AddNewSignature";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ConfirmationPopup from "../common/ConfirmationPopup";
-import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 const SignatureUi=({collectionId})=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
@@ -28,7 +27,7 @@ const SignatureUi=({collectionId})=>{
             const res=await dispatch(getSignatureAsync({token,id:collectionId})).unwrap();
            
         } catch (error) {
-            console.log(error);
+        //    toast.error("Something went wrong. Please try again.");  
             
         }
     }
@@ -48,8 +47,7 @@ const SignatureUi=({collectionId})=>{
             toast.success(res.message);
             getCollectionById();
             setSignatureModel(false);
-            setDeleteId(null)
-
+            setDeleteId(null);
         }
         
     } catch (error) {
@@ -73,18 +71,18 @@ const SignatureUi=({collectionId})=>{
     if(isCollectionItemLoading  || isLoading) return <ImageLoader/>
     return(
         <>
-       <div className="bg-[#EFE6DC] ">
+       <div className="bg-[#EFE6DC]  shadow-xl">
         <div className="flex gap-2 px-[20px] bg-[#fff] py-[20px]" onClick={()=>{addNewItemHandler()}}>
             <PlusOutlined style={{fontSize:"18px" }} />
             <CustomText className={"text-[16px] font-semibold !text-[#214344] "} value={"Add New Item"}/>
         </div>
-        <div className="flex flex-col gap-1 h-[420px] overflow-auto bg-[#fff]  ">
+        <div className="flex flex-col gap-1 h-[40vh] overflow-auto bg-[#fff]  ">
             {signatureItem?.collection?.items?.map((item)=>{                
                 return(
                     <>
                     <div className="flex justify-between items-center bg-[#fff] px-[20px]">
                         <div className="flex gap-[10px] items-center">
-                            <Image preview={false} className="!size-[100px]" src={item?.image}/>
+                            <Image preview={false} className="!size-[100px]" src={item?.images?.productImage}/>
                             <CustomText className={"text-[16px]  !text-[#214344] "} value={item?.title}/>
 
                         </div>
@@ -96,7 +94,7 @@ const SignatureUi=({collectionId})=>{
                                     <Image preview={false} src={deleteIcon} alt="deleteIcon"/>
                                 </div>
                                 <div
-                                onClick={()=>{navigate("/admin/create-product",{state:item?.product})}}
+                                onClick={()=>{navigate("/admin/create-product",{state:item?._id})}}
                                     className="h-[20px] w-[20px] cursor-pointer"
                                 >
                                     <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />

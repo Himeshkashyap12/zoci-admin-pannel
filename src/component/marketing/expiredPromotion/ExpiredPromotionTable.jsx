@@ -15,35 +15,29 @@ import CustomPagination from "../../common/CustomPagination";
 import CustomModal from "../../common/CustomModal";
 import ConfirmationPopup from "../../common/ConfirmationPopup";
 import CreateNewPromotion from "../CreateNewPromotion";
+import { toast } from "react-toastify";
 
-const ExpiredPromotionTable=()=>{
-   const token=Cookies.get("token");  
-      const dispatch=useDispatch();
+const ExpiredPromotionTable=({page,setPage})=>{
        const [seletedId,setDeletedId]=useState("");
-            const [edit,setEdit]=useState(false);
-            const [page,setPage]=useState(1);
-            const [promotionModel ,setPromotionModel]=useState(false);
-            const {promotion,isLoading}=useSelector(state=>state?.marketing);
-            const [edititem,setEditItem]=useState(null)            
-        const getActivePromotion=async()=>{
-          try {
-            const data={isActive:false}
-          const res=await dispatch(getAllPromotionAsync({token,data})).unwrap();
-          } catch (error) {
-            console.log(error);
-          }
-        }
- const confirmationPopUpHandler=async()=>{
+       const [edit,setEdit]=useState(false);
+       const [promotionModel ,setPromotionModel]=useState(false);
+       const {promotion,isLoading}=useSelector(state=>state?.marketing);
+       const [edititem,setEditItem]=useState(null);              
+       
+       
+      
+        const confirmationPopUpHandler=async()=>{
            try {
             const res=await dispatch(deleteNewPromotionAsync({token,id:seletedId})).unwrap();
             if(res.status){
             toast.success(res.message);
             setPromotionModel(false);
-            getActivePromotion();
+            const data={isActive:false,limit:10,page:page};
+            dispatch(getAllPromotionAsync({token,data}))
           }
             
            } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
             setPromotionModel(false);
 
             
@@ -51,9 +45,7 @@ const ExpiredPromotionTable=()=>{
          }
 
 
-        useEffect(()=>{
-        getActivePromotion();
-        },[])
+        
      const columns = [
     {
       title: (
@@ -143,7 +135,7 @@ const ExpiredPromotionTable=()=>{
       key: "banner",
       width: 200,
       align: "center",
-      render: (text) =>  <Image preview={false} src={text}/>
+      render: (text) =>  <Image className="!size-[50px] rounded-md" preview={false} src={text}/>
     },
     {
       title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
@@ -179,8 +171,7 @@ const ExpiredPromotionTable=()=>{
         <>
         <CustomTable scroll={{x:1700}}  dataSource={promotion?.promos} columns={columns}/>
         <CustomPagination pageNumber={page} total={promotion?.total} onchange={(e)=>{setPage(e)}}/>
-     
-       <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setOpen={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
+        <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
 
         </>
     )

@@ -1,9 +1,9 @@
 import { Cascader } from "antd"
 
-const CustomMultipleFilter=({onchange,option,placeholder})=>{
+const CustomMultipleFilter=({onchange,option,placeholder,value})=>{
     return(
         <>
-        <Cascader options={option} onChange={onchange} placeholder={placeholder} />
+        <Cascader options={option} onChange={onchange} placeholder={placeholder}  value={value} />
         </>
     )
 }

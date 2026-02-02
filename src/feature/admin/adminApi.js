@@ -138,7 +138,6 @@ export const deleteProductImage= async (data) => {
 
     return res.data;
   } catch (error) {
-    console.error('Error deleting image:', error.response?.data || error.message);
     throw error;
   }
 

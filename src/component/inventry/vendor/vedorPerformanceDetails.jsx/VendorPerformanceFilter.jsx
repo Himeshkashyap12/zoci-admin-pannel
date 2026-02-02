@@ -11,35 +11,29 @@ import CustomMultipleFilter from "../../../common/CustumMultipleFilter"
 import { useNavigate } from "react-router-dom"
 import { vendorDetailsFilter, vendorDetailsSort } from "./vendorDetailsFilterData"
 
-const   VendorPerformanceFilter=({setSort,setFilter,setSearch,search,exportProductHandler})=>{
+const   VendorPerformanceFilter=({setSort,setFilter,setSearch,search,exportProductHandler ,filterKey,sortKey,setPage})=>{
     const [productListBulkModel,setproductListBulkModel]=useState(false);
     return(
         <>
          <div className="inventary">
             <Row justify={"center"} gutter={[40,20]}>
-                 <Col span={6}>
+                 <Col xxl={6} xl={24} lg={24} md={24}>
                  <div className="flex  gap-20 items-center">
-                   
                    <div >
-                   <CustomInput search onchange={(e)=>{setSearch(e.target.value)}}  className={"!w-[350px]"}  placeholder={"Search Vendor Products"} />
+                   <CustomInput search value={search} onchange={(e)=>{setPage(1),setSearch(e.target.value)}}  className={"!w-[350px]"}  placeholder={"Search Vendor Products"} />
                    </div>
                    </div>
                  </Col>
-                 <Col span={18}>
-                 <div className="flex gap-2 justify-end"> 
-                  {/* <CustomButton className={"!text-[#fff]"} value={"Print"}/> */}
-                  {/* <CustomButton onclick={()=>{naviagte("/admin/create-product")}}  className={"!text-[#fff]"} value={"Add New product"}/> */}
+                 <Col xxl={18} xl={24} lg={24} md={24}>
+                 <div className="flex gap-2 xl:justify-end"> 
                   <CustomButton onclick={()=>{setproductListBulkModel(true)}} className={"!text-[#fff]"} value={"Bulk Import"}/>
                   <CustomButton value={<div className="flex items-center justify-between gap-1 ">
                     <Image preview={false} className="!size-[16px]" src={filter}/>
-                    {/* <CustomText className={"!text-[#fff]"} value={"Filter"}/> */}
-                   <CustomMultipleFilter placeholder={"Filter"}  onchange={(value)=>setFilter(value)} option={vendorDetailsFilter}   />
-
+                   <CustomMultipleFilter value={filterKey} placeholder={"Filter"}  onchange={(value)=>{setPage(1),setFilter(value)}} option={vendorDetailsFilter}   />
                   </div>}/>
                   <CustomButton value={<div className="flex items-center gap-1">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                   <CustomMultipleFilter placeholder={"Sort"}  onchange={(value)=>setSort(value)} option={vendorDetailsSort}   />
-
+                   <CustomMultipleFilter value={sortKey} placeholder={"Sort"}  onchange={(value)=>{setPage(1),setSort(value)}} option={vendorDetailsSort}   />
                   </div>}/>
                   <CustomButton onclick={()=>{exportProductHandler()}} value={<div className="flex items-center gap-1">
                     <Image preview={false} className="!size-[20px]" src={sort}/>

@@ -22,7 +22,7 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
         try {
         const res=await dispatch(getAllProductAsync({token,data}))
         } catch (error) {
-            console.log(error);   
+           toast.error("Something went wrong. Please try again.");   
         }   
     }
 
@@ -48,8 +48,7 @@ const AddNewSignature=({setSignatureModel,collectionId,title})=>{
           }
           
          } catch (error) {
-        console.log(error);
-            console.log(error);
+        toast.error("Something went wrong. Please try again.");  
             setSignatureModel(false)
             
          }

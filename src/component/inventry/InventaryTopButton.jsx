@@ -11,7 +11,7 @@ const InventaryTopButton = ({totalVendor}) => {
           className={"!text-[#214344] !text-[20px] "}
         />
       </div>
-      <div className="flex gap-10">
+      <div className="flex flex-wrap gap-5">
         <CustomButton
           onclick={()=>{navigate("/admin/stock-alert")}}
           className={"!text-[14px] font-semibold  w-[330px]  !h-[50px] !text-[#fff]"}

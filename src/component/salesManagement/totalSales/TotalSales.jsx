@@ -11,6 +11,7 @@ import { getTotalSalesAsync } from "../../../feature/sales/salesSlice";
 import { useEffect, useState } from "react";
 import Loader from "../../loader/Loader";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const TotalSales = () => {
   const navigate = useNavigate();
      const token=Cookies.get("token"); 
@@ -39,7 +40,7 @@ const TotalSales = () => {
 
               const res=await dispatch(getTotalSalesAsync({token,data})).unwrap();
               } catch (error) {
-                console.log(error);
+                // toast.error("Something went wrong. Please try again.");  
               }
             }
             const totalSalesCard=[
@@ -48,7 +49,7 @@ const TotalSales = () => {
               value: `Rs. ${totalSales?.totals?.exhibitionSales}`,
             },
             {
-              title: "Event Sales",
+              title: "Make To Order",
               value: `Rs. ${totalSales?.totals?.eventSales}`,
             },
             {
@@ -92,7 +93,7 @@ const TotalSales = () => {
         </Row>
       </div>
       <div>
-        <ToTalSalesFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
+        <ToTalSalesFilter setPage={setPage} filterKey={filter} sortKey={sort}  setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
       </div>
       <div>
         <TotalSalesTable page={page} setPage={setPage}  totalSales={totalSales}/>

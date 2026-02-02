@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTotalOrderAsync } from "../../../feature/sales/salesSlice";
 import Cookies from "js-cookie";
 import { useDebounce } from "../../../hooks/UseDebounce";
+import { toast } from "react-toastify";
 const TotalOrder = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
@@ -41,21 +42,21 @@ const TotalOrder = () => {
                 if(search && !trimSearch) return;
               const res=await dispatch(getTotalOrderAsync({token,data})).unwrap();
               } catch (error) {
-                console.log(error);
+              //  toast.error("Something went wrong. Please try again.");  
               }
             }
      const totalOrderCard=[
               {
-              title: "Exhibition Expenses",
-              value: `Rs. ${totalOrders?.summary?.exhibitionOrders}`,
+              title: "Exhibition Orders",
+              value: `${totalOrders?.summary?.exhibitionOrders}`,
             },
             {
-              title: "Event Expenses",
-              value: `Rs. ${totalOrders?.summary?.eventOrders}`,
+              title: "Event Orders",
+              value: `${totalOrders?.summary?.eventOrders}`,
             },
             {
-              title: "Online/Operational Expenses",
-              value: `Rs. ${totalOrders?.summary?.onlineOrders}`,
+              title: "Online Orders",
+              value: `${totalOrders?.summary?.onlineOrders}`,
             },
             ]
               useEffect(()=>{
@@ -96,7 +97,7 @@ const TotalOrder = () => {
         </Row>
       </div>
       <div>
-        <TotalOrderFilter setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
+        <TotalOrderFilter setPage={setPage} filterKey={filter} sortKey={sort}  setDate={setDate} date={date} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch} />
       </div>
       <div>
         <TotalOrderTable page={page} setPage={setPage}   item={totalOrders} />

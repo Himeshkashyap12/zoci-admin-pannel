@@ -10,13 +10,13 @@ import "../order.css";
 import { productExchangeSort } from "./productExchangeData";
 const { RangePicker } = DatePicker;
 
-const ProductExchangeFilter=({setSearch,setSort,search,date,setDate,exportOrderHandler})=>{
+const ProductExchangeFilter=({setSearch,setSort,search,date,setDate,exportOrderHandler,setPage,sortKey})=>{
     return(
         <div className="order">
          <Row justify={"space-between"} gutter={[40]}>
                  <Col span={8}>
                   <div className="w-[70%]">
-                   <CustomInput search name={"search"} value={search} onchange={(e)=>{setSearch(e.target.value)}} placeholder={"Search Your Orders"} />
+                   <CustomInput search name={"search"} value={search} onchange={(e)=>{setPage(1),setSearch(e.target.value)}} placeholder={"Search Your Orders"} />
                    </div>
                  </Col>
                  
@@ -25,16 +25,10 @@ const ProductExchangeFilter=({setSearch,setSort,search,date,setDate,exportOrderH
                     <RangePicker disabledDate={(current) => {
                       return current && current > new Date().setHours(0, 0, 0, 0);
                     }}
-                     onChange={(i,value)=>{setDate(value)}} />
-                     
-                  {/* <CustomButton value={<div className="flex items-center gap-2">
-                    <Image preview={false} className="!size-[16px]" src={filter}/>
-                   <CustomMultipleFilter placeholder={"Filter"} onchange={(value)=>{setFilter(value)}} option={makeToOnlineOrderSort}/>
-
-                       </div>}/> */}
+                     onChange={(i,value)=>{setPage(1),setDate(value)}} />
                   <CustomButton value={<div className="flex items-center gap-2">
                     <Image preview={false} className="!size-[20px]" src={sort}/>
-                   <CustomMultipleFilter  placeholder={"Sort"} onchange={(value)=>{setSort(value)}} option={productExchangeSort}/>
+                   <CustomMultipleFilter value={sortKey}  placeholder={"Sort"} onchange={(value)=>{setPage(1),setSort(value)}} option={productExchangeSort}/>
                   </div>}/>
                   
                   <CustomButton onclick={()=>{exportOrderHandler()}} value={<div className="flex items-center gap-2">

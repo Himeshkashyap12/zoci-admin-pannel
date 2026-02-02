@@ -52,7 +52,7 @@ const CustomSlider = ({EventSalesSlider}) => {
         return(
             <SwiperSlide>
           <div className=" flex justify-between items-center px-20 ">
-            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item?.sourceName}/>
+            <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item?.sourceName??"-"}/>
             <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={item?.city??"Not mentioned"}/>
             <CustomText className={"!text-[24px] font-bold !text-[#214344] "} value={`Rs. ${item?.sales}`}/>
             <Image className="!size-[100px] object-cover" src={item?.image??"https://zoci-data.s3.ap-south-1.amazonaws.com/productImages/1763887620428_no-image-icon-6.png"}/>

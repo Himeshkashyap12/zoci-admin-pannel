@@ -6,12 +6,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       
       },
     ],
@@ -38,12 +38,12 @@
     children: [
       {
         value: 'asc',
-        label: 'Low To High',
+        label: 'Ascending',
       
       },
       {
         value: 'desc',
-        label: 'High To Low',
+        label: 'Descending',
       
       },
     ],
@@ -99,28 +99,12 @@
         label: 'Gold',
       
       },
+      {
+        value: 'Platinum',
+        label: 'Platinum',
+      
+      },
     ],
-  },
-   {
-    label:"Category",
-    value:"category",
-    children: [
-      {
-        value: 'Necklace',
-        label: 'Necklace',
-      
-      },
-      {
-        value: 'Earrings',
-        label: 'Earrings',
-      
-      },
-      {
-        value: 'Rings',
-        label: 'Rings',
-      
-      },
-    ]
-}
+  }
   
 ];

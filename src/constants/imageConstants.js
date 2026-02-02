@@ -1,0 +1,1 @@
+export const dummyImage="https://zoci-data.s3.ap-south-1.amazonaws.com/productImages/1741236911889_No_image_available.svg.webp"

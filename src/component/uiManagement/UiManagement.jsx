@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { collectionDataHandler, getCollectionAsync } from "../../feature/uiManagement/UiManagementSlice.js";
 import useInfiniteScrollObserver from "../../hooks/useCustomLoading.jsx";
 import Loader from "../loader/Loader.jsx";
+import { toast } from "react-toastify";
 const UiManagement=()=>{
     const [collection,setCollection]=useState(true);
     const [search,setSearch]=useState("");
@@ -22,8 +23,6 @@ const UiManagement=()=>{
    const {isCollectionLoading}=useSelector(state=>state?.ui)
    const [hasMore,setHasMore]=useState(true);
    const [page,setPage]=useState(1);
-   
-
 
     const getCollection=async()=>{ 
                 try {
@@ -38,6 +37,9 @@ const UiManagement=()=>{
             if (search && !trimSearch) {
               return; 
             }
+             if(page==1){
+                    dispatch(collectionDataHandler())
+                  }
             const res=await dispatch(getCollectionAsync({token,data})).unwrap();
             if(res.success){
                const receivedCount = res?.collections?.length ?? 0;
@@ -46,12 +48,13 @@ const UiManagement=()=>{
             
            setDeleteStatus(false)
             } catch (error) {
-               console.log(error);   
+            //  toast.error("Something went wrong. Please try again.");
             } 
         }
-        useEffect(()=>{
-                     getCollection();
-                },[debouncedText,sortFilter,deleteStatus,page]); ;
+        
+         useEffect(()=>{
+             getCollection();
+          },[debouncedText,sortFilter,deleteStatus,page]); 
 
                 const loadMore = useCallback(() => {
                   if (isCollectionLoading || !hasMore) return;
@@ -59,9 +62,8 @@ const UiManagement=()=>{
                 }, [isCollectionLoading, hasMore]);
 
   // sentinel ref
-  const sentinelRef = useInfiniteScrollObserver(loadMore, { rootMargin: "50px" });
-
-    if(isCollectionLoading) return <Loader/>
+    const sentinelRef = useInfiniteScrollObserver(loadMore, { rootMargin: "50px" });
+    if(isCollectionLoading) return <Loader/> ;
 
     return(
         <>

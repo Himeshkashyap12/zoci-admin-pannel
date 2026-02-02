@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/axios";
+import { toast } from "react-toastify";
 const initialState = {
   marketingDashboard:[], 
   promotion:[],
@@ -191,7 +192,7 @@ export const promotionExportInExcelAsync = createAsyncThunk(
       });      
        return { blob: res.data, headers: res.headers };      
     } catch (error) { 
-      console.log(error);
+      toast.error("Something went wrong. Please try again.");
            
       throw error;
     }

@@ -26,6 +26,7 @@ const CreateEssance = ({ setOpen,madeFor,editData,setEditData}) => {
   });
  
  const CreateCategoryHandler=async()=>{
+
        try {
         if(!editData){
          const data={...category,madeFor:madeFor}
@@ -57,7 +58,7 @@ const CreateEssance = ({ setOpen,madeFor,editData,setEditData}) => {
         }
       
        } catch (error) {
-        console.log(error);
+       toast.error("Something went wrong. Please try again.");
         
        }
  }
@@ -76,7 +77,8 @@ const handleUpload = async (e) => {
                
             }
             } catch (err) {
-            console.error(err);
+                throw error;
+
           }
     };
        

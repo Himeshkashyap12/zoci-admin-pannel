@@ -2,6 +2,7 @@
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useSelector } from "react-redux";
 
 export function isoToIST(isoString) {
   const date = new Date(isoString); // Convert ISO string to Date object
@@ -85,7 +86,7 @@ export const isoTODate = (isoDate) => {
 
 
 export function generate4DigitRandomNumber() {
-  return `ORD#${Math.floor(1000 + Math.random() * 9000)}`;
+  return `SKU-${Math.floor(1000 + Math.random() * 9000)}`;
 }
 
 dayjs.extend(utc);
@@ -93,4 +94,17 @@ dayjs.extend(utc);
 export function isoToUTC(isoString) {
   return dayjs(isoString).utc().format("YYYY-MM-DD HH:mm:ss");
 }
+
+
  
+ 
+export function formatDateUTC(isoDate) {
+  const date = new Date(isoDate);
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+

@@ -3,7 +3,7 @@ import { Col, Empty, Row } from "antd";
 import Cookies from "js-cookie";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogAsync } from "../../feature/blog/blogSlice";
+import { filteredDataHandler, getBlogAsync } from "../../feature/blog/blogSlice";
 import useInfiniteScrollObserver from "../../hooks/useCustomLoading";
 import CustomText from "../common/CustomText";
 import PaginationLoader from "../loader/PaginationLoader";
@@ -20,17 +20,20 @@ const Blog = () => {
  const getBlogData=async()=>{
     try {
       const data={page:page,limit:12};
+      if(page==1){
+        dispatch(filteredDataHandler())
+      }
     const res=await dispatch(getBlogAsync({token,data})).unwrap();    
           const receivedCount = res?.blogs?.length ?? 0;
         if (receivedCount < 12) setHasMore(false);
     } catch (error) {
-      console.log(error);
+      // toast.error("Something went wrong. Please try again.");
     }
   }
 
 
   useEffect(() => {
-    getBlogData()
+    getBlogData();
   }, [page]);
 
 
@@ -61,9 +64,8 @@ const Blog = () => {
                 return(
                     <>
                     <Col xxl={6} xl={8} md={8} sm={12} xs={24}>
-                           <BlogCard item={item}/>
+                           <BlogCard page={page}  item={item}/>
                     </Col>
-
                     </>
                 )
             })}

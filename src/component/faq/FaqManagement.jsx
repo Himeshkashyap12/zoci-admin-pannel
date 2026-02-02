@@ -1,19 +1,18 @@
-import { EditOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Input, Typography } from "antd";
+import { EditOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-import { deleteFaqAsync, fetchFaqAsync } from "../../feature/faq/faqSlice";
-import CustomAccordian from "../common/CustomAccordian";
-import CustomText from "../common/CustomText";
-import CustomInput from "../common/CustomInput";
-import CustomButton from "../common/CustomButton";
-import deleteIcon from "../../assets/icons/deleteIcon.png"
-import CustomModal from "../common/CustomModal";
-import AddFaq from "./AddFaq";
-import Loader from "../loader/Loader";
 import { toast } from "react-toastify";
+import deleteIcon from "../../assets/icons/deleteIcon.png";
+import { deleteFaqAsync, fetchFaqAsync } from "../../feature/faq/faqSlice";
 import ConfirmationPopup from "../common/ConfirmationPopup";
+import CustomAccordian from "../common/CustomAccordian";
+import CustomButton from "../common/CustomButton";
+import CustomInput from "../common/CustomInput";
+import CustomModal from "../common/CustomModal";
+import CustomText from "../common/CustomText";
+import Loader from "../loader/Loader";
+import AddFaq from "./AddFaq";
 
 const FaqManagement = () => {
     const [faqModel,setFaqModel]=useState(false);
@@ -33,7 +32,7 @@ const FaqManagement = () => {
       try {
         const res=await dispatch(fetchFaqAsync({token})).unwrap();
       } catch (error) {
-          console.log(error);  
+           toast.error("Something went wrong. Please try again."); 
       }
     }
     useEffect(()=>{
@@ -53,9 +52,8 @@ const FaqManagement = () => {
                 getFaq()
             }
         } catch (error) {
-            console.log(error);
-            toast?.error("Something Went Wrong !")
-                setFaqModel(false)
+            toast.error("Something went wrong. Please try again.");
+            setFaqModel(false)
             
         }
      }
@@ -164,9 +162,7 @@ if(isLoading) return <Loader/>
             </div>
           </div>
       </div>
-
             <CustomModal closeIcon  footer={false} setOpen={setFaqModel} open={faqModel} modalBody={deleteId?<ConfirmationPopup setDeleteId={setDeleteId} confirmationPopUpHandler={deleteConfirmFaqHandler} setDeleteConfirm={setFaqModel} />:<AddFaq editItem={editItem} setFaqModel={setFaqModel}  />} width={"800px"}  align={"center"}/>
-
     </>
   );
 };

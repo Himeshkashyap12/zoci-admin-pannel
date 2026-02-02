@@ -1,24 +1,23 @@
 
 
-import { Button, Col, DatePicker, Row, Select } from "antd";
-import { useEffect, useState } from "react";
-import CustomImageUpload from "../common/CustomImageUpload";
 import { UploadOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { getImageUrlAsync } from "../../feature/media/mediaSlice";
+import { Button, Col, Row } from "antd";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
-import CustomText from "../common/CustomText";
-import CustomInput from "../common/CustomInput";
-import CustomButton from "../common/CustomButton";
-import CustomSelect from "../common/CustomSelect";
-import { CreateNewPromotionAsync, getAllPromotionAsync, updateNewPromotionAsync } from "../../feature/marketing/marketingSlice";
 import { compareNewAndOldObject, isoTODate } from "../../constants/constants";
 import { specialChar } from "../../constants/regex";
-import { useDebounce } from "../../hooks/UseDebounce";
 import { getAllProductAsync } from "../../feature/inventaryManagement/inventarySlice";
-import Search from "antd/es/input/Search";
+import { CreateNewPromotionAsync, getAllPromotionAsync, updateNewPromotionAsync } from "../../feature/marketing/marketingSlice";
+import { getImageUrlAsync } from "../../feature/media/mediaSlice";
+import { useDebounce } from "../../hooks/UseDebounce";
+import CustomButton from "../common/CustomButton";
+import CustomDate from "../common/CustomDate";
+import CustomImageUpload from "../common/CustomImageUpload";
+import CustomInput from "../common/CustomInput";
+import CustomSelect from "../common/CustomSelect";
+import CustomText from "../common/CustomText";
 const CreateNewPromotion=({setOpen,edititem,edit})=>{
   const dispatch=useDispatch();
   const token=Cookies.get("token");
@@ -38,7 +37,7 @@ const CreateNewPromotion=({setOpen,edititem,edit})=>{
           minOrderValue:"" ,
           maxOrderValue:"" ,
           category: "",
-          expiryDate: "2025-12-31",
+          expiryDate: "",
           usageLimit: "",
           banner: "",
           productSKU:[],
@@ -54,20 +53,33 @@ const CreateNewPromotion=({setOpen,edititem,edit})=>{
       setPromotion({...promotion,[name]:value})
       } 
     }
-    const dateHandler=(date)=>{
-      setPromotion({...promotion,expiryDate:isoTODate(date.toISOString())});
-    }
+    const dateHandler = (date) => {
+  if (!date) return;
+
+  // convert to UTC without date shift
+  const utcDate = new Date(Date.UTC(
+    date.year(),
+    date.month(),
+    date.date()
+  ));
+
+  setPromotion({
+    ...promotion,
+    expiryDate: utcDate.toISOString()
+  });
+};
+
 
     const categoryOption=[
-       {label:"Custom",value:"Custom"},
+       {label:"All",value:"Custom"},
        {label:"Birthday",value:"Birthday"},
        {label:"Anniversary",value:"Anniversary"},
     ]
 
 
 const typeOption=[
-  {label:"flat",value:"Flat"},
-  {label:"percentage",value:"Percentage"},
+  {label:"Flat",value:"Flat"},
+  {label:"Percentage",value:"Percentage"},
 
 ]
   
@@ -91,6 +103,17 @@ const typeOption=[
     
 
         const addpromotionHandler=async()=>{
+          if(
+            promotion?.code=="" ||
+            promotion?.type=="" ||
+            promotion?.value=="" ||
+            promotion?.applyOn=="" ||
+            promotion?.minOrderValue=="" ||
+            promotion?.maxOrderValue=="" ||
+            promotion?.category=="" ||
+            promotion?.expiryDate=="" ||
+            promotion?.usageLimit=="" 
+          ) return toast.error("Please enter all fields")
           if(promotion?.value>100 ) return toast.error("Value should be 1-100 ")
             try {
               if(!edit){
@@ -112,7 +135,8 @@ const typeOption=[
                if(res.status=="success"){
                 toast.success(res.message);
                 setOpen(false);
-                dispatch(getAllPromotionAsync({token}));
+                const data={isActive:true}
+                dispatch(getAllPromotionAsync({token,data}));
                 setPromotion({
                    code: "",
                     type: "",
@@ -120,7 +144,7 @@ const typeOption=[
                     minOrderValue:"" ,
                     maxOrderValue:"" ,
                     category: "",
-                    expiryDate: "2025-12-31",
+                    expiryDate: "",
                     usageLimit: "",
                     banner: "",
                     productSKU:[],
@@ -185,8 +209,7 @@ const typeOption=[
               }
               }
             } catch (error) {
-               console.log(error); 
-                toast.error("Something went wrong!")
+                toast.error("Something went wrong. Please try again.");
             }
         }
         const getProducts=async()=>{
@@ -214,28 +237,41 @@ const typeOption=[
                 <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
-                      <CustomText className={"text-[16px] "} value={"Promo code"}/>
+                        <div className="flex gap-1">
+                      <CustomText  className={"text-[16px] "} value={"Promo code"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
                        <CustomInput name={"code"}  onchange={(e)=>{promotionHandler(e)}} value={promotion?.code} className={"h-[46px]"}/>
                        
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Expiry  Date"}/>
-                      <DatePicker  onChange={(date)=>dateHandler(date)} className={"h-[46px]"} />
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                    </div>
+                      <CustomDate showTime={true} less onchange={(date)=>dateHandler(date)} className={"h-[46px]"} />
                        
                       </div></Col>
                 </Row>
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
+                        <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Type"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
                         <CustomSelect className="!h-[46px]"  name={"type"} onchange={(e)=>{promotionHandler(e,"type")}}  value={promotion?.type}  options={typeOption} />
                       </div>
                     </Col>
                     <Col span={12}>
                      <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Value"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        <CustomInput type={"number"}  name={"value"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.value} className={"h-[46px]"} />
                       </div></Col>
                 </Row>
@@ -243,7 +279,11 @@ const typeOption=[
                  <Row gutter={[20,20]}>
                     <Col span={12}>
                       <div className="flex flex-col gap-2">
+                        <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Usage Limit"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        <CustomInput type={"number"} name={"usageLimit"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.usageLimit} className={"h-[46px]"}/>
                        
                       </div>
@@ -251,8 +291,10 @@ const typeOption=[
                       <Col span={12}>
                      
                        <div className="flex flex-col gap-3">
-                   
+                   <div className="flex gap-1">
                     <CustomText value={"Range"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                  </div>
                      <div className="flex gap-3">
                     <CustomInput type={"number"}  className={"h-[46px]"} name={"minOrderValue"} value={promotion?.minOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Min Value"}/>
                     <CustomInput  type={"number"} className={"h-[46px]"} name={"maxOrderValue"} value={promotion?.maxOrderValue} onchange={(e)=>{promotionHandler(e)}} placeholder={"Max Value"}/>
@@ -264,13 +306,21 @@ const typeOption=[
               <Row gutter={[20,20]}>
                   <Col span={12}>
                   <div className="flex flex-col gap-3">
-                  <CustomText value={"Category"}/>
+                    <div className="flex gap-1">
+                      <CustomText value={"Category"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                   <CustomSelect className="!h-[46px]" name="category" onchange={(e)=>{promotionHandler(e,"category")}} value={promotion?.category} placeholder="Category" options={categoryOption} /> 
                     </div>
                   </Col>
                    <Col span={12}>
                  <div className="flex flex-col gap-3">
+                     <div className="flex gap-1">
                       <CustomText className={"text-[16px] "} value={"Product"}/>
+                      <CustomText value={"*"} className={"!text-[red]"}/>
+                      </div>
+
                        {/* <CustomInput name={"productSKU"} onchange={(e)=>{promotionHandler(e)}} value={promotion?.productSKU} className={"h-[46px]"}/> */}
                       <CustomSelect   className="!h-[44px]" value={promotion?.applyOn} onchange={(e)=>setPromotion({...promotion,applyOn:e})} options={[{label:"All Products",value:"ALL"},{label:"PRODUCTS",value:"PRODUCTS"}]}/>
                       </div>
@@ -315,7 +365,7 @@ const typeOption=[
                 
 
                 <div className="flex justify-center gap-4 pt-10">
-                    <CustomButton onclick={()=>{addpromotionHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={`Yes, ${edit?"Edit":"Add New"}  Expense`}/>
+                    <CustomButton disable={isMediaLoading?true:false} onclick={()=>{addpromotionHandler()}} className={"!text-[#fff] !bg-[#214344] w-[180px]"} value={`Yes, ${edit?"Edit":"Add New"}  Expense`}/>
                     <Button onClick={()=>{setOpen(false)}} className="!border-[2px] !border-[#214344] rounded-full  w-[180px] text-[14px]">No, Cancel</Button>
 
                 </div>

@@ -14,54 +14,31 @@ import CustomModal from "../../common/CustomModal";
 import ConfirmationPopup from "../../common/ConfirmationPopup";
 import { toast } from "react-toastify";
 import CreateNewPromotion from "../CreateNewPromotion";
-
-const ActivePromotionTable=()=>{
-       const token=Cookies.get("token");  
+const ActivePromotionTable=({setPage,page})=>{
       const dispatch=useDispatch();
-      const [page,setPage]=useState(1);
+      const token=Cookies.get("token");
       const [seletedId,setDeletedId]=useState("");
       const [edit,setEdit]=useState(false);
       const [promotionModel ,setPromotionModel]=useState(false);
       const {promotion,isLoading}=useSelector(state=>state?.marketing);
-      const [edititem,setEditItem]=useState(null)
-            console.log(edititem,"dfdsvgfvdh");
-            
-        const getActivePromotion=async()=>{
-          try {
-            const data={isActive:true,limit:10,page:page}
-          const res=await dispatch(getAllPromotionAsync({token,data})).unwrap();
-          
-          } catch (error) {
-            console.log(error);
-           
-          }
-        }
-
-
-
+      const [edititem,setEditItem]=useState(null);            
+      
          const confirmationPopUpHandler=async()=>{
            try {
             const res=await dispatch(deleteNewPromotionAsync({token,id:seletedId})).unwrap();
             if(res.status){
             toast.success(res.message);
             setPromotionModel(false);
-            getActivePromotion();
+            const data={isActive:true,limit:10,page:page};
+            dispatch(getAllPromotionAsync({token,data}));
           }
-            
            } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
             setPromotionModel(false);
-
-            
            }
          }
+      
 
-
-        useEffect(()=>{
-        getActivePromotion();
-        },[page]);
-
-     
      const columns = [
     {
       title: (
@@ -186,7 +163,7 @@ if(isLoading) return <Loader/>
         <>
         <CustomTable  scroll={{x:1700}}  dataSource={promotion?.promos} columns={columns}/>
         <CustomPagination pageNumber={page} total={promotion?.total} onchange={(e)=>{setPage(e)}}/>
-       <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setOpen={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
+       <CustomModal  footer={false} setOpen={setPromotionModel} open={promotionModel} modalBody={!edit?<ConfirmationPopup confirmationPopUpHandler={confirmationPopUpHandler} setDeleteConfirm={setPromotionModel} />:<CreateNewPromotion edit={edit} edititem={edititem} setOpen={setPromotionModel}/>} width={edit?"1052px":"552px"} align={"center"}/>
 
          </>
     )

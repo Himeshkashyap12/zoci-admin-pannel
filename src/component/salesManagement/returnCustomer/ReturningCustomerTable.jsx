@@ -50,7 +50,7 @@ const ReturningCustomerTable=({returningCustomers,page,setPage})=>{
                   dataIndex: "customerName",
                   key: "customerName",
                   width: 200,
-                  render: (text) => <CustomText value={text} />,
+                  render: (text) => <CustomText value={text??"-"} />,
                 },
 
                 {
@@ -64,7 +64,7 @@ const ReturningCustomerTable=({returningCustomers,page,setPage})=>{
                   key: "contactNumber",
                   width: 150,
                   align:"center",
-                  render: (text) => <CustomText value={text} />,
+                  render: (text) => <CustomText value={text??"-"} />,
                 },
 
                 {

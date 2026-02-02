@@ -15,6 +15,7 @@ import { isoToIST } from "../../../../constants/constants";
 import { useDebounce } from "../../../../hooks/UseDebounce";
 import Loader from "../../../loader/Loader";
 import CustomPagination from "../../../common/CustomPagination";
+import { toast } from "react-toastify";
 const BagWishListTable=({id,setCustomerDetails})=>{
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const [page,setPage]=useState(1);
@@ -41,7 +42,7 @@ const BagWishListTable=({id,setCustomerDetails})=>{
             if(search && !trimSearch) return;
           const res=await dispatch(customerWishListAndBagAsync({token,id,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
           }
         }
 

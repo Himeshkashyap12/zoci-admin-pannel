@@ -10,6 +10,8 @@ import CustomSelect from "../common/CustomSelect";
 import "./sales.css"
 import { useSelector } from "react-redux";
 const ProductSalesChart=({item,salesChartValue,handleSalesReport})=>{
+  console.log(item,"item");
+  
    const [salesChart,setSalesChart]=useState(false);
    const {isDashboardLoading}=useSelector(state=>state?.sales);
 
@@ -77,16 +79,16 @@ const ProductSalesChart=({item,salesChartValue,handleSalesReport})=>{
          <div className="flex justify-center items-center" onClick={()=>{setSalesChart(()=>salesChart?false:true)}}> <Image preview={false} className="!size-[16px] object-cover"  src={calender}/></div>
                </div>}/>
     </div>
-    <div className="flex flex-col gap-4">
+  {isDashboardLoading? <Skeleton.Node active  className="!w-full" />: <div className="flex flex-col gap-4">
        <CustomText className={"!text-[30px] text-[#0D141C] font-[700]"} value={item?.last30DaysQty}/>
        <div className="flex gap-2 items-center">
        <CustomText className={"!text-[16px] !text-[#214344] font-[300]"} value={"Last 30 Days"}/>
        <CustomText className={"!text-[20px] !text-[#088738] font-[500]"} value={`+ ${item?.last30DaysQty}`}/>
        </div>
-    </div>
+    </div>}
     <div>
        {isDashboardLoading?
-<Skeleton.Node active style={{ width: 640,height:200 }} /> : <Chart height={200} options={options} series={series} type="bar"  />}
+   <Skeleton.Node active style={{ width: 640,height:200 }} /> : <Chart height={200} options={options} series={series} type="bar"/>}
    </div>
    </div>
    </div>)

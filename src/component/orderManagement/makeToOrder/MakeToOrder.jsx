@@ -10,21 +10,22 @@ import { getMakeToOrderAsync } from "../../../feature/order/orderSlice";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { orderExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const MakeToOrder=()=>{
     const navigate=useNavigate()
-      const token=Cookies.get("token");  
-      const dispatch=useDispatch();
-      const [date,setDate]=useState([]);  
-       const [page,setPage]=useState(1);
-       const [search,setSearch]=useState("");
-       const debounce=useDebounce(search,500);
-       const [filter,setFilter]=useState([])
-       const [sort,setSort]=useState([])  
-        const getMakeToOrder=async()=>{
-        const trimSearch=search.trim();
-                const data={
-                  limit:10,
-                  page:page,
+    const token=Cookies.get("token");  
+    const dispatch=useDispatch();
+    const [date,setDate]=useState([]);  
+    const [page,setPage]=useState(1);
+    const [search,setSearch]=useState("");
+    const debounce=useDebounce(search,500);
+    const [filter,setFilter]=useState([])
+    const [sort,setSort]=useState([])  
+    const getMakeToOrder=async()=>{
+    const trimSearch=search.trim();
+        const data={
+              limit:10,
+              page:page,
                   ...(search && {search:trimSearch} ),
                   ...(sort?.length>0 && {[sort[0]]:sort[1]} ),
                   ...(filter?.length>0 && {[filter[0]]:filter[1]} ),
@@ -34,7 +35,7 @@ const MakeToOrder=()=>{
           if(search && !trimSearch) return;
           const res=await dispatch(getMakeToOrderAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            // toast.error("Something went wrong. Please try again.");  
           }
         }
           const exportOrderHandler = async () => {
@@ -53,7 +54,7 @@ const MakeToOrder=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Order Management → Make to Order"}/>
             </div>
             <div>
-                <MakeTOOrderFilter date={date}  setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
+                <MakeTOOrderFilter date={date} setPage={setPage} filterKey={filter} sortKey={sort} setDate={setDate} exportOrderHandler={exportOrderHandler} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}  />
             </div>
             
               <div>

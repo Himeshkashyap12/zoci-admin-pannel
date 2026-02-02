@@ -9,6 +9,7 @@ import { bestSellingProducts } from "../../../feature/inventaryManagement/invent
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const BestSeller=()=>{
       const [selectedRowKeys,setSelectedRowKeys]=useState([])
       const navigate=useNavigate();
@@ -33,7 +34,7 @@ const BestSeller=()=>{
           if(search && !trimSearch) return;
                 const res=await dispatch(bestSellingProducts({token,data})).unwrap();
              } catch (error) {
-                console.log(error);
+                // toast.error("Something went wrong. Please try again.");
             }
         }
        const exportProductHandler = async () => {
@@ -52,13 +53,12 @@ const BestSeller=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Inventory Management & Analysis → Best-selling Product "}/>
             </div>
             <div>
-                <BestSellerFilter exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
+                <BestSellerFilter sortKey={sort} filterKey={filter} setPage={setPage}  exportProductHandler={exportProductHandler}  search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}/>
             </div>
             
               <div>
                <BestSellerTable setSelectedRowKeys={setSelectedRowKeys} selectedRowKeys={selectedRowKeys} setPage={setPage} page={page}/>
               </div>
-        
         </div>
     )
 }

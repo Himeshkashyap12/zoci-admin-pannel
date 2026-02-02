@@ -11,6 +11,7 @@ import Cookies from "js-cookie"
 import { notifyMeAsync, stockLevelAlertAsync } from "../../../feature/inventaryManagement/inventarySlice";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import { dataExportInExcelHandler } from "../constants";
+import { toast } from "react-toastify";
 const StockAlert=()=>{
     const [stockAlerstStatus,setStockAlertStatus]=useState("stock");
       const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -45,7 +46,7 @@ const StockAlert=()=>{
           const res=await dispatch(notifyMeAsync({token,data})).unwrap();
           setTotal(res?.total)
           } catch (error) {
-            console.log(error);
+            toast.error("Something went wrong. Please try again.");
           }
         }
         const getStockAlert=async()=>{
@@ -64,7 +65,7 @@ const StockAlert=()=>{
           setTotal(res?.total)
 
           } catch (error) {
-            console.log(error);
+            //  toast.error("Something went wrong. Please try again.");
           }
         }
 
@@ -91,7 +92,7 @@ const StockAlert=()=>{
                 <CustomText className={"!text-[#214344] !text-[20px]"} value={"Inventory Management & Analysis → Stock Level Alerts"}/>
             </div>
             <div>
-                <StockFilter  exportProductHandler={exportProductHandler} stockAlerstStatus={stockAlerstStatus} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}   selectedRowKeys={selectedRowKeys}/>
+                <StockFilter filterKey={filter} sortKey={sort} setPage={setPage}  exportProductHandler={exportProductHandler} stockAlerstStatus={stockAlerstStatus} search={search} setSort={setSort} setFilter={setFilter} setSearch={setSearch}   selectedRowKeys={selectedRowKeys}/>
             </div>
             <div >
                 <StockAlertButton setStockAlertStatus={setStockAlertStatus} stockAlerstStatus={stockAlerstStatus}/>

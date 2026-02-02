@@ -9,6 +9,7 @@ import { getBirthdayAnniversaryReminderAsync } from "../../../feature/crm/crmSli
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../../hooks/UseDebounce";
 import Cookies from "js-cookie"
+import { toast } from "react-toastify";
 const AnniversaryReminder = () => {
   const navigate=useNavigate();
       const token=Cookies.get("token");  
@@ -32,7 +33,7 @@ const AnniversaryReminder = () => {
              if(search && !trimSearch) return;
           const res=await dispatch(getBirthdayAnniversaryReminderAsync({token,data})).unwrap();
           } catch (error) {
-            console.log(error);
+            // toast.error("Something went wrong. Please try again.");
           }
         };
          useEffect(()=>{
@@ -60,7 +61,7 @@ const AnniversaryReminder = () => {
       </div>
      
       <div>
-        <BirthdayReminderFilter setDate={setDate} date={date} search={search} setSearch={setSearch} setSortKey={setSortKey}/>
+        <BirthdayReminderFilter  setPage={setPage}  sortKey={sortKey} setDate={setDate} date={date} search={search} setSearch={setSearch} setSortKey={setSortKey}/>
       </div>
       <div>
         <AnniversaryRemindertable  page={page} setPage={setPage}/>
