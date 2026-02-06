@@ -8,10 +8,7 @@ import Loader from "../../loader/Loader";
 import { useSelector } from "react-redux";
 
 const NetProfitTable=({item,setPage,page})=>{
-      const [selectedRowKeys, setSelectedRowKeys] = useState([]);
       const {  isLoading } = useSelector((state) => state?.sales);
-
-      const navigate=useNavigate();
    const columns = [
   {
     title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="SNo." />,
@@ -23,59 +20,61 @@ const NetProfitTable=({item,setPage,page})=>{
   },
 
   {
-    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Discription" />,
-    dataIndex: "description",
-    key: "description",
-    width: 250, 
-    render: (text) => <CustomText value={text} />,
-  },
-
-  {
-    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Debit" />,
-    dataIndex: "debit",
-    key: "debit",
-    width: 150,
+    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Invoice Id" />,
+    dataIndex: "orderId",
+    key: "orderId",
+    width:150, 
     align:"center",
-    render: (value) => (
-      <CustomText
-        className="!text-[#EF4444]"
-        value={`Rs. ${value}` }
-      />
-    ),
+    render: (text) => <CustomText value={text??"-"} />,
   },
-
-  {
-    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Credit" />,
-    dataIndex: "credit",
-    key: "credit",
-    width: 150,
-    align:"center",
-    render: (value) => (
-      <CustomText
-       className="!text-[#088738]"
-        value={`Rs. ${value}`}
-      />
-    ),
-  },
+// Table: invoiceId, debit, credit, packagingcharge, profit, date
+// invoiceId= Order Id
+// debit= Total Debit
+// amount= Total Credit
   {
     title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Total Debit" />,
     dataIndex: "totalDebit",
     key: "totalDebit",
     width: 150,
-    align:"center",
-    render: (value) => (
-      <CustomText value={`Rs. ${value}`} />
+    align:"start",
+    render: (text) => (
+      <CustomText
+       value={`Rs. ${text}`}
+      />
     ),
   },
 
   {
     title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Total Credit" />,
-    dataIndex: "totalCredit",
-    key: "totalCredit",
+    dataIndex: "amount",
+    key: "amount",
     width: 150,
-    align:"center",
-    render: (value) => (
-      <CustomText value={`Rs. ${value}`} />
+    align:"start",
+    render: (text) => (
+      <CustomText
+        value={`Rs. ${text}`}
+      />
+    ),
+  },
+  {
+    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Packaging Charge" />,
+    dataIndex: "packagingCharge",
+    key: "packagingCharge",
+    width: 150,
+    align:"start",
+    render: (text) => (
+      <CustomText value={`Rs. ${text}`} />
+    ),
+  },
+
+  {
+    title: <CustomText className="!text-[14px] !text-[#fff] font-semibold" value="Profit" />,
+    dataIndex: "profit",
+    key: "profit",
+    width: 150,
+    align:"start",
+    render: (text) => (
+      <CustomText  value={`Rs. ${(text.toFixed(2))}`} />
     ),
   },
     {
@@ -91,27 +90,14 @@ const NetProfitTable=({item,setPage,page})=>{
    
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }
-];
- const onSelectChange = newSelectedRowKeys => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
- const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+
+
   if (isLoading) return <Loader />;
 
     return(
         <>
               <CustomTable  dataSource={item?.data} columns={columns}/>
-              <CustomPagination  total={item?.pagination?.total} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
+              <CustomPagination  total={item?.pagination?.totalRecords} pageNumber={page} onchange={(e)=>{setPage(e)}}/>
 
         </>
     )

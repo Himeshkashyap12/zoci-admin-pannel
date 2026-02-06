@@ -278,7 +278,6 @@ export const getAddressAsync = createAsyncThunk(
 export const updateOrderStatusAsync = createAsyncThunk(
   "order/updateOrderStatus",
  async ({token,data,id}) => {
-  console.log(token,"token");
   
         try {
       const res = await api.put(`/make-to-orders/${id}`,data,{

@@ -57,7 +57,7 @@ const OfflineSalesList = () => {
                    };
         useEffect(()=>{
         getOfflineSalesList();
-        },[debounce,filter,sort,date])
+        },[debounce,filter,sort,date,page])
   return (
     <div className="flex flex-col gap-5 p-[24px]">
       <div className="flex gap-2 items-center">

@@ -1,19 +1,17 @@
 
 
-import { useNavigate } from "react-router-dom";
-import CustomText from "../../common/CustomText";
 import { LeftOutlined } from "@ant-design/icons";
-import SalesCard from "../SalesCard";
 import { Col, Row, Skeleton } from "antd";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getTotalOrderAsync } from "../../../feature/sales/salesSlice";
+import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomText from "../../common/CustomText";
+import SalesCard from "../SalesCard";
 import TotalOrderFilter from "./TotalOrderFilter";
 import TotalOrderTable from "./TotalOrderTable";
-import { useEffect, useState } from "react";
-import Loader from "../../loader/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import { getTotalOrderAsync } from "../../../feature/sales/salesSlice";
-import Cookies from "js-cookie";
-import { useDebounce } from "../../../hooks/UseDebounce";
-import { toast } from "react-toastify";
 const TotalOrder = () => {
   const navigate = useNavigate();
    const token=Cookies.get("token");
@@ -48,16 +46,12 @@ const TotalOrder = () => {
      const totalOrderCard=[
               {
               title: "Exhibition Orders",
-              value: `${totalOrders?.summary?.exhibitionOrders}`,
-            },
-            {
-              title: "Event Orders",
-              value: `${totalOrders?.summary?.eventOrders}`,
+              value: `${totalOrders?.summary?.exhibitionOrders+totalOrders?.summary?.eventOrders}`,
             },
             {
               title: "Online Orders",
               value: `${totalOrders?.summary?.onlineOrders}`,
-            },
+            }
             ]
               useEffect(()=>{
                 totalOrderHandler();

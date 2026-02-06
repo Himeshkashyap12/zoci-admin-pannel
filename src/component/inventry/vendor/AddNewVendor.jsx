@@ -61,9 +61,7 @@ const AddNewVendor=({setOpen})=>{
           phoneNumber: ""
         });
         }        
-      } catch (err) {
-        console.log(err);
-        
+      } catch (err) {        
         toast.error("Something went wrong")
        
         

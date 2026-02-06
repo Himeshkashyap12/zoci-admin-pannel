@@ -52,7 +52,6 @@ const EssanceVideo=()=>{
        setDeleteId(id);
        }
    const editHandler=(item)=>{
-    console.log(item);
     
     setDeleteId(null)
      setEditData(item);

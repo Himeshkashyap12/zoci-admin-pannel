@@ -1,28 +1,29 @@
-import { useNavigate } from "react-router-dom";
-import CustomText from "../../common/CustomText";
-import { LeftOutlined } from "@ant-design/icons";
-import SalesCard from "../SalesCard";
+import { EditOutlined, LeftOutlined } from "@ant-design/icons";
 import { Col, Row, Skeleton } from "antd";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getNetProfitAsync } from "../../../feature/sales/salesSlice";
+import { useDebounce } from "../../../hooks/UseDebounce";
+import CustomModal from "../../common/CustomModal";
+import CustomText from "../../common/CustomText";
+import SalesCard from "../SalesCard";
 import NetProfitFilter from "./NetProfitFilter";
 import NetProfitTable from "./NetProfitTable";
-import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { getNetProfitAsync } from "../../../feature/sales/salesSlice";
-import Loader from "../../loader/Loader";
-import { useEffect, useState } from "react";
-import { useDebounce } from "../../../hooks/UseDebounce";
-import { toast } from "react-toastify";
+import AveragePackagingCharge from "./UpdateAveragePackaging";
 const NetProfit = () => {
-  const navigate = useNavigate();
-  const token = Cookies.get("token");
+   const navigate = useNavigate();
+   const token = Cookies.get("token");
    const [search,setSearch]=useState("");
-      const [date,setDate]=useState([]); 
-     const debounce=useDebounce(search,500);
+   const [date,setDate]=useState([]);   
+   const debounce=useDebounce(search,500);
+   const [netProfitModel,setProfitModel]=useState(false);
    const [sort,setSort]=useState([])    
    const [page,setPage]=useState(1)       
-  const dispatch = useDispatch();
-  const { netProfit,isLoading } = useSelector((state) => state?.sales);  
-  const getNetProfitHanler = async () => {
+   const dispatch = useDispatch();
+   const { netProfit,isLoading } = useSelector((state) => state?.sales);  
+   const getNetProfitHanler = async () => {
       const trimSearch=search.trim();
                 const data={
                   limit:10,
@@ -40,19 +41,18 @@ const NetProfit = () => {
       //  toast.error("Something went wrong. Please try again.");  
     }
   };
+   
   const totalNetProfit = [
-    {
-      title: "Total Revenue",
-      value: `Rs. ${netProfit?.cards?.totalRevenue}`,
-    },
-    {
-      title: "Event Expenses",
-      value: `Rs. ${netProfit?.cards?.totalExpenditure}`,
-    },
+   
     {
       title: "Net Profit",
       value: `Rs. ${netProfit?.cards?.netProfit}`,
     },
+    {
+      title: "Average Packaging charges",
+      value: `Rs. ${netProfit?.cards?.avgPackageCost}`,
+    },
+   
   ];
   useEffect(() => {
     getNetProfitHanler();
@@ -74,15 +74,20 @@ const NetProfit = () => {
         </div>
         <CustomText
           className={"!text-[#214344] !text-[20px]"}
-          value={"Sales Reports → Lazer"}
+          value={"Sales Reports → Ledger"}
         />
       </div>
       <div>
-        <Row gutter={[10]}>
+        <Row gutter={[10,10]} >
           {totalNetProfit?.map((item) => {
             return (
               <Col span={8}>
-                {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />: <SalesCard item={item}/>}
+                {isLoading? <Skeleton.Node active={"active"} className="!w-[100%] !h-[150px] rounded-xl" />:
+                <div className="relative"> 
+                  <SalesCard item={item}/>
+                  {item?.title=="Average Packaging charges" && <div  onClick={()=>{setProfitModel(true)}} className="absolute top-1 right-3 cursor-pointer">
+                    <EditOutlined style={{color:"#214344", fontSize:"20px"}} /></div>}
+                </div>}
               </Col>
             );
           })}
@@ -94,7 +99,12 @@ const NetProfit = () => {
       <div>
         <NetProfitTable  page={page} setPage={setPage} item={netProfit} />
       </div>
+
+
+        <CustomModal closeIcon  footer={false} setOpen={setProfitModel} open={netProfitModel} modalBody={<AveragePackagingCharge averagePackagingCharges={netProfit?.cards?.avgPackageCost} setProfitModel={setProfitModel}  />} width={"500px"}  align={"center"}/>
+
     </div>
+    
   );
 };
 export default NetProfit;

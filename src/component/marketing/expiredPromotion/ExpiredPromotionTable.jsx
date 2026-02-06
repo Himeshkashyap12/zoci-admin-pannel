@@ -137,33 +137,33 @@ const ExpiredPromotionTable=({page,setPage})=>{
       align: "center",
       render: (text) =>  <Image className="!size-[50px] rounded-md" preview={false} src={text}/>
     },
-    {
-      title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
-      dataIndex: "action",
-      align: "center",
-      key: "action",
-      width: 130,
-      render: (_, record) => (
-        <Space size="middle">
-                 <div
-                   className="h-[20px] w-[20px] cursor-pointer"
-                   onClick={() => {
-                    setEdit(false), setPromotionModel(true),setDeletedId(record?._id);
-                   }}
-                 >
-                   <img src={deleteIcon} alt="deleteIcon"/>
-                 </div>
-                 <div
-                    onClick={()=>{setEdit(true),setEditItem(record),setPromotionModel(true)}}
-                   className="h-[20px] w-[20px] cursor-pointer"
-                 >
-                   <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
-                 </div>
-               </Space>
-      ),
+    // {
+    //   title: (<CustomText  className="!text-[14px] !text-[#fff] font-semibold" value={"Action"}/>),
+    //   dataIndex: "action",
+    //   align: "center",
+    //   key: "action",
+    //   width: 130,
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //              <div
+    //                className="h-[20px] w-[20px] cursor-pointer"
+    //                onClick={() => {
+    //                 setEdit(false), setPromotionModel(true),setDeletedId(record?._id);
+    //                }}
+    //              >
+    //                <img src={deleteIcon} alt="deleteIcon"/>
+    //              </div>
+    //              <div
+    //                 onClick={()=>{setEdit(true),setEditItem(record),setPromotionModel(true)}}
+    //                className="h-[20px] w-[20px] cursor-pointer"
+    //              >
+    //                <EditOutlined style={{ color: "#214344", fontSize: "24px" }} />
+    //              </div>
+    //            </Space>
+    //   ),
      
      
-    },
+    // },
   ];
 
   if(isLoading) return <Loader/>

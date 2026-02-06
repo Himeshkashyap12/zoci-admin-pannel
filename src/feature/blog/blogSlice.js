@@ -157,7 +157,6 @@ export const blogSlice = createSlice({
         builder.addCase(getBlogDetailsAsync.fulfilled, (state, action) => {                
           state.isLoading = false;
           state.blogDetails=action.payload?.data
-          console.log(action.payload);
           
         });
         builder.addCase(getBlogDetailsAsync.rejected, (state, action) => {
