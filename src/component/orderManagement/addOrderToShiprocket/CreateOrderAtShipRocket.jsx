@@ -30,9 +30,7 @@ const CreateOrderAtShipRocket = ({ shipRocketAddress, orderItems, status ,item }
     })
     ?.reduce((acc, curr) => {
       return acc + curr;
-    }, 0);
-    console.log(item,"dfhg");
-    
+    }, 0);    
   const [error, setError] = useState({
     email: ""
   });

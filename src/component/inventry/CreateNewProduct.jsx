@@ -68,12 +68,35 @@ const CreateNewProduct = () => {
     { label: "Yes", value: true },
     { label: "No", value: false },
   ];
-  const metalTypeOption=[
+  const stoneTypeOption=[
     {label:"Natural Diamond",value:"Natural Diamond"},
     {label:"Lab Grown Diamond",value:"Lab Grown Diamond"},
     {label:"Gemstone",value:"Gemstone"},
     {label:"Synthetic",value:"Synthetic"}
   ]
+const baseMetalTypeOption = [
+  { label: "Y22K", value: "Y22K" },
+  { label: "Y18K", value: "Y18K" },
+  { label: "Y14K", value: "Y14K" },
+  { label: "Y9K", value: "Y9K" },
+
+  { label: "W18K", value: "W18K" },
+  { label: "W14K", value: "W14K" },
+  { label: "W9K", value: "W9K" },
+
+  { label: "R18K", value: "R18K" },
+  { label: "R14K", value: "R14K" },
+  { label: "R9K", value: "R9K" },
+
+  { label: "G18K", value: "G18K" },
+  { label: "G14K", value: "G14K" },
+  { label: "G9K", value: "G9K" },
+
+  { label: "STERLING SILVER (925)", value: "STERLING SILVER (925)" },
+  { label: "ARGENTIUM SILVER (935)", value: "ARGENTIUM SILVER (935)" },
+  { label: "PLATINUM (950)", value: "PLATINUM (950)" },
+];
+
 
   const tagOptions=[
   { label: "Gold", value: "gold" },
@@ -153,7 +176,8 @@ const CreateNewProduct = () => {
       !productInput?.images?.productImage || 
       !productInput?.images?.modalImage ||
       !productInput?.title  ||
-      !productInput?.description 
+      !productInput?.description ||
+      ((productInput?.baseMetalType=="G18K" || productInput?.baseMetalType=="G14K" || productInput?.baseMetalType=="G9K") && !productInput?.hudNo) 
     ) return toast.error("Please fill all field")
     if((productInput?.category=="Rings" || productInput?.category=="Bracelets") && productInput?.size=="") return toast.error("Please enter size")
    try {
@@ -277,10 +301,9 @@ const CreateNewProduct = () => {
               <Col span={12}>
                 <div className="flex flex-col gap-2">
                   <CustomLabel required value={"Base Metal Type"} />
-                   <CustomInput name="baseMetalType"
-                        value={productInput.baseMetalType}
-                       onchange={productInputHandler} 
-                       className="!rounded-full" />
+                   
+                   <CustomSelect value={productInput?.baseMetalType} onchange={(e)=>{setProductInput({...productInput,baseMetalType:e})}} options={baseMetalTypeOption} className="!rounded-full" />
+
 
                 </div>
               </Col>
@@ -306,7 +329,7 @@ const CreateNewProduct = () => {
                     value={productInput.stone}
                     onchange={productInputHandler} 
                     className="!rounded-full" /> */}
-                   <CustomSelect value={productInput?.stone} onchange={(e)=>{setProductInput({...productInput,stone:e})}} options={metalTypeOption} className="!rounded-full" />
+                   <CustomSelect value={productInput?.stone} onchange={(e)=>{setProductInput({...productInput,stone:e})}} options={stoneTypeOption} className="!rounded-full" />
 
 
                 </div>
@@ -371,7 +394,7 @@ const CreateNewProduct = () => {
             <Row gutter={[40, 40]}>
               <Col span={12}>
                 <div className="flex flex-col gap-2">
-                  <CustomLabel  value={"HUID No."} />
+                  <CustomLabel required={(productInput?.baseMetalType=="G18K" || productInput?.baseMetalType=="G14K" || productInput?.baseMetalType=="G9K") ?true:false} value={"HUID No."} />
                     <CustomInput name="hudNo"
                         value={productInput.hudNo}
                         onchange={productInputHandler}

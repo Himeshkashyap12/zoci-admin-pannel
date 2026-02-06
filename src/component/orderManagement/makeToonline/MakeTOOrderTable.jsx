@@ -10,9 +10,7 @@ import CustomPagination from "../../common/CustomPagination.jsx"
 import { useNavigate } from "react-router-dom";
 import { isoToIST } from "../../../constants/constants.js";
 const MakeToOrderTablePage=({page,setPage})=>{
-      const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);
-      console.log(makeOnlineOrders);
-      
+      const {makeOnlineOrders,isLoading}=useSelector(state=>state?.order);      
       const navigate=useNavigate();
       const copyTextHandler=async(text)=>{
                   try {

@@ -45,17 +45,13 @@ const TotalExpenditure = () => {
             }
           const totalExpenditureCards=[
             {
-            title: "Exhibition Expenses",
-            value: `Rs. ${totalExpenditure?.totals?.exhibitionExpenses}`,
+            title: "Operational Expenses",
+            value: `Rs. ${totalExpenditure?.totals?.operationalExpenses}`,
           },
-          {
+           {
             title: "Event Expenses",
             value: `Rs. ${totalExpenditure?.totals?.eventExpenses}`,
-          },
-          {
-            title: "Online/Operational Expenses",
-            value: `Rs. ${totalExpenditure?.totals?.onlineExpenses}`,
-          },
+          }
           ]
 
                useEffect(()=>{

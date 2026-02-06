@@ -19,14 +19,17 @@ import SalesCard from "./SalesCard";
 import SalesReportTable from "./SalesReportTable";
 import SalesDashboardCard from "./SalesDashboardCard";
 import { toast } from "react-toastify";
+import AddEvent from "./AddEvent";
 const SalesReport=()=>{
   const [addExpenseModel,setAddExpenseModel]=useState(false);
   const [salesDateOptionValue,setSalesDateOptionValue]=useState({});
   const [salesChartValue,setSalesChartValue]=useState("");  
+  const [event,setEvent]=useState(false);
   const navigate=useNavigate();
   const token=Cookies.get("token");  
   const dispatch=useDispatch();
   const {slaesDashboard,isLoading}=useSelector(state=>state?.sales);
+  const [editData,setEditData]=useState(null);
 
    const handleSalesReport=(e)=>{
     setSalesChartValue(e)
@@ -165,20 +168,21 @@ if(isLoading ) return <Loader/>
           </Row>
           <Row>
             <Col span={24}>
-          {slaesDashboard?.events?.length>0 &&  <EventSales item={slaesDashboard?.events}/>}
+           <EventSales setEvent={setEvent} setAddExpenseModel={setAddExpenseModel} setEditData={setEditData} item={slaesDashboard?.events}/>
              </Col>
           </Row>
          <div className="flex flex-wrap justify-between gap-5">
             <CustomButton onclick={()=>{navigate("/admin/online-sales")}}  className={"!text-[#fff] !w-[250px] !h-[60px]"} value={"Online Sales List"}/>
             <CustomButton onclick={()=>{navigate("/admin/make-order-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Make To Order List "}/>
             <CustomButton onclick={()=>{navigate("/admin/offline-sales-list")}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Offline Sales List"}/>
-            <CustomButton onclick={()=>{setAddExpenseModel(true)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Expenses"}/>
+            <CustomButton onclick={()=>{setEditData(null),setAddExpenseModel(true),setEvent(true)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Event"}/>
+            <CustomButton onclick={()=>{setAddExpenseModel(true),setEvent(false)}} className={"!text-[#fff] !w-[250px] !h-[60px]"}value={"Add Expenses"}/>
          </div>
          <div>
             <SalesReportTable  />
            </div>
 
-           <CustomModal open={addExpenseModel} setOpen={setAddExpenseModel} modalBody={<AddExpense setOpen={setAddExpenseModel}/>} width={800} />
+           <CustomModal open={addExpenseModel} setOpen={setAddExpenseModel} modalBody={event?<AddEvent editData={editData} setOpen={setAddExpenseModel}/>:<AddExpense setOpen={setAddExpenseModel}/>} width={800} />
         </div>
     )
 }

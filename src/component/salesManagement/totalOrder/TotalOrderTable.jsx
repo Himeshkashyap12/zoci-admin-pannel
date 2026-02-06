@@ -60,7 +60,7 @@ const TotalOrderTable = ({ item, page, setPage }) => {
       title: (
         <CustomText
           className="!text-[14px] !text-[#fff] font-semibold"
-          value="Exhibition / Event /online"
+          value="Exhibition / online"
         />
       ),
       dataIndex: "source",

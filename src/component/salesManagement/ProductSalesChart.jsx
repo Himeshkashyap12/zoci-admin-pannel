@@ -9,9 +9,7 @@ import { Avatar, Image, Skeleton } from "antd";
 import CustomSelect from "../common/CustomSelect";
 import "./sales.css"
 import { useSelector } from "react-redux";
-const ProductSalesChart=({item,salesChartValue,handleSalesReport})=>{
-  console.log(item,"item");
-  
+const ProductSalesChart=({item,salesChartValue,handleSalesReport})=>{  
    const [salesChart,setSalesChart]=useState(false);
    const {isDashboardLoading}=useSelector(state=>state?.sales);
 

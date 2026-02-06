@@ -73,7 +73,6 @@ export const deleteProductData = async (id) => {
 };
 
 export const getAllOrder = async ({page}) => {
-  console.log(page);
   
   const token = localStorage.getItem("token");
 

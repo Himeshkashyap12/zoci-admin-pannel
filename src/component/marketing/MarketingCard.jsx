@@ -1,9 +1,7 @@
 import { Card } from "antd";
 import CustomText from "../common/CustomText";
 
-const MarketingCard=({item})=>{
-    console.log(item,"fsdfb");
-    
+const MarketingCard=({item})=>{    
     return(
         <>
         <Card >

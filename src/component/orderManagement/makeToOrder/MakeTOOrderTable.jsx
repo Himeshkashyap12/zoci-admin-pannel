@@ -34,12 +34,9 @@ const MakeToOrderTablePage=({setPage,page})=>{
            }
             const orderStatusOptions = [
                     { label: "Ordered", value: "Ordered" },
-                    { label: "Processing", value: "Processing" },
-                    { label: "WIP Delivery", value: "WIP Delivery" },
                     { label: "Delivered", value: "Delivered" },
-                    { label: "Returned", value: "Returned" },
-                    { label: "Exchanged", value: "Exchanged" },
-                    { label: "Cancelled", value: "Cancelled" }
+                    { label: "Out Of Delivery", value: "Out Of Delivery" },
+                    { label: "Transit", value: "Transit" },
             ];
 
         const orderStatusHandler=async()=>{
@@ -183,7 +180,7 @@ const MakeToOrderTablePage=({setPage,page})=>{
                 align: "center",
                 render:(_,text)=>{
                   return(
-                   <CustomSelect value={text?.orderStatus} onchange={(e)=>{orderStatusConfirmation(e,text)}} options={orderStatusOptions} className="!rounded-full w-full" />
+                   <CustomSelect value={text?.orderStatus} onchange={(e)=>{orderStatusConfirmation(e,text)}} options={orderStatusOptions} className="!rounded-full w-full " />
                   )
                 }
               },

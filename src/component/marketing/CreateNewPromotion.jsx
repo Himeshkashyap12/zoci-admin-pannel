@@ -176,7 +176,8 @@ const typeOption=[
                if(res.status=="success"){
                 toast.success(res.message);
                 setOpen(false);
-                dispatch(getAllPromotionAsync({token}));
+                const data={isActive:true}
+                dispatch(getAllPromotionAsync({token,data}));
                 setPromotion({
                    code: "",
                     type: "",

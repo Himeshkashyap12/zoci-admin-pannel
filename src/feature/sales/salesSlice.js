@@ -313,7 +313,71 @@ export const offlineSalesExportInExcelAsync = createAsyncThunk(
 );
 
 
+export const addEventSalesEventAsync = createAsyncThunk(
+  "sales/createEventAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.post(`/exhibitions/create`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const UpdateEventSalesEventAsync = createAsyncThunk(
+  "sales/updateEventAsync",
+ async ({token,data,id}) => {
+        try {
+      const res = await api.put(`/exhibitions/update/${id}`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const deleteEventSalesEventAsync = createAsyncThunk(
+  "sales/deleteEventAsync",
+ async ({token,id}) => {
+        try {
+      const res = await api.delete(`exhibitions/delete/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
+export const UpdateAveragePackagingChargesAsync = createAsyncThunk(
+  "sales/updateAveragePackagingAsync",
+ async ({token,data}) => {
+        try {
+      const res = await api.put(`user/updateAvgPackageCost`,data,{
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        }
+      });
+      return res?.data; // No need for `await res.data`
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 
 
@@ -485,6 +549,48 @@ export const salesSlice = createSlice({
           state.isLoading = false;
           state.error = action;
         });
+          builder.addCase(addEventSalesEventAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(addEventSalesEventAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(addEventSalesEventAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(UpdateEventSalesEventAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(UpdateEventSalesEventAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(UpdateEventSalesEventAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+         builder.addCase(deleteEventSalesEventAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(deleteEventSalesEventAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(deleteEventSalesEventAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+          builder.addCase(UpdateAveragePackagingChargesAsync.pending, (state) => {
+          state.isLoading = true;
+        });
+        builder.addCase(UpdateAveragePackagingChargesAsync.fulfilled, (state, action) => {                
+          state.isLoading = false;
+        });
+        builder.addCase(UpdateAveragePackagingChargesAsync.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action;
+        });
+        
+        
         
   },
 });
